@@ -1,0 +1,2 @@
+# VRChatLogEventOSC
+VRChatのoutput-logを監視して特定のイベント発生時にOSCを送信するツール
