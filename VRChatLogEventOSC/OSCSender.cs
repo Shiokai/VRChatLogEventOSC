@@ -2,63 +2,195 @@
 using System.ComponentModel;
 using Reactive.Bindings;
 using System.Reactive.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
+using Rug.Osc;
 
 namespace VRChatLogEventOSC
 {
-    public sealed class OSCSender : INotifyPropertyChanged
+    public sealed class OSCSender : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+        private static readonly IPAddress DefaultIPAddress = IPAddress.Loopback;
+        private static readonly int DefaultPort = 9000;
+        private OscSender _sender;
+        private float _buttomInterval = 0.3f;
+        private Task _buttomIntervalTask;
+        private CancellationTokenSource _cancellationTokenSource = new();
 
-        // public ReactiveProperty<string> DatetimeInfo {get;}
-    
-        // public ReactiveProperty<string> ReceivedInviteInfo {get;}
-        // public ReactiveProperty<string> ReceivedRequestInviteInfo {get;}
-        // public ReactiveProperty<string> SendInviteInfo {get;}
-        // public ReactiveProperty<string> SendRequestInviteInfo {get;}
-        // public ReactiveProperty<string> MetPlayerInfo {get;}
-        // public ReactiveProperty<string> JoinedRoom1Info {get;}
-        public ReactiveProperty<string> JoinedRoom2Info {get;}
-        // public ReactiveProperty<string> SendFriendRequestInfo {get;}
-        // public ReactiveProperty<string> ReceivedFriendRequestInfo {get;}
-        public ReactiveProperty<string> AcceptFriendRequestInfo {get;}
-        // public ReactiveProperty<string> ReceivedInviteResponseInfo {get;}
-        // public ReactiveProperty<string> ReceivedRequestInviteResponseInfo {get;}
-        public ReactiveProperty<string> PlayedVideo1Info {get;}
-        public ReactiveProperty<string> PlayedVideo2Info {get;}
-        public ReactiveProperty<string> AcceptInviteInfo {get;}
-        public ReactiveProperty<string> AcceptRequestInviteInfo {get;}
-    
-        public ReactiveProperty<string> JoinLeftInfo {get;}
-        public ReactiveProperty<string> JoinedRoom1DetailInfo {get;}
-        public ReactiveProperty<string> AcceptInviteDetailInfo {get;}
-        // public ReactiveProperty<string> NotificationEventInfo {get;}
-        public ReactiveProperty<string> TookScreenshotInfo {get;}
+        private IObservable<long> _buttonIntervalObservable;
+
+        public float ButtomInterval
+        {
+            get => _buttomInterval;
+            set
+            {
+                _buttomInterval = value;
+                _buttomIntervalTask = Task.Delay(TimeSpan.FromSeconds(value), _cancellationTokenSource.Token);
+            }
+        }
+
+        // private ReactiveProperty<OscMessage> oscMessage;
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            _sender.Close();
+            _cancellationTokenSource.Dispose();
+            ((IDisposable)_buttonIntervalObservable).Dispose();
+            _disposed = true;
+        }
         public OSCSender()
         {
-            // DatetimeInfo = new(string.Empty);
-        
-            // ReceivedInviteInfo = new(string.Empty);
-            // ReceivedRequestInviteInfo = new(string.Empty);
-            // SendInviteInfo = new(string.Empty);
-            // SendRequestInviteInfo = new(string.Empty);
-            // MetPlayerInfo = new(string.Empty);
-            // JoinedRoom1Info = new(string.Empty);
-            JoinedRoom2Info = new(string.Empty);
-            // SendFriendRequestInfo = new(string.Empty);
-            // ReceivedFriendRequestInfo = new(string.Empty);
-            AcceptFriendRequestInfo = new(string.Empty);
-            // ReceivedInviteResponseInfo = new(string.Empty);
-            // ReceivedRequestInviteResponseInfo = new(string.Empty);
-            PlayedVideo1Info = new(string.Empty);
-            PlayedVideo2Info = new(string.Empty);
-            AcceptInviteInfo = new(string.Empty);
-            AcceptRequestInviteInfo = new(string.Empty);
-        
-            JoinLeftInfo = new(string.Empty);
-            JoinedRoom1DetailInfo = new(string.Empty);
-            AcceptInviteDetailInfo = new(string.Empty);
-            // NotificationEventInfo = new(string.Empty);
-            TookScreenshotInfo = new(string.Empty);
+            _sender = CreateNewClient(DefaultIPAddress.ToString(), DefaultPort);
+            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
+            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
+            _sender.Connect();
         }
+        public OSCSender(string address)
+        {
+            _sender = CreateNewClient(address, DefaultPort);
+            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
+            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
+            _sender.Connect();
+        }
+        public OSCSender(int port)
+        {
+            _sender = CreateNewClient(DefaultIPAddress.ToString(), port);
+            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
+            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
+            _sender.Connect();
+        }
+        public OSCSender(string address, int port)
+        {
+            _sender = CreateNewClient(address, port);
+            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
+            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
+            _sender.Connect();
+        }
+
+        private OscSender CreateNewClient()
+        {
+            return CreateNewClient(DefaultIPAddress.ToString(), DefaultPort);
+        }
+        private OscSender CreateNewClient(string iPAddress, int port)
+        {
+            IPAddress address;
+            try
+            {
+                address = IPAddress.Parse(iPAddress);
+            }
+            catch (FormatException)
+            {
+                address = DefaultIPAddress;
+            }
+
+            OscSender client;
+            try
+            {
+                client = new OscSender(address, 0, port);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                client = new OscSender(address, 0, DefaultPort);
+            }
+
+            return client;
+        }
+
+        public void ChangeClient(string iPAddress, int port)
+        {
+            _sender.Close();
+            _sender = CreateNewClient(iPAddress, port);
+            _sender.Connect();
+        }
+
+        public void SendMessage(string path, params object[] args)
+        {
+            if (args.Any(obj => obj == null))
+            {
+                return;
+            }
+
+            OscMessage message;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = "/vrclogevent/invalid";
+            }
+
+            try
+            {
+                message = new OscMessage(path, args);
+            }
+            catch (ArgumentException)
+            {
+                message = new OscMessage("/vrclogevent/invalid", args);
+            }
+            _sender.Send(message);
+        }
+
+        public void ToggleMessage(string path, params object[] args)
+        {
+            SendMessage(path, args);
+        }
+
+        public void ButtomMessage(string path, object offValue, params object[] args)
+        {
+            SendMessage(path, args);
+            Observable.Timer(TimeSpan.FromSeconds(ButtomInterval)).Subscribe(_ => SendMessage(path, offValue));
+        }
+
+        public void ButtomMessage(string path, params bool[] args)
+        {
+            ButtomMessage(path, false, args);
+        }
+
+        public void ButtomMessage(string path, params int[] args)
+        {
+            ButtomMessage(path, 0, args);
+        }
+
+        public void ButtomMessage(string path, params float[] args)
+        {
+            ButtomMessage(path, 0.0f, args);
+        }
+
+        public void ButtomMessage(string path, params string[] args)
+        {
+            ButtomMessage(path, string.Empty, args);
+        }
+
+        public async Task ButtomMessageAsync(string path, object offValue, params object[] args)
+        {
+            SendMessage(path, args);
+            await _buttomIntervalTask;
+            SendMessage(path, offValue);
+        }
+
+        public Task ButtomMessageAsync(string path, params bool[] args)
+        {
+            return ButtomMessageAsync(path, false, args);
+        }
+
+        public Task ButtomMessageAsync(string path, params int[] args)
+        {
+            return ButtomMessageAsync(path, 0, args);
+        }
+
+        public Task ButtomMessageAsync(string path, params float[] args)
+        {
+            return ButtomMessageAsync(path, 0.0f, args);
+        }
+
+        public Task ButtomMessageAsync(string path, params string[] args)
+        {
+            return ButtomMessageAsync(path, string.Empty, args);
+        }
+
     }
 }
