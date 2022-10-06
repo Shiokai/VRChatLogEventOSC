@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VRChatLogEventOSC
 {
-    public class SingleSetting
+    public sealed record class SingleSetting
     {
         public enum OSCTypeEnum
         {
@@ -39,9 +39,9 @@ namespace VRChatLogEventOSC
         public string Version { get; } = "0.0.0";
         public string SettingName { get; private set; } = string.Empty;
         public string OSCAddress { get; private set; } = string.Empty;
+        public bool? OSCBool {get; private set;} = null;
         public int? OSCInt {get; private set;} = null;
         public float? OSCFloat {get; private set;} = null;
-        public bool? OSCBool {get; private set;} = null;
         public string? OSCString {get; private set;} = null;
         [JsonIgnore]
         public object? OSCValue
@@ -61,17 +61,21 @@ namespace VRChatLogEventOSC
             {
                 switch (value)
                 {
-                    case bool val:
-                        OSCBool = val;
+                    case bool bval:
+                        OSCValueType = OSCValueTypeEnum.Bool;
+                        OSCBool = bval;
                         break;
-                    case int val:
-                        OSCInt = val;
+                    case int ival:
+                        OSCValueType = OSCValueTypeEnum.Int;
+                        OSCInt = ival;
                         break;
-                    case float val:
-                        OSCFloat = val;
+                    case float fval:
+                        OSCValueType = OSCValueTypeEnum.Float;
+                        OSCFloat = fval;
                         break;
-                    case string val:
-                        OSCString = val;
+                    case string sval:
+                        OSCValueType = OSCValueTypeEnum.String;
+                        OSCString = sval;
                         break;
                     case null:
                     {
@@ -114,45 +118,17 @@ namespace VRChatLogEventOSC
         public string Message { get; private set; } = string.Empty;
         public string URL { get; private set; } = string.Empty;
 
-        private Dictionary<string, string> nameToProperty;
+        private readonly Dictionary<string, string> _nameToProperty;
         public string CaptureProperty(string capture)
         {
-            return nameToProperty[capture];
-        }
-
-        public override string ToString()
-        {
-            return ""
-            + nameof(SettingName) + ": " + SettingName + "\n"
-            + nameof(OSCAddress) + ": " + OSCAddress + "\n"
-            + nameof(OSCValue) + ": " + OSCValue + "\n"
-            + nameof(OSCValueType) + ": " + OSCValueType + "\n"
-            + nameof(OSCType) + ": " + OSCType + "\n"
-            + nameof(UserName) + ": " + UserName + "\n"
-            + nameof(UserID) + ": " + UserID + "\n"
-            + nameof(WorldName) + ": " + WorldName + "\n"
-            + nameof(WorldURL) + ": " + WorldURL + "\n"
-            + nameof(WorldID) + ": " + WorldID + "\n"
-            + nameof(InstanceID) + ": " + InstanceID + "\n"
-            + nameof(InstanceType) + ": " + InstanceType + "\n"
-            + nameof(ReqInv) + ": " + ReqInv + "\n"
-            + nameof(WorldUserID) + ": " + WorldUserID + "\n"
-            + nameof(Region) + ": " + Region + "\n"
-            + nameof(Message) + ": " + Message + "\n"
-            + nameof(URL) + ": " + URL + "\n"
-            ;
+            return _nameToProperty[capture];
         }
 
         public SingleSetting(
-            string settingName = "Empty",
-            string oSCAddress = "/avatar/parameters/empty",
-            // string oSCValue = "empty",
-            bool? oSCBool = null,
-            int? oSCInt = null,
-            float? oSCFloat = null,
-            string? oSCString = null,
-            OSCValueTypeEnum oSCValueType = OSCValueTypeEnum.Int,
-            OSCTypeEnum oSCType = OSCTypeEnum.Button,
+            string settingName = "",
+            string oscAddress = "/avatar/parameters/empty",
+            object? oscValue = null,
+            OSCTypeEnum oscType = OSCTypeEnum.Button,
             string userName = "",
             string userID = "",
             string worldName = "",
@@ -168,14 +144,9 @@ namespace VRChatLogEventOSC
         )
         {
             SettingName = settingName;
-            OSCAddress = oSCAddress;
-            // OSCValue = oSCValue;
-            OSCBool = oSCBool;
-            OSCInt = oSCInt;
-            OSCFloat = oSCFloat;
-            OSCString = oSCString;
-            OSCValueType = oSCValueType;
-            OSCType = oSCType;
+            OSCAddress = oscAddress;
+            OSCValue = oscValue;
+            OSCType = oscType;
             UserName = userName;
             UserID = userID;
             WorldName = worldName;
@@ -189,13 +160,9 @@ namespace VRChatLogEventOSC
             Message = message;
             URL = url;
 
-            nameToProperty = new()
+            _nameToProperty = new()
             {
                 {nameof(SettingName), SettingName},
-                // {nameof(OSCAddress), OSCAddress},
-                // {nameof(OSCValue), OSCValue},
-                // {nameof(OSCValueType), OSCValueType},
-                // {nameof(OSCType), OSCType},
                 {nameof(UserName), UserName},
                 {nameof(UserID), UserID},
                 {nameof(WorldName), WorldName},
@@ -214,34 +181,16 @@ namespace VRChatLogEventOSC
         /// <summary>
         /// Only for Json Constructor.
         /// </summary>
-        /// <param name="settingName"></param>
-        /// <param name="oSCAddress"></param>
-        /// <param name="oSCValue"></param>
-        /// <param name="oSCValueType"></param>
-        /// <param name="oSCType"></param>
-        /// <param name="userName"></param>
-        /// <param name="userID"></param>
-        /// <param name="worldName"></param>
-        /// <param name="worldURL"></param>
-        /// <param name="worldID"></param>
-        /// <param name="instanceID"></param>
-        /// <param name="instanceType"></param>
-        /// <param name="reqInv"></param>
-        /// <param name="worldUserID"></param>
-        /// <param name="region"></param>
-        /// <param name="message"></param>
-        /// <param name="url"></param>
         [JsonConstructor]
         public SingleSetting(
-            string settingName = "Empty",
-            string oSCAddress = "/avatar/parameters/empty",
-            // string oSCValue = "empty",
-            bool? oSCBool = null,
-            int? oSCInt = null,
-            float? oSCFloat = null,
-            string? oSCString = null,
-            OSCValueTypeEnum oSCValueType = OSCValueTypeEnum.Int,
-            OSCTypeEnum oSCType = OSCTypeEnum.Button,
+            string settingName = "",
+            string oscAddress = "/avatar/parameters/empty",
+            bool? oscBool = null,
+            int? oscInt = null,
+            float? oscFloat = null,
+            string? oscString = null,
+            OSCValueTypeEnum oscValueType = OSCValueTypeEnum.Bool,
+            OSCTypeEnum oscType = OSCTypeEnum.Button,
             string userName = "",
             string userID = "",
             string worldName = "",
@@ -257,14 +206,13 @@ namespace VRChatLogEventOSC
         )
         {
             SettingName = settingName;
-            OSCAddress = oSCAddress;
-            // OSCValue = oSCValue;
-            OSCBool = oSCBool;
-            OSCInt = oSCInt;
-            OSCFloat = oSCFloat;
-            OSCString = oSCString;
-            OSCValueType = oSCValueType;
-            OSCType = oSCType;
+            OSCAddress = oscAddress;
+            OSCBool = oscBool;
+            OSCInt = oscInt;
+            OSCFloat = oscFloat;
+            OSCString = oscString;
+            OSCValueType = oscValueType;
+            OSCType = oscType;
             UserName = userName;
             UserID = userID;
             WorldName = worldName;
@@ -278,13 +226,9 @@ namespace VRChatLogEventOSC
             Message = message;
             URL = url;
 
-            nameToProperty = new()
+            _nameToProperty = new()
             {
                 {nameof(SettingName), SettingName},
-                // {nameof(OSCAddress), OSCAddress},
-                // {nameof(OSCValue), OSCValue},
-                // {nameof(OSCValueType), OSCValueType},
-                // {nameof(OSCType), OSCType},
                 {nameof(UserName), UserName},
                 {nameof(UserID), UserID},
                 {nameof(WorldName), WorldName},
