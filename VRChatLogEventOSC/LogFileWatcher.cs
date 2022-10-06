@@ -26,7 +26,7 @@ namespace VRChatLogEventOSC
 
         public float Interval { get; set; } = 0.1f;
 
-        private readonly ReactiveProperty<string> _logLine = new(string.Empty);
+        private readonly ReactivePropertySlim<string> _logLine = new(string.Empty);
         public IObservable<string> LogLineObservable => _logLine.Skip(1);
         private bool _isWatching = false;
         public bool IsDetectFileCreation {get; set;} = false;
@@ -83,11 +83,15 @@ namespace VRChatLogEventOSC
                 h => (s, e) => h(e),
                 h => _watcher.Created += h,
                 h => _watcher.Created -= h
-            ).Where(_ => IsDetectFileCreation).Select(e => e.FullPath).Where(path => path.Contains("output_log_")).Subscribe(path =>
+            ).Where(_ => IsDetectFileCreation)
+            .Select(e => e.FullPath)
+            .Where(path => path.Contains("output_log_"))
+            .Subscribe(path =>
             {
                 _logFilePath = path;
                 _lastLength = 0;
             });
+
             _watcher.EnableRaisingEvents = true;
 
             
@@ -116,7 +120,6 @@ namespace VRChatLogEventOSC
                             _lastLength = fileStream.Length;
                         }
                     }
-
                 }
                 catch (FileNotFoundException)
                 {
