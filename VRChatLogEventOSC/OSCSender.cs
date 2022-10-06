@@ -10,17 +10,12 @@ using Rug.Osc;
 
 namespace VRChatLogEventOSC
 {
-    public sealed class OSCSender : INotifyPropertyChanged, IDisposable
+    public sealed class OSCSender : IDisposable
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
         private static readonly IPAddress DefaultIPAddress = IPAddress.Loopback;
         private static readonly int DefaultPort = 9000;
         private OscSender _sender;
         private float _buttomInterval = 0.3f;
-        private Task _buttomIntervalTask;
-        private CancellationTokenSource _cancellationTokenSource = new();
-
-        private IObservable<long> _buttonIntervalObservable;
 
         public float ButtomInterval
         {
@@ -28,11 +23,14 @@ namespace VRChatLogEventOSC
             set
             {
                 _buttomInterval = value;
-                _buttomIntervalTask = Task.Delay(TimeSpan.FromSeconds(value), _cancellationTokenSource.Token);
             }
         }
 
-        // private ReactiveProperty<OscMessage> oscMessage;
+        public bool BoolButtonOffValue { get; set; } = false;
+        public int IntButtonOffValue { get; set; } = 0;
+        public float FloatButtonOffValue { get; set; } = 0.0f;
+        public string StringButtonOffValue { get; set; } = string.Empty;
+
         private bool _disposed = false;
         public void Dispose()
         {
@@ -41,36 +39,26 @@ namespace VRChatLogEventOSC
                 return;
             }
             _sender.Close();
-            _cancellationTokenSource.Dispose();
-            ((IDisposable)_buttonIntervalObservable).Dispose();
             _disposed = true;
         }
         public OSCSender()
         {
             _sender = CreateNewClient(DefaultIPAddress.ToString(), DefaultPort);
-            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
-            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
             _sender.Connect();
         }
         public OSCSender(string address)
         {
             _sender = CreateNewClient(address, DefaultPort);
-            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
-            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
             _sender.Connect();
         }
         public OSCSender(int port)
         {
             _sender = CreateNewClient(DefaultIPAddress.ToString(), port);
-            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
-            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
             _sender.Connect();
         }
         public OSCSender(string address, int port)
         {
             _sender = CreateNewClient(address, port);
-            _buttomIntervalTask = Task.Delay(+TimeSpan.FromSeconds(_buttomInterval), _cancellationTokenSource.Token);
-            _buttonIntervalObservable = Observable.Timer(TimeSpan.FromSeconds(ButtomInterval));
             _sender.Connect();
         }
 
@@ -110,6 +98,20 @@ namespace VRChatLogEventOSC
             _sender.Connect();
         }
 
+        public void ChangeClient(string iPAddress)
+        {
+            _sender.Close();
+            _sender = CreateNewClient(iPAddress, DefaultPort);
+            _sender.Connect();
+        }
+
+        public void ChangeClient(int port)
+        {
+            _sender.Close();
+            _sender = CreateNewClient(DefaultIPAddress.ToString(), port);
+            _sender.Connect();
+        }
+
         public void SendMessage(string path, params object[] args)
         {
             if (args.Any(obj => obj == null))
@@ -139,58 +141,31 @@ namespace VRChatLogEventOSC
             SendMessage(path, args);
         }
 
-        public void ButtomMessage(string path, object offValue, params object[] args)
+        private void ButtomMessage(string path, object offValue, params object[] args)
         {
             SendMessage(path, args);
             Observable.Timer(TimeSpan.FromSeconds(ButtomInterval)).Subscribe(_ => SendMessage(path, offValue));
         }
 
-        public void ButtomMessage(string path, params bool[] args)
+        public void ButtomMessage(string path, object value)
         {
-            ButtomMessage(path, false, args);
+            switch (value)
+            {
+                case bool bval:
+                    ButtomMessage(path, BoolButtonOffValue, bval);
+                    break;
+                case int ival:
+                    ButtomMessage(path, IntButtonOffValue, ival);
+                    break;
+                case float fval:
+                    ButtomMessage(path, FloatButtonOffValue, fval);
+                    break;
+                case string sval:
+                    ButtomMessage(path, StringButtonOffValue, sval);
+                    break;
+                default:
+                    break;
+            }
         }
-
-        public void ButtomMessage(string path, params int[] args)
-        {
-            ButtomMessage(path, 0, args);
-        }
-
-        public void ButtomMessage(string path, params float[] args)
-        {
-            ButtomMessage(path, 0.0f, args);
-        }
-
-        public void ButtomMessage(string path, params string[] args)
-        {
-            ButtomMessage(path, string.Empty, args);
-        }
-
-        public async Task ButtomMessageAsync(string path, object offValue, params object[] args)
-        {
-            SendMessage(path, args);
-            await _buttomIntervalTask;
-            SendMessage(path, offValue);
-        }
-
-        public Task ButtomMessageAsync(string path, params bool[] args)
-        {
-            return ButtomMessageAsync(path, false, args);
-        }
-
-        public Task ButtomMessageAsync(string path, params int[] args)
-        {
-            return ButtomMessageAsync(path, 0, args);
-        }
-
-        public Task ButtomMessageAsync(string path, params float[] args)
-        {
-            return ButtomMessageAsync(path, 0.0f, args);
-        }
-
-        public Task ButtomMessageAsync(string path, params string[] args)
-        {
-            return ButtomMessageAsync(path, string.Empty, args);
-        }
-
     }
 }
