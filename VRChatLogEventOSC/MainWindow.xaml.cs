@@ -37,14 +37,24 @@ namespace VRChatLogEventOSC
             // var test = WholeSetting.CreateEmptyWholeSettingDict(0);
             var test = WholeSetting.CreateDefaultWholeSettingDict();
             // test[RegexPattern.EventTypeEnum.OnPlayerJoined].Add(new(settingName: "Test"));
-            test[RegexPattern.EventTypeEnum.JoinedRoom1Detail].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oSCInt: 1));
-            test[RegexPattern.EventTypeEnum.OnPlayerJoined].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oSCInt: 1));
+            // for (int i = 0; i < 50; i++)
+            // {
+            //     test[RegexPattern.EventTypeEnum.JoinedRoomURL].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: i, oscType: SingleSetting.OSCTypeEnum.Toggle, oscAddress: "/avatars/parameters/JoinedRoomURL"));
+            // }
+            test[RegexPattern.EventTypeEnum.JoinedRoomURL].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: 5, oscType: SingleSetting.OSCTypeEnum.Toggle, oscAddress: "/avatars/parameters/JoinedRoomURL"));
+            test[RegexPattern.EventTypeEnum.OnPlayerJoined].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: true, oscType: SingleSetting.OSCTypeEnum.Button, oscAddress: "/avatars/parameters/OnPlayerJoined"));
+            test[RegexPattern.EventTypeEnum.OnPlayerLeft].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: true, oscType: SingleSetting.OSCTypeEnum.Button, oscAddress: "/avatars/parameters/OnPlayerLeft"));
             jsonLoader.SaveSetting(new WholeSetting(test));
             // jsonLoader.WriteAsJson(new SettingBase(settingName: "Test", userName: "Shiokai", message: "hoge"));
             var setting = jsonLoader.LoadSetting();
             _eventToOSCConverter.CurrentSetting = setting ?? new(WholeSetting.CreateDefaultWholeSettingDict());
-            _watcher.StartWatchingFromTop();
+            _oscSender.ButtomInterval = 5;
+            // _oscSender.ChangeClient(9005);
+            _watcher.IsDetectFileCreation = true;
+            // _watcher.StartWatchingFromTop();
+            _watcher.StartWatchingFromCurrent();
             // Debug.Print(setting?.ToString());
+            
 
 
 
