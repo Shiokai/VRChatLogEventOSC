@@ -10,7 +10,7 @@ namespace VRChatLogEventOSC
 {
     public class WholeSetting
     {
-        // public string Version { get; } = "0.0.0";
+        public string Version { get; } = "0.0.0";
 
         private readonly Dictionary<EventTypeEnum, List<SingleSetting>> _settings = new(){
             {EventTypeEnum.ReceivedInvite, new(0)},
@@ -81,24 +81,24 @@ namespace VRChatLogEventOSC
 
             return new()
             {
-                {EventTypeEnum.ReceivedInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedInvite), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.ReceivedRequestInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedRequestInvite), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.SendInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.SendInvite), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.SendRequestInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.SendRequestInvite), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.JoinedRoomURL, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.JoinedRoomURL), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.JoinedRoomName, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.JoinedRoomName), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.SendFriendRequest, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.SendFriendRequest), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.ReceivedFriendRequest, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedFriendRequest), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.AcceptFriendRequest, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.AcceptFriendRequest), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.ReceivedInviteResponse, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedInviteResponse), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.ReceivedRequestInviteResponse, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedRequestInviteResponse), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.PlayedVideo1, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.PlayedVideo1), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.PlayedVideo2, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.PlayedVideo2), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.AcceptInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.AcceptInvite), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.AcceptRequestInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.AcceptRequestInvite), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.OnPlayerJoined, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.OnPlayerJoined), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.OnPlayerLeft, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.OnPlayerLeft), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
-                {EventTypeEnum.TookScreenshot, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.TookScreenshot), reqInv:SingleSetting.ReqInvEnum.NotSpecified)}},
+                {EventTypeEnum.ReceivedInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedInvite))}},
+                {EventTypeEnum.ReceivedRequestInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedRequestInvite))}},
+                {EventTypeEnum.SendInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.SendInvite))}},
+                {EventTypeEnum.SendRequestInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.SendRequestInvite))}},
+                {EventTypeEnum.JoinedRoomURL, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.JoinedRoomURL))}},
+                {EventTypeEnum.JoinedRoomName, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.JoinedRoomName))}},
+                {EventTypeEnum.SendFriendRequest, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.SendFriendRequest))}},
+                {EventTypeEnum.ReceivedFriendRequest, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedFriendRequest))}},
+                {EventTypeEnum.AcceptFriendRequest, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.AcceptFriendRequest))}},
+                {EventTypeEnum.ReceivedInviteResponse, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedInviteResponse))}},
+                {EventTypeEnum.ReceivedRequestInviteResponse, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.ReceivedRequestInviteResponse))}},
+                {EventTypeEnum.PlayedVideo1, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.PlayedVideo1))}},
+                {EventTypeEnum.PlayedVideo2, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.PlayedVideo2))}},
+                {EventTypeEnum.AcceptInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.AcceptInvite))}},
+                {EventTypeEnum.AcceptRequestInvite, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.AcceptRequestInvite))}},
+                {EventTypeEnum.OnPlayerJoined, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.OnPlayerJoined))}},
+                {EventTypeEnum.OnPlayerLeft, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.OnPlayerLeft))}},
+                {EventTypeEnum.TookScreenshot, new(){new(oscAddress: "/avatar/parameters/" + nameof(EventTypeEnum.TookScreenshot))}},
             };
         }
 
@@ -127,7 +127,6 @@ namespace VRChatLogEventOSC
                 {EventTypeEnum.TookScreenshot, _settings[EventTypeEnum.TookScreenshot].AsReadOnly()},
             };
         }
-        // [JsonConstructor]
 
         public WholeSetting(Dictionary<EventTypeEnum, List<SingleSetting>> settings)
         {
@@ -155,37 +154,51 @@ namespace VRChatLogEventOSC
             };
         }
 
-        // [JsonConstructor]
-        // public WholeSetting(string version, Dictionary<EventTypeEnum, List<SingleSetting>> settings)
-        // {
-        //     Version = version;
-        //     _settings = settings;
-        //     Settings = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>()
-        //     {
-        //         {EventTypeEnum.ReceivedInvite, _settings[EventTypeEnum.ReceivedInvite].AsReadOnly()},
-        //         {EventTypeEnum.ReceivedRequestInvite, _settings[EventTypeEnum.ReceivedRequestInvite].AsReadOnly()},
-        //         {EventTypeEnum.SendInvite, _settings[EventTypeEnum.SendInvite].AsReadOnly()},
-        //         {EventTypeEnum.SendRequestInvite, _settings[EventTypeEnum.SendRequestInvite].AsReadOnly()},
-        //         {EventTypeEnum.MetPlayer, _settings[EventTypeEnum.MetPlayer].AsReadOnly()},
-        //         {EventTypeEnum.JoinedRoom1, _settings[EventTypeEnum.JoinedRoom1].AsReadOnly()},
-        //         {EventTypeEnum.JoinedRoom2, _settings[EventTypeEnum.JoinedRoom2].AsReadOnly()},
-        //         {EventTypeEnum.SendFriendRequest, _settings[EventTypeEnum.SendFriendRequest].AsReadOnly()},
-        //         {EventTypeEnum.ReceivedFriendRequest, _settings[EventTypeEnum.ReceivedFriendRequest].AsReadOnly()},
-        //         {EventTypeEnum.AcceptFriendRequest, _settings[EventTypeEnum.AcceptFriendRequest].AsReadOnly()},
-        //         {EventTypeEnum.ReceivedInviteResponse, _settings[EventTypeEnum.ReceivedInviteResponse].AsReadOnly()},
-        //         {EventTypeEnum.ReceivedRequestInviteResponse, _settings[EventTypeEnum.ReceivedRequestInviteResponse].AsReadOnly()},
-        //         {EventTypeEnum.PlayedVideo1, _settings[EventTypeEnum.PlayedVideo1].AsReadOnly()},
-        //         {EventTypeEnum.PlayedVideo2, _settings[EventTypeEnum.PlayedVideo2].AsReadOnly()},
-        //         {EventTypeEnum.AcceptInvite, _settings[EventTypeEnum.AcceptInvite].AsReadOnly()},
-        //         {EventTypeEnum.AcceptRequestInvite, _settings[EventTypeEnum.AcceptRequestInvite].AsReadOnly()},
-        //         {EventTypeEnum.OnPlayerJoined, _settings[EventTypeEnum.OnPlayerJoined].AsReadOnly()},
-        //         {EventTypeEnum.OnPlayerLeft, _settings[EventTypeEnum.OnPlayerLeft].AsReadOnly()},
-        //         {EventTypeEnum.JoinedRoom1Detail, _settings[EventTypeEnum.JoinedRoom1Detail].AsReadOnly()},
-        //         {EventTypeEnum.AcceptInviteDetail, _settings[EventTypeEnum.AcceptInviteDetail].AsReadOnly()},
-        //         {EventTypeEnum.NotificationEvent, _settings[EventTypeEnum.NotificationEvent].AsReadOnly()},
-        //         {EventTypeEnum.TookScreenshot, _settings[EventTypeEnum.TookScreenshot].AsReadOnly()},
-        //     };
-        // }
+        [JsonConstructor]
+        public WholeSetting(string version, IReadOnlyDictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> settings)
+        {
+            Version = version;
+            _settings = new Dictionary<EventTypeEnum, List<SingleSetting>>()
+            {
+                {EventTypeEnum.ReceivedInvite, settings[EventTypeEnum.ReceivedInvite].ToList()},
+                {EventTypeEnum.ReceivedRequestInvite, settings[EventTypeEnum.ReceivedRequestInvite].ToList()},
+                {EventTypeEnum.SendInvite, settings[EventTypeEnum.SendInvite].ToList()},
+                {EventTypeEnum.SendRequestInvite, settings[EventTypeEnum.SendRequestInvite].ToList()},
+                {EventTypeEnum.JoinedRoomURL, settings[EventTypeEnum.JoinedRoomURL].ToList()},
+                {EventTypeEnum.JoinedRoomName, settings[EventTypeEnum.JoinedRoomName].ToList()},
+                {EventTypeEnum.SendFriendRequest, settings[EventTypeEnum.SendFriendRequest].ToList()},
+                {EventTypeEnum.ReceivedFriendRequest, settings[EventTypeEnum.ReceivedFriendRequest].ToList()},
+                {EventTypeEnum.AcceptFriendRequest, settings[EventTypeEnum.AcceptFriendRequest].ToList()},
+                {EventTypeEnum.ReceivedInviteResponse, settings[EventTypeEnum.ReceivedInviteResponse].ToList()},
+                {EventTypeEnum.ReceivedRequestInviteResponse, settings[EventTypeEnum.ReceivedRequestInviteResponse].ToList()},
+                {EventTypeEnum.PlayedVideo1, settings[EventTypeEnum.PlayedVideo1].ToList()},
+                {EventTypeEnum.PlayedVideo2, settings[EventTypeEnum.PlayedVideo2].ToList()},
+                {EventTypeEnum.AcceptInvite, settings[EventTypeEnum.AcceptInvite].ToList()},
+                {EventTypeEnum.AcceptRequestInvite, settings[EventTypeEnum.AcceptRequestInvite].ToList()},
+                {EventTypeEnum.OnPlayerJoined, settings[EventTypeEnum.OnPlayerJoined].ToList()},
+                {EventTypeEnum.OnPlayerLeft, settings[EventTypeEnum.OnPlayerLeft].ToList()},
+                {EventTypeEnum.TookScreenshot, settings[EventTypeEnum.TookScreenshot].ToList()},
+            };
+            Settings = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>()
+            {
+                {EventTypeEnum.ReceivedInvite, _settings[EventTypeEnum.ReceivedInvite].AsReadOnly()},
+                {EventTypeEnum.ReceivedRequestInvite, _settings[EventTypeEnum.ReceivedRequestInvite].AsReadOnly()},
+                {EventTypeEnum.SendInvite, _settings[EventTypeEnum.SendInvite].AsReadOnly()},
+                {EventTypeEnum.SendRequestInvite, _settings[EventTypeEnum.SendRequestInvite].AsReadOnly()},
+                {EventTypeEnum.SendFriendRequest, _settings[EventTypeEnum.SendFriendRequest].AsReadOnly()},
+                {EventTypeEnum.ReceivedFriendRequest, _settings[EventTypeEnum.ReceivedFriendRequest].AsReadOnly()},
+                {EventTypeEnum.AcceptFriendRequest, _settings[EventTypeEnum.AcceptFriendRequest].AsReadOnly()},
+                {EventTypeEnum.ReceivedInviteResponse, _settings[EventTypeEnum.ReceivedInviteResponse].AsReadOnly()},
+                {EventTypeEnum.ReceivedRequestInviteResponse, _settings[EventTypeEnum.ReceivedRequestInviteResponse].AsReadOnly()},
+                {EventTypeEnum.PlayedVideo1, _settings[EventTypeEnum.PlayedVideo1].AsReadOnly()},
+                {EventTypeEnum.PlayedVideo2, _settings[EventTypeEnum.PlayedVideo2].AsReadOnly()},
+                {EventTypeEnum.AcceptInvite, _settings[EventTypeEnum.AcceptInvite].AsReadOnly()},
+                {EventTypeEnum.AcceptRequestInvite, _settings[EventTypeEnum.AcceptRequestInvite].AsReadOnly()},
+                {EventTypeEnum.OnPlayerJoined, _settings[EventTypeEnum.OnPlayerJoined].AsReadOnly()},
+                {EventTypeEnum.OnPlayerLeft, _settings[EventTypeEnum.OnPlayerLeft].AsReadOnly()},
+                {EventTypeEnum.TookScreenshot, _settings[EventTypeEnum.TookScreenshot].AsReadOnly()},
+            };
+        }
 
     }
 }

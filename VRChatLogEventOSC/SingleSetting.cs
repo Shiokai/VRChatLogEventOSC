@@ -36,7 +36,6 @@ namespace VRChatLogEventOSC
             {ReqInvEnum.CanRequestInvite, "~canRequestInvite"}
         };
 
-        public string Version { get; } = "0.0.0";
         public string SettingName { get; private set; } = string.Empty;
         public string OSCAddress { get; private set; } = string.Empty;
         public bool? OSCBool {get; private set;} = null;
@@ -183,26 +182,26 @@ namespace VRChatLogEventOSC
         /// </summary>
         [JsonConstructor]
         public SingleSetting(
-            string settingName = "",
-            string oscAddress = "/avatar/parameters/empty",
-            bool? oscBool = null,
-            int? oscInt = null,
-            float? oscFloat = null,
-            string? oscString = null,
-            OSCValueTypeEnum oscValueType = OSCValueTypeEnum.Bool,
-            OSCTypeEnum oscType = OSCTypeEnum.Button,
-            string userName = "",
-            string userID = "",
-            string worldName = "",
-            string worldURL = "",
-            string worldID = "",
-            string instanceID = "",
-            string instanceType = "",
-            string reqInv = "",
-            string worldUserID = "",
-            string region = "",
-            string message = "",
-            string url = ""
+            string settingName,
+            string oscAddress,
+            bool? oscBool,
+            int? oscInt,
+            float? oscFloat,
+            string? oscString,
+            OSCValueTypeEnum oscValueType,
+            OSCTypeEnum oscType,
+            string userName,
+            string userID,
+            string worldName,
+            string worldURL,
+            string worldID,
+            string instanceID,
+            string instanceType,
+            string reqInv,
+            string worldUserID,
+            string region,
+            string message,
+            string url
         )
         {
             SettingName = settingName;
