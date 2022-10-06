@@ -78,6 +78,7 @@ namespace VRChatLogEventOSC
 
             return matchAll;
         }
+
         public EventToOSCConverter(LineClassifier lineClassifier, OSCSender oSCSender)
         {
             _lineClassifier = lineClassifier;
@@ -97,30 +98,24 @@ namespace VRChatLogEventOSC
                 {
                     Match match = Regexes[type].Match(e);
                     IEnumerable<string> captures = CaptureNames(type);
-                    var tasks = new List<Task>();
 
                     foreach (var setting in CurrentSetting.Settings[type])
                     {
-                        // foreach (var capture in CaptureNames(type))
-                        // {
-                        //     if (string.IsNullOrWhiteSpace(setting.CaptureProperty(capture)) || setting.CaptureProperty(capture) == match.Groups[capture].Value)
-                        //     {
-                        //         // _oSCSender.SendMessage(setting.OSCAddress, match.Groups[capture].Value);
-                        //         // _oSCSender.SendMessage(setting.OSCAddress, setting.OSCValue);
-                        //         // _oSCSender.SendMessage(setting.OSCAddress, type.ToString(), match.Groups[capture].Value);
-                        //         Debug.Print(match.Groups[capture].Value);
-                        //     }
-
-                        //     if (CaptureNames(type).Where(capture => capture != "ReqInv").All(capture => string.IsNullOrWhiteSpace(setting.CaptureProperty(capture)) || setting.CaptureProperty(capture) == match.Groups[capture].Value))
-                        //     {
-                        //         _oSCSender.SendMessage(setting.OSCAddress, setting.OSCValue);
-                                
-                        //     }
-                        // }
                         if (IsEventMatchSetting(match, setting, captures))
                         {
-                            // _oSCSender.SendMessage(setting.OSCAddress, setting.OSCValue);   
-                            _oSCSender.ButtomMessage(setting.OSCAddress, setting.OSCValue);
+                            if (setting.OSCValue == null)
+                            {
+                                continue;
+                            }
+
+                            if (setting.OSCType == SingleSetting.OSCTypeEnum.Button)
+                            {
+                                _oSCSender.ButtomMessage(setting.OSCAddress, setting.OSCValue);
+                            }
+                            else if (setting.OSCType == SingleSetting.OSCTypeEnum.Toggle)
+                            {
+                                _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue);
+                            }
                         }
                     }
                 });
