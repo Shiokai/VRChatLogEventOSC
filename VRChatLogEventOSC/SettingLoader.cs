@@ -14,14 +14,28 @@ namespace VRChatLogEventOSC
         JsonSerializerOptions options = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
         public void SaveSetting(WholeSetting setting)
         {
-            string json = JsonSerializer.Serialize<WholeSetting>(setting, options);
-            File.WriteAllText(SettingFilePath, json);
+            using var stream = new FileStream(SettingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            JsonSerializer.Serialize<WholeSetting>(stream, setting, options);
+        }
+
+        public Task SaveSettingAsync(WholeSetting setting)
+        {
+            using var stream = new FileStream(SettingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            var task = JsonSerializer.SerializeAsync<WholeSetting>(stream, setting, options);
+            return task;
         }
 
         public WholeSetting? LoadSetting()
         {
             string json = File.ReadAllText(SettingFilePath);
             var setting = JsonSerializer.Deserialize<WholeSetting>(json);
+            return setting;
+        }
+
+        public ValueTask<WholeSetting?> LoadSettingAsync()
+        {
+            using var stream = new FileStream(SettingFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+            var setting = JsonSerializer.DeserializeAsync<WholeSetting>(stream);
             return setting;
         }
     }
