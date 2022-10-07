@@ -185,6 +185,8 @@ namespace VRChatLogEventOSC
                 {EventTypeEnum.ReceivedRequestInvite, _settings[EventTypeEnum.ReceivedRequestInvite].AsReadOnly()},
                 {EventTypeEnum.SendInvite, _settings[EventTypeEnum.SendInvite].AsReadOnly()},
                 {EventTypeEnum.SendRequestInvite, _settings[EventTypeEnum.SendRequestInvite].AsReadOnly()},
+                {EventTypeEnum.JoinedRoomURL, _settings[EventTypeEnum.JoinedRoomURL].AsReadOnly()},
+                {EventTypeEnum.JoinedRoomName, _settings[EventTypeEnum.JoinedRoomName].AsReadOnly()},
                 {EventTypeEnum.SendFriendRequest, _settings[EventTypeEnum.SendFriendRequest].AsReadOnly()},
                 {EventTypeEnum.ReceivedFriendRequest, _settings[EventTypeEnum.ReceivedFriendRequest].AsReadOnly()},
                 {EventTypeEnum.AcceptFriendRequest, _settings[EventTypeEnum.AcceptFriendRequest].AsReadOnly()},
