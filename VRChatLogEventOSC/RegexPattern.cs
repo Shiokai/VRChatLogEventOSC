@@ -32,24 +32,24 @@ namespace VRChatLogEventOSC
             TookScreenshot,
         }
         private static readonly Dictionary<string, EventTypeEnum> EventType = new(){
-            {"ReceivedInvite", EventTypeEnum.ReceivedInvite},
-            {"ReceivedRequestInvite", EventTypeEnum.ReceivedRequestInvite},
-            {"SendInvite", EventTypeEnum.SendInvite},
-            {"SendRequestInvite", EventTypeEnum.SendRequestInvite},
-            {"JoinedRoomURL", EventTypeEnum.JoinedRoomURL},
-            {"JoinedRoomName", EventTypeEnum.JoinedRoomName},
-            {"SendFriendRequest", EventTypeEnum.SendFriendRequest},
-            {"ReceivedFriendRequest", EventTypeEnum.ReceivedFriendRequest},
-            {"AcceptFriendRequest", EventTypeEnum.AcceptFriendRequest},
-            {"ReceivedInviteResponse", EventTypeEnum.ReceivedInviteResponse},
-            {"ReceivedRequestInviteResponse", EventTypeEnum.ReceivedRequestInviteResponse},
-            {"PlayedVideo1", EventTypeEnum.PlayedVideo1},
-            {"PlayedVideo2", EventTypeEnum.PlayedVideo2},
-            {"AcceptInvite", EventTypeEnum.AcceptInvite},
-            {"AcceptRequestInvite", EventTypeEnum.AcceptRequestInvite},
-            {"OnPlayerJoined", EventTypeEnum.OnPlayerJoined},
-            {"OnPlayerLeft", EventTypeEnum.OnPlayerLeft},
-            {"TookScreenshot", EventTypeEnum.TookScreenshot},
+            {nameof(EventTypeEnum.ReceivedInvite), EventTypeEnum.ReceivedInvite},
+            {nameof(EventTypeEnum.ReceivedRequestInvite), EventTypeEnum.ReceivedRequestInvite},
+            {nameof(EventTypeEnum.SendInvite), EventTypeEnum.SendInvite},
+            {nameof(EventTypeEnum.SendRequestInvite), EventTypeEnum.SendRequestInvite},
+            {nameof(EventTypeEnum.JoinedRoomURL), EventTypeEnum.JoinedRoomURL},
+            {nameof(EventTypeEnum.JoinedRoomName), EventTypeEnum.JoinedRoomName},
+            {nameof(EventTypeEnum.SendFriendRequest), EventTypeEnum.SendFriendRequest},
+            {nameof(EventTypeEnum.ReceivedFriendRequest), EventTypeEnum.ReceivedFriendRequest},
+            {nameof(EventTypeEnum.AcceptFriendRequest), EventTypeEnum.AcceptFriendRequest},
+            {nameof(EventTypeEnum.ReceivedInviteResponse), EventTypeEnum.ReceivedInviteResponse},
+            {nameof(EventTypeEnum.ReceivedRequestInviteResponse), EventTypeEnum.ReceivedRequestInviteResponse},
+            {nameof(EventTypeEnum.PlayedVideo1), EventTypeEnum.PlayedVideo1},
+            {nameof(EventTypeEnum.PlayedVideo2), EventTypeEnum.PlayedVideo2},
+            {nameof(EventTypeEnum.AcceptInvite), EventTypeEnum.AcceptInvite},
+            {nameof(EventTypeEnum.AcceptRequestInvite), EventTypeEnum.AcceptRequestInvite},
+            {nameof(EventTypeEnum.OnPlayerJoined), EventTypeEnum.OnPlayerJoined},
+            {nameof(EventTypeEnum.OnPlayerLeft), EventTypeEnum.OnPlayerLeft},
+            {nameof(EventTypeEnum.TookScreenshot), EventTypeEnum.TookScreenshot},
         };
 
         private static readonly Dictionary<EventTypeEnum, IEnumerable<string>> CaptureName = new(){
@@ -193,25 +193,25 @@ namespace VRChatLogEventOSC
             string tookScreenshotSimple = @"\[VRC Camera\] Took screenshot to: ((.*))$";
 
             string anyEventPattern = "("
-            // + "?<ReceivedInvite>" +  receivedInviteSimple + ")" + "|(" 
-            // + "?<ReceivedRequestInvite>" + receivedRequestInviteSimple + ")" + "|(" 
-            // + "?<SendInvite>" + sendInviteSimple + ")" + "|(" 
-            // + "?<SendRequestInvite>" + sendRequestInviteSimple + ")" + "|(" 
-            + "?<JoinedRoomURL>" + joinedRoomURLSimple + ")" + "|("
-            + "?<JoinedRoomName>" + joinedRoomNameSimple + ")" + "|("
-            // + "?<SendFriendRequest>" + sendFriendRequestSimple + ")" + "|(" 
-            // + "?<ReceivedFriendRequest>" + receivedFriendRequestSimple + ")" + "|(" 
-            + "?<AcceptFriendRequest>" + acceptFriendRequestSimple + ")" + "|("
-            // + "?<ReceivedInviteResponse>" + receivedInviteResponseSimple + ")" + "|(" 
-            // + "?<ReceivedRequestInviteResponse>" + receivedRequestInviteResponseSimple + ")" + "|(" 
-            + "?<PlayedVideo1>" + playedVideo1Simple + ")" + "|("
-            + "?<PlayedVideo2>" + playedVideo2Simple + ")" + "|("
-            + "?<AcceptInvite>" + acceptInviteSimple + ")" + "|("
-            + "?<AcceptRequestInvite>" + acceptRequestInviteSimple + ")" + "|("
+            // + $"?<{nameof(EventTypeEnum.ReceivedInvite)}>" +  receivedInviteSimple + ")" + "|(" 
+            // + $"?<{nameof(EventTypeEnum.ReceivedRequestInvite)}>" + receivedRequestInviteSimple + ")" + "|(" 
+            // + $"?<{nameof(EventTypeEnum.SendInvite)}>" + sendInviteSimple + ")" + "|(" 
+            // + $"?<{nameof(EventTypeEnum.SendRequestInvite)}>" + sendRequestInviteSimple + ")" + "|(" 
+            + $"?<{nameof(EventTypeEnum.JoinedRoomURL)}>" + joinedRoomURLSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.JoinedRoomName)}>" + joinedRoomNameSimple + ")" + "|("
+            // + $"?<{nameof(EventTypeEnum.SendFriendRequest)}>" + sendFriendRequestSimple + ")" + "|(" 
+            // + $"?<{nameof(EventTypeEnum.ReceivedFriendRequest)}>" + receivedFriendRequestSimple + ")" + "|(" 
+            + $"?<{nameof(EventTypeEnum.AcceptFriendRequest)}>" + acceptFriendRequestSimple + ")" + "|("
+            // + $"?<{nameof(EventTypeEnum.ReceivedInviteResponse)}>" + receivedInviteResponseSimple + ")" + "|(" 
+            // + $"?<{nameof(EventTypeEnum.ReceivedRequestInviteResponse)}>" + receivedRequestInviteResponseSimple + ")" + "|(" 
+            + $"?<{nameof(EventTypeEnum.PlayedVideo1)}>" + playedVideo1Simple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.PlayedVideo2)}>" + playedVideo2Simple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.AcceptInvite)}>" + acceptInviteSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.AcceptRequestInvite)}>" + acceptRequestInviteSimple + ")" + "|("
 
-            + "?<OnPlayerJoined>" + onPlayerJoinedSimple + ")" + "|("
-            + "?<OnPlayerLeft>" + onPlayerLeftSimple + ")" + "|("
-            + "?<TookScreenshot>" + tookScreenshotSimple + ")";
+            + $"?<{nameof(EventTypeEnum.OnPlayerJoined)}>" + onPlayerJoinedSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.OnPlayerLeft)}>" + onPlayerLeftSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.TookScreenshot)}>" + tookScreenshotSimple + ")";
 
 
 
