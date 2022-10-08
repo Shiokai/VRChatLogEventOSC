@@ -8,9 +8,9 @@ using static VRChatLogEventOSC.RegexPattern;
 
 namespace VRChatLogEventOSC
 {
-    public class WholeSetting
+    public sealed record class WholeSetting
     {
-        public string Version { get; } = "0.0.0";
+        public int JsonVersion { get; init; } = 0;
 
         private readonly Dictionary<EventTypeEnum, List<SingleSetting>> _settings = new(){
             // {EventTypeEnum.ReceivedInvite, new(0)},
@@ -155,13 +155,17 @@ namespace VRChatLogEventOSC
         }
 
         [JsonConstructor]
-        public WholeSetting(string version, IReadOnlyDictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> settings)
+        public WholeSetting(int jsonVersion, IReadOnlyDictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> settings)
         {
-            // if (System.Version.Parse(version) < System.Version.Parse(Version))
+            // if (jsonVersion < JsonVersion)
             // {
             //     MigrateSetting();
             // }
-            Version = version;
+            // else
+            // {
+            //     JsonVersion = jsonVersion;
+            // }
+
             _settings = new Dictionary<EventTypeEnum, List<SingleSetting>>()
             {
                 // {EventTypeEnum.ReceivedInvite, settings.TryGetValue(EventTypeEnum.ReceivedInvite, out var receivedInvite) ? receivedInvite.ToList() : new List<SingleSetting>(0)},

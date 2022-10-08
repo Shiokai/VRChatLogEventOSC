@@ -33,7 +33,7 @@ namespace VRChatLogEventOSC
             _oSCSender.Dispose();
         }
 
-        private bool IsEventMatchSetting(Match match, SingleSetting setting, IEnumerable<string> captures)
+        private static bool IsEventMatchSetting(Match match, SingleSetting setting, IEnumerable<string> captures)
         {
             bool matchAll = true;
             foreach (var capture in captures)
@@ -101,22 +101,25 @@ namespace VRChatLogEventOSC
 
                     foreach (var setting in CurrentSetting.Settings[type])
                     {
-                        if (IsEventMatchSetting(match, setting, captures))
+                        if (setting.OSCValue == null)
                         {
-                            if (setting.OSCValue == null)
-                            {
-                                continue;
-                            }
-
-                            if (setting.OSCType == SingleSetting.OSCTypeEnum.Button)
-                            {
-                                _oSCSender.ButtomMessage(setting.OSCAddress, setting.OSCValue);
-                            }
-                            else if (setting.OSCType == SingleSetting.OSCTypeEnum.Toggle)
-                            {
-                                _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue);
-                            }
+                            continue;
                         }
+
+                        if (!IsEventMatchSetting(match, setting, captures))
+                        {
+                            continue;
+                        }
+
+                        if (setting.OSCType == SingleSetting.OSCTypeEnum.Button)
+                        {
+                            _oSCSender.ButtomMessage(setting.OSCAddress, setting.OSCValue);
+                        }
+                        else if (setting.OSCType == SingleSetting.OSCTypeEnum.Toggle)
+                        {
+                            _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue);
+                        }
+                        
                     }
                 });
 

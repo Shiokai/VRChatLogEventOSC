@@ -62,11 +62,11 @@ namespace VRChatLogEventOSC
             _sender.Connect();
         }
 
-        private OscSender CreateNewClient()
+        private static OscSender CreateNewClient()
         {
             return CreateNewClient(DefaultIPAddress.ToString(), DefaultPort);
         }
-        private OscSender CreateNewClient(string iPAddress, int port)
+        private static OscSender CreateNewClient(string iPAddress, int port)
         {
             IPAddress address;
             try
