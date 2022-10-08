@@ -157,27 +157,31 @@ namespace VRChatLogEventOSC
         [JsonConstructor]
         public WholeSetting(string version, IReadOnlyDictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> settings)
         {
+            // if (System.Version.Parse(version) < System.Version.Parse(Version))
+            // {
+            //     MigrateSetting();
+            // }
             Version = version;
             _settings = new Dictionary<EventTypeEnum, List<SingleSetting>>()
             {
-                // {EventTypeEnum.ReceivedInvite, settings[EventTypeEnum.ReceivedInvite].ToList()},
-                // {EventTypeEnum.ReceivedRequestInvite, settings[EventTypeEnum.ReceivedRequestInvite].ToList()},
-                // {EventTypeEnum.SendInvite, settings[EventTypeEnum.SendInvite].ToList()},
-                // {EventTypeEnum.SendRequestInvite, settings[EventTypeEnum.SendRequestInvite].ToList()},
-                {EventTypeEnum.JoinedRoomURL, settings[EventTypeEnum.JoinedRoomURL].ToList()},
-                {EventTypeEnum.JoinedRoomName, settings[EventTypeEnum.JoinedRoomName].ToList()},
-                // {EventTypeEnum.SendFriendRequest, settings[EventTypeEnum.SendFriendRequest].ToList()},
-                // {EventTypeEnum.ReceivedFriendRequest, settings[EventTypeEnum.ReceivedFriendRequest].ToList()},
-                {EventTypeEnum.AcceptFriendRequest, settings[EventTypeEnum.AcceptFriendRequest].ToList()},
-                // {EventTypeEnum.ReceivedInviteResponse, settings[EventTypeEnum.ReceivedInviteResponse].ToList()},
-                // {EventTypeEnum.ReceivedRequestInviteResponse, settings[EventTypeEnum.ReceivedRequestInviteResponse].ToList()},
-                {EventTypeEnum.PlayedVideo1, settings[EventTypeEnum.PlayedVideo1].ToList()},
-                {EventTypeEnum.PlayedVideo2, settings[EventTypeEnum.PlayedVideo2].ToList()},
-                {EventTypeEnum.AcceptInvite, settings[EventTypeEnum.AcceptInvite].ToList()},
-                {EventTypeEnum.AcceptRequestInvite, settings[EventTypeEnum.AcceptRequestInvite].ToList()},
-                {EventTypeEnum.OnPlayerJoined, settings[EventTypeEnum.OnPlayerJoined].ToList()},
-                {EventTypeEnum.OnPlayerLeft, settings[EventTypeEnum.OnPlayerLeft].ToList()},
-                {EventTypeEnum.TookScreenshot, settings[EventTypeEnum.TookScreenshot].ToList()},
+                // {EventTypeEnum.ReceivedInvite, settings.TryGetValue(EventTypeEnum.ReceivedInvite, out var receivedInvite) ? receivedInvite.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.ReceivedRequestInvite, settings.TryGetValue(EventTypeEnum.ReceivedRequestInvite, out var receivedRequestInvite) ? receivedRequestInvite.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.SendInvite, settings.TryGetValue(EventTypeEnum.SendInvite, out var sendInvite) ? sendInvite.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.SendRequestInvite, settings.TryGetValue(EventTypeEnum.SendRequestInvite, out var sendRequestInvite) ? sendRequestInvite.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.JoinedRoomURL, settings.TryGetValue(EventTypeEnum.JoinedRoomURL, out var joinedRoomURL) ? joinedRoomURL.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.JoinedRoomName, settings.TryGetValue(EventTypeEnum.JoinedRoomName, out var joinedRoomName) ? joinedRoomName.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.SendFriendRequest, settings.TryGetValue(EventTypeEnum.SendFriendRequest, out var sendFriendRequest) ? sendFriendRequest.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.ReceivedFriendRequest, settings.TryGetValue(EventTypeEnum.ReceivedFriendRequest, out var receivedFriendRequest) ? receivedFriendRequest.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.AcceptFriendRequest, settings.TryGetValue(EventTypeEnum.AcceptFriendRequest, out var acceptFriendRequest) ? acceptFriendRequest.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.ReceivedInviteResponse, settings.TryGetValue(EventTypeEnum.ReceivedInviteResponse, out var receivedInviteResponse) ? receivedInviteResponse.ToList() : new List<SingleSetting>(0)},
+                // {EventTypeEnum.ReceivedRequestInviteResponse, settings.TryGetValue(EventTypeEnum.ReceivedRequestInviteResponse, out var receivedRequestInviteResponse) ? receivedRequestInviteResponse.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.PlayedVideo1, settings.TryGetValue(EventTypeEnum.PlayedVideo1, out var playedVideo1) ? playedVideo1.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.PlayedVideo2, settings.TryGetValue(EventTypeEnum.PlayedVideo2, out var playedVideo2) ? playedVideo2.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.AcceptInvite, settings.TryGetValue(EventTypeEnum.AcceptInvite, out var acceptInvite) ? acceptInvite.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.AcceptRequestInvite, settings.TryGetValue(EventTypeEnum.AcceptRequestInvite, out var acceptRequestInvite) ? acceptRequestInvite.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.OnPlayerJoined, settings.TryGetValue(EventTypeEnum.OnPlayerJoined, out var onPlayerJoined) ? onPlayerJoined.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.OnPlayerLeft, settings.TryGetValue(EventTypeEnum.OnPlayerLeft, out var onPlayerLeft) ? onPlayerLeft.ToList() : new List<SingleSetting>(0)},
+                {EventTypeEnum.TookScreenshot, settings.TryGetValue(EventTypeEnum.TookScreenshot, out var tookScreenshot) ? tookScreenshot.ToList() : new List<SingleSetting>(0)},
             };
             Settings = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>()
             {
