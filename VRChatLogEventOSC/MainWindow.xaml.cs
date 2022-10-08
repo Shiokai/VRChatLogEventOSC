@@ -44,15 +44,16 @@ namespace VRChatLogEventOSC
             test[RegexPattern.EventTypeEnum.JoinedRoomURL].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: 5, oscType: SingleSetting.OSCTypeEnum.Toggle, oscAddress: "/avatars/parameters/JoinedRoomURL"));
             test[RegexPattern.EventTypeEnum.OnPlayerJoined].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: true, oscType: SingleSetting.OSCTypeEnum.Button, oscAddress: "/avatars/parameters/OnPlayerJoined"));
             test[RegexPattern.EventTypeEnum.OnPlayerLeft].Add(new(reqInv: SingleSetting.ReqInvEnum.None, oscValue: true, oscType: SingleSetting.OSCTypeEnum.Button, oscAddress: "/avatars/parameters/OnPlayerLeft"));
-            jsonLoader.SaveSetting(new WholeSetting(test));
+            // jsonLoader.SaveSetting(new WholeSetting(test));
             // jsonLoader.WriteAsJson(new SettingBase(settingName: "Test", userName: "Shiokai", message: "hoge"));
             var setting = jsonLoader.LoadSetting();
+            Debug.Print(setting?.ToString());
             _eventToOSCConverter.CurrentSetting = setting ?? new(WholeSetting.CreateDefaultWholeSettingDict());
             _oscSender.ButtomInterval = 5;
             // _oscSender.ChangeClient(9005);
             _watcher.IsDetectFileCreation = true;
-            // _watcher.StartWatchingFromTop();
-            _watcher.StartWatchingFromCurrent();
+            _watcher.StartWatchingFromTop();
+            // _watcher.StartWatchingFromCurrent();
             // Debug.Print(setting?.ToString());
             
 
