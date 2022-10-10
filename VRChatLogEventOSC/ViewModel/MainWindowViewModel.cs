@@ -52,7 +52,7 @@ namespace VRChatLogEventOSC
                 Style.Value = state != WindowState.Minimized ? WindowStyle.SingleBorderWindow : WindowStyle.ToolWindow;
             });
 
-            _notifyIcon.Text = "Running";
+            _notifyIcon.Text = _isRunning ? "VRChatLogEventOSC: Running" : "VRChatLogEventOSC: Paused";
 
             _model.IsRunnging.Subscribe(running =>
             {

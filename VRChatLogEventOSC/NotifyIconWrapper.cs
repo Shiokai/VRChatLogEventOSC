@@ -69,7 +69,7 @@ namespace VRChatLogEventOSC
         public IObservable<EventArgs>? DoubleClicked;
         public IObservable<EventArgs>? PauseSelected;
 
-        private ToolStripMenuItem _openItem = new("Open");
+        private ToolStripMenuItem _openItem = new("Open Control");
         private ToolStripMenuItem _quitItem = new("Quit");
         private ToolStripMenuItem _pauseItem = new("Pause [ ]");
 
@@ -90,7 +90,8 @@ namespace VRChatLogEventOSC
                 h => _quitItem.Click += h,
                 h => _quitItem.Click -= h
             );
-            var contextMenu = new ContextMenuStrip { Items = { _openItem, _pauseItem, _quitItem } };
+            var separator = new ToolStripSeparator();
+            var contextMenu = new ContextMenuStrip { Items = { _openItem, _pauseItem, separator, _quitItem } };
             return contextMenu;
         }
 

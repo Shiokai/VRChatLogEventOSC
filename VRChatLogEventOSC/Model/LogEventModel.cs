@@ -13,7 +13,6 @@ namespace VRChatLogEventOSC
         public static LogEventModel Instance
         { 
             get => _instance ??= new LogEventModel();
-            private set => _instance = value;
         }
 
         private readonly LogFileWatcher _logFileWatcher = new();
