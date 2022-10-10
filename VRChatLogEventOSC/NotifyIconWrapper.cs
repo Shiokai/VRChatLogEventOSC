@@ -14,31 +14,6 @@ namespace VRChatLogEventOSC
         private readonly NotifyIcon? _notifyIcon;
         private readonly ContextMenuStrip? _contextMenuStrip;
 
-        public NotifyIconWrapper()
-        {
-            if (DesignerProperties.GetIsInDesignMode(this))
-                return;
-            _contextMenuStrip = CreateContextMenu();
-            _notifyIcon = new NotifyIcon
-            {
-                Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
-                Visible = true,
-                ContextMenuStrip = _contextMenuStrip,
-            };
-            DoubleClicked = Observable.FromEvent<EventHandler, EventArgs>(
-                h => (s, e) => h(e),
-                h => _notifyIcon.DoubleClick += h,
-                h => _notifyIcon.DoubleClick -= h
-            );
-            Application.Current.Exit += (obj, args) => { _notifyIcon.Dispose(); };
-
-            PauseSelected?.Subscribe(_ => 
-            {
-                _isPaused = !_isPaused;
-                _pauseItem.Text = $"Pause [{(_isPaused ? "✓" : " ")}]";
-            });
-        }
-
         public string Text
         {
             get => _notifyIcon?.Text ?? string.Empty;
@@ -95,6 +70,34 @@ namespace VRChatLogEventOSC
             return contextMenu;
         }
 
+        public NotifyIconWrapper()
+        {
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+                
+            _contextMenuStrip = CreateContextMenu();
+
+            _notifyIcon = new NotifyIcon
+            {
+                Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
+                Visible = true,
+                ContextMenuStrip = _contextMenuStrip,
+            };
+            
+            DoubleClicked = Observable.FromEvent<EventHandler, EventArgs>(
+                h => (s, e) => h(e),
+                h => _notifyIcon.DoubleClick += h,
+                h => _notifyIcon.DoubleClick -= h
+            );
+
+            PauseSelected?.Subscribe(_ => 
+            {
+                _isPaused = !_isPaused;
+                _pauseItem.Text = $"Pause [{(_isPaused ? "✓" : " ")}]";
+            });
+
+            Application.Current.Exit += (obj, args) => { _notifyIcon.Dispose(); };
+        }
         public class NotifyRequestRecord
         {
             public string Title { get; set; } = "";
