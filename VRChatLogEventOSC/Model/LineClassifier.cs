@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Reactive.Bindings.Extensions;
 using static VRChatLogEventOSC.RegexPattern;
 
 
@@ -58,31 +59,31 @@ namespace VRChatLogEventOSC
 
         public LineClassifier(LogFileWatcher logFileWatcher)
         {
+            _eventsDisposable = new CompositeDisposable(_eventReactiveProperties.Values);
             EventReactiveProperties = new Dictionary<EventTypeEnum, ReadOnlyReactivePropertySlim<string>>()
             {
-                {EventTypeEnum.ReceivedInvite, _eventReactiveProperties[EventTypeEnum.ReceivedInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.ReceivedRequestInvite, _eventReactiveProperties[EventTypeEnum.ReceivedRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.SendInvite, _eventReactiveProperties[EventTypeEnum.SendInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.SendRequestInvite, _eventReactiveProperties[EventTypeEnum.SendRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.JoinedRoomURL, _eventReactiveProperties[EventTypeEnum.JoinedRoomURL].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.JoinedRoomName, _eventReactiveProperties[EventTypeEnum.JoinedRoomName].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.SendFriendRequest, _eventReactiveProperties[EventTypeEnum.SendFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.ReceivedFriendRequest, _eventReactiveProperties[EventTypeEnum.ReceivedFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.AcceptFriendRequest, _eventReactiveProperties[EventTypeEnum.AcceptFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.ReceivedInviteResponse, _eventReactiveProperties[EventTypeEnum.ReceivedInviteResponse].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.ReceivedRequestInviteResponse, _eventReactiveProperties[EventTypeEnum.ReceivedRequestInviteResponse].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.PlayedVideo1, _eventReactiveProperties[EventTypeEnum.PlayedVideo1].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.PlayedVideo2, _eventReactiveProperties[EventTypeEnum.PlayedVideo2].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.AcceptInvite, _eventReactiveProperties[EventTypeEnum.AcceptInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.AcceptRequestInvite, _eventReactiveProperties[EventTypeEnum.AcceptRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.OnPlayerJoined, _eventReactiveProperties[EventTypeEnum.OnPlayerJoined].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.OnPlayerLeft, _eventReactiveProperties[EventTypeEnum.OnPlayerLeft].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
-                {EventTypeEnum.TookScreenshot, _eventReactiveProperties[EventTypeEnum.TookScreenshot].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None)},
+                {EventTypeEnum.ReceivedInvite, _eventReactiveProperties[EventTypeEnum.ReceivedInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.ReceivedRequestInvite, _eventReactiveProperties[EventTypeEnum.ReceivedRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.SendInvite, _eventReactiveProperties[EventTypeEnum.SendInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.SendRequestInvite, _eventReactiveProperties[EventTypeEnum.SendRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.JoinedRoomURL, _eventReactiveProperties[EventTypeEnum.JoinedRoomURL].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.JoinedRoomName, _eventReactiveProperties[EventTypeEnum.JoinedRoomName].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.SendFriendRequest, _eventReactiveProperties[EventTypeEnum.SendFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.ReceivedFriendRequest, _eventReactiveProperties[EventTypeEnum.ReceivedFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.AcceptFriendRequest, _eventReactiveProperties[EventTypeEnum.AcceptFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.ReceivedInviteResponse, _eventReactiveProperties[EventTypeEnum.ReceivedInviteResponse].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.ReceivedRequestInviteResponse, _eventReactiveProperties[EventTypeEnum.ReceivedRequestInviteResponse].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.PlayedVideo1, _eventReactiveProperties[EventTypeEnum.PlayedVideo1].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.PlayedVideo2, _eventReactiveProperties[EventTypeEnum.PlayedVideo2].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.AcceptInvite, _eventReactiveProperties[EventTypeEnum.AcceptInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.AcceptRequestInvite, _eventReactiveProperties[EventTypeEnum.AcceptRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.OnPlayerJoined, _eventReactiveProperties[EventTypeEnum.OnPlayerJoined].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.OnPlayerLeft, _eventReactiveProperties[EventTypeEnum.OnPlayerLeft].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
+                {EventTypeEnum.TookScreenshot, _eventReactiveProperties[EventTypeEnum.TookScreenshot].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
             };
 
 
 
-            _eventsDisposable = new CompositeDisposable(_eventReactiveProperties.Values);
 
             _logFileWatcher = logFileWatcher;
 
