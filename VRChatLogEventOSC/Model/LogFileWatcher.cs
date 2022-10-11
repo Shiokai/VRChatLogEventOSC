@@ -4,16 +4,19 @@ using System.Reactive.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Reactive.Bindings;
+using System.ComponentModel;
 
 namespace VRChatLogEventOSC
 {
-    public sealed class LogFileWatcher : IDisposable
+    public sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
     {
-        private static readonly string _logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private static readonly string _defaultLogDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
+        private string _logDirectoryPath { get; set; } = _defaultLogDirectoryPath;
         private string _logFilePath = "";
         private readonly FileSystemWatcher _watcher = new()
         {
-            Path = _logDirectoryPath,
+            Path = _defaultLogDirectoryPath,
             Filter = "*.txt",
             NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName,
             IncludeSubdirectories = false
@@ -81,6 +84,12 @@ namespace VRChatLogEventOSC
         public void PauseWatching()
         {
             _isWatching.Value = false;
+        }
+
+        public void ChangeLogDerectory(string dirPath)
+        {
+            _logDirectoryPath = dirPath;
+            _watcher.Path = dirPath;
         }
 
         public LogFileWatcher()

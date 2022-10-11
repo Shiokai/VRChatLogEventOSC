@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
+using System.ComponentModel;
+
+using VRChatLogEventOSC.Model;
 
 namespace VRChatLogEventOSC
 {
-    internal class LogEventModel : IDisposable
+    internal class LogEventModel : IDisposable, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
         private static LogEventModel? _instance;
         public static LogEventModel Instance
         { 
@@ -57,12 +61,18 @@ namespace VRChatLogEventOSC
             _logFileWatcher.StartWatchingFromTop();
         }
 
+        public void AttachConfig(ConfigData config)
+        {
+            _sender.ChangeClient(config.IPAddress.ToString(), config.Port);
+            _logFileWatcher.ChangeLogDerectory(config.LogFileDirectory);
+        }
+
         private LogEventModel()
         {
             _lineClassifier = new LineClassifier(_logFileWatcher);
             _converter = new EventToOSCConverter(_lineClassifier, _sender);
-            var settignLoader = new SettingLoader();
-            _converter.CurrentSetting = settignLoader.LoadSetting() ?? new WholeSetting(WholeSetting.CreateEmptyWholeSettingDict());
+            // var settignLoader = new FileLoader();
+            _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting(WholeSetting.CreateEmptyWholeSettingDict());
             _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.IsDetectFileCreation = true;
             // _logFileWatcher.StartWatchingFromTop();
