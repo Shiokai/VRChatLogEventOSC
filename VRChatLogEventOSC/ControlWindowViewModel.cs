@@ -41,10 +41,7 @@ namespace VRChatLogEventOSC
         [Required(ErrorMessage = "Required")]
         public ReactiveProperty<string> ConfigDirectoryPath { get; init; }
         public ReadOnlyReactivePropertySlim<string> ConfigDirectoryPathError { get; init; }
-        public ReactivePropertySlim<bool> ConfigDetectLatestLogFile { get; init; }
-        public ReactivePropertySlim<bool> ConfigFullScanWithDetect { get; init; }
 
-        public ReactiveCommand SaveConfigCommand { get; init; }
         public ReactiveCommand SaveAndLoadCommand { get; init; }
 
         private readonly CompositeDisposable _compositeDisposable = new();
@@ -84,7 +81,7 @@ namespace VRChatLogEventOSC
                 _isPaused.Value = false;
             }).AddTo(_compositeDisposable);
 
-            QuitApplicationCommand = new ReactiveCommand().WithSubscribe(() => _model.QuitApplication()).AddTo(_compositeDisposable);
+            QuitApplicationCommand = new ReactiveCommand().WithSubscribe(() => ControlWindowModel.QuitApplication()).AddTo(_compositeDisposable);
 
 
             ConfigIPAdress = new ReactiveProperty<string>(IPAddress.Loopback.ToString())
@@ -114,27 +111,18 @@ namespace VRChatLogEventOSC
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigDetectLatestLogFile = new ReactivePropertySlim<bool>().AddTo(_compositeDisposable);
-
-            ConfigFullScanWithDetect = new ReactivePropertySlim<bool>().AddTo(_compositeDisposable);
-
             var canSave = Observable.Merge(ConfigIPAdress.ObserveHasErrors.ToUnit(), ConfigPort.ObserveHasErrors.ToUnit(), ConfigDirectoryPath.ObserveHasErrors.ToUnit())
             .Select(_ => ConfigIPAdress.HasErrors || ConfigPort.HasErrors || ConfigDirectoryPath.HasErrors)
             .Inverse();
-
-            SaveConfigCommand = canSave
-            .ToReactiveCommand()
-            .WithSubscribe(() => _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigDetectLatestLogFile.Value, ConfigFullScanWithDetect.Value))
-            .AddTo(_compositeDisposable);
 
             SaveAndLoadCommand = canSave
             .ToReactiveCommand()
             .WithSubscribe(() => 
             {
-                _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigDetectLatestLogFile.Value, ConfigFullScanWithDetect.Value);
+                _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
                 var config = _model.LoadConfig();
-                (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigDetectLatestLogFile.Value, ConfigFullScanWithDetect.Value) = (config.IPAddress, config.Port, config.LogFileDirectory, config.DetectLatestLogFile, config.FullScanWithDetect);
-            });
+                (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            }).AddTo(_compositeDisposable);
 
             FolderBrowseCommand = new ReactiveCommand().WithSubscribe(() =>
             {
@@ -150,9 +138,9 @@ namespace VRChatLogEventOSC
                     ConfigDirectoryPath.Value = folderBrowserDialog.SelectedPath;
                 }
             }).AddTo(_compositeDisposable);
-            
+
             var config = _model.LoadConfig();
-            (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigDetectLatestLogFile.Value, ConfigFullScanWithDetect.Value) = (config.IPAddress, config.Port, config.LogFileDirectory, config.DetectLatestLogFile, config.FullScanWithDetect);
+            (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
 
         }
 

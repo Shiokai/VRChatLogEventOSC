@@ -37,7 +37,7 @@ namespace VRChatLogEventOSC
             _logEventModel.Rescan();
         }
 
-        public void QuitApplication()
+        public static void QuitApplication()
         {
             Application.Current.Shutdown();
         }
@@ -63,9 +63,9 @@ namespace VRChatLogEventOSC
             return config;
         }
 
-        public void SaveConfig(string ipAddress, int port, string logFileDirectory, bool detectLatestLogFile, bool fullScanWithDetect)
+        public void SaveConfig(string ipAddress, int port, string logFileDirectory)
         {
-            var config = new Model.ConfigData(ipAddress, port, logFileDirectory, detectLatestLogFile, fullScanWithDetect);
+            var config = new Model.ConfigData(ipAddress, port, logFileDirectory);
             FileLoader.SaveConfig(config);
             _logEventModel.AttachConfig(config);
         }

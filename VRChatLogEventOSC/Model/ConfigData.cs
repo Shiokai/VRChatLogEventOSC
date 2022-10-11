@@ -15,26 +15,19 @@ namespace VRChatLogEventOSC.Model
         public string IPAddress { get; init; }
         public int Port { get; init; }
         public string LogFileDirectory { get; init; }
-        public bool DetectLatestLogFile { get; init; }
-        public bool FullScanWithDetect { get; init; }
-
         public ConfigData()
         {
             IPAddress = System.Net.IPAddress.Loopback.ToString();
             Port = 9000;
             LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
-            DetectLatestLogFile = true;
-            FullScanWithDetect = false;
         }
 
         [JsonConstructor]
-        public ConfigData(string ipAddress, int port, string logFileDirectory, bool detectLatestLogFile, bool fullScanWithDetect)
+        public ConfigData(string ipAddress, int port, string logFileDirectory)
         {
             IPAddress = ipAddress;
             Port = port;
             LogFileDirectory = logFileDirectory;
-            DetectLatestLogFile = detectLatestLogFile;
-            FullScanWithDetect = fullScanWithDetect;
         }
     }
 }

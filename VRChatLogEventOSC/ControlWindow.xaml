@@ -22,14 +22,11 @@
         <Label Content="IPAdress" HorizontalAlignment="Left" Margin="23,272,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.474,0.194"/>
         <TextBox HorizontalAlignment="Left" Margin="88,323,0,0" TextWrapping="Wrap" Text="{Binding ConfigPort.Value,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Port" HorizontalAlignment="Left" Margin="23,319,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.474,0.194"/>
-        <CheckBox Content="DetectLatestLogFile" HorizontalAlignment="Left" Margin="86,367,0,0" VerticalAlignment="Top" IsChecked="{Binding ConfigDetectLatestLogFile.Value}"/>
-        <CheckBox Content="FullScanWithDetect" HorizontalAlignment="Left" Margin="87,387,0,0" VerticalAlignment="Top" IsChecked="{Binding ConfigFullScanWithDetect.Value}"/>
         <Button Content="Browze" HorizontalAlignment="Left" Margin="224,181,0,0" VerticalAlignment="Top" Command="{Binding FolderBrowseCommand}"/>
-        <Button Content="Save" HorizontalAlignment="Left" Margin="116,439,0,0" VerticalAlignment="Top" Command="{Binding SaveConfigCommand}"/>
         <Label Content="{Binding ConfigDirectoryPathError.Value, Mode=OneWay}" HorizontalAlignment="Left" Margin="17,203,0,0" VerticalAlignment="Top" Foreground="Red"/>
         <Label Content="{Binding ConfigIPAdressError.Value, Mode=OneWay}" HorizontalAlignment="Left" Margin="29,298,0,0" VerticalAlignment="Top" Foreground="Red"/>
         <Label Content="{Binding ConfigPortError.Value, Mode=OneWay}" HorizontalAlignment="Left" Margin="39,345,0,0" VerticalAlignment="Top" Foreground="Red"/>
-        <Button Content="Save and Load" HorizontalAlignment="Left" Margin="168,439,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.165,0.062" Command="{Binding SaveAndLoadCommand}"/>
+        <Button Content="Apply" HorizontalAlignment="Left" Margin="122,394,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.165,0.062" Command="{Binding SaveAndLoadCommand}"/>
 
         <!--<Button Content="Notify" Margin="10" Width="100" Height="50" Command="{Binding NotifyCommand}"/>-->
         <!--<Button Content="Pause"  Margin="350,286,350,98" Width="100" Height="50" Command="{Binding PauseCommand}"/>
