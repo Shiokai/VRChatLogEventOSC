@@ -61,7 +61,7 @@ namespace VRChatLogEventOSC
                 // {EventTypeEnum.SendRequestInvite, new(0)},
                 {EventTypeEnum.JoinedRoomURL, new(0)},
                 {EventTypeEnum.JoinedRoomName, new(0)},
-                {EventTypeEnum.SendFriendRequest, new(0)},
+                // {EventTypeEnum.SendFriendRequest, new(0)},
                 // {EventTypeEnum.ReceivedFriendRequest, new(0)},
                 {EventTypeEnum.AcceptFriendRequest, new(0)},
                 // {EventTypeEnum.ReceivedInviteResponse, new(0)},
