@@ -1,0 +1,23 @@
+﻿<Window x:Class="VRChatLogEventOSC.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:VRChatLogEventOSC"
+        mc:Ignorable="d"
+        Title="ControlWindow" Height="500" Width="300">
+    <Window.DataContext>
+        <local:ControlWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Button Content="Pause" HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding PauseCommand}"/>
+        <Button Content="Restart" HorizontalAlignment="Center" Margin="0,99,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding RestartCommand}"/>
+        <Button Content="Rescan" HorizontalAlignment="Center" Margin="0,141,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding RescanCommand}"/>
+        <Button Content="RestartWithScan" HorizontalAlignment="Center" Margin="0,194,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding RestartWithScanCommand}"/>
+        <Button Content="Quit" HorizontalAlignment="Left" Margin="133,301,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.879" Command="{Binding QuitApplicationCommand}"/>
+        <!--<Button Content="Notify" Margin="10" Width="100" Height="50" Command="{Binding NotifyCommand}"/>-->
+        <!--<Button Content="Pause"  Margin="350,286,350,98" Width="100" Height="50" Command="{Binding PauseCommand}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="226,114,0,0" TextWrapping="Wrap" Text="{Binding Status.Value, Mode=OneWay}" VerticalAlignment="Top"/>-->
+    </Grid>
+</Window>

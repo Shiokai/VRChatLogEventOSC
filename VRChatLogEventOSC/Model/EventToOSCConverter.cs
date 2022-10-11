@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Reactive.Bindings.Extensions;
 using static VRChatLogEventOSC.RegexPattern;
 
 using System.Diagnostics;
@@ -121,9 +122,7 @@ namespace VRChatLogEventOSC
                         }
                         
                     }
-                });
-
-                _eventsDisposables.Add(diposable);
+                }).AddTo(_eventsDisposables);
             }
         }
     }

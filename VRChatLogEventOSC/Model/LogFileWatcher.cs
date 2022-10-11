@@ -28,7 +28,9 @@ namespace VRChatLogEventOSC
 
         private readonly ReactivePropertySlim<string> _logLine = new(string.Empty);
         public IObservable<string> LogLineObservable => _logLine.Skip(1);
-        private bool _isWatching = false;
+        // private bool _isWatching = false;
+        private readonly ReactivePropertySlim<bool> _isWatching = new(false);
+        public ReadOnlyReactivePropertySlim<bool> IsWatching;
         public bool IsDetectFileCreation {get; set;} = false;
 
         private bool _disposed = false;
@@ -44,7 +46,7 @@ namespace VRChatLogEventOSC
             _disposed = true;
         }
 
-        private void LoadLatestLogFile()
+        public void LoadLatestLogFile()
         {
             _logFilePath = Directory.GetFiles(_logDirectoryPath, "output_log_*.txt", SearchOption.TopDirectoryOnly).OrderByDescending(file => Directory.GetCreationTime(file)).First();
             _lastLength = 0;
@@ -52,33 +54,39 @@ namespace VRChatLogEventOSC
 
         public void StartWatchingFromCurrent()
         {
+            if (!File.Exists(_logFilePath))
+            {
+                return;
+            }
+            
             using (var fileStream = new FileStream(_logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                     _lastLength = fileStream.Length;
             }
 
-            _isWatching = true;
+            _isWatching.Value = true;
         }
 
         public void StartWatchingFromTop()
         {
             _lastLength = 0;
-            _isWatching = true;
+            _isWatching.Value = true;
         }
 
         public void StartWatchingFromLatest()
         {
-            _isWatching = true;
+            _isWatching.Value = true;
         }
 
         public void PauseWatching()
         {
-            _isWatching = false;
+            _isWatching.Value = false;
         }
 
         public LogFileWatcher()
         {
-            LoadLatestLogFile();
+            IsWatching = _isWatching.ToReadOnlyReactivePropertySlim(false, ReactivePropertyMode.DistinctUntilChanged);
+            // LoadLatestLogFile();
             _fileCreationDisposable = Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
                 h => (s, e) => h(e),
                 h => _watcher.Created += h,
@@ -95,7 +103,7 @@ namespace VRChatLogEventOSC
             _watcher.EnableRaisingEvents = true;
 
             
-            _watchDisposable = Observable.Interval(TimeSpan.FromSeconds(Interval)).Where(_ => _isWatching).Subscribe(_ =>
+            _watchDisposable = Observable.Interval(TimeSpan.FromSeconds(Interval)).Where(_ => _isWatching.Value).Subscribe(_ =>
             {
                 if (!File.Exists(_logFilePath))
                 {

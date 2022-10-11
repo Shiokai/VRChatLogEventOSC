@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+	<UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="ReactiveProperty" Version="8.1.2" />
     <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
     <PackageReference Include="Rug.Osc" Version="1.2.5" />
