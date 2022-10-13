@@ -30,41 +30,61 @@ namespace VRChatLogEventOSC
 
         public static void SaveConfig(ConfigData config)
         {
-            using var stream = new FileStream(_configFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            using var stream = new FileStream(_configFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
             JsonSerializer.Serialize<ConfigData>(stream, config, _options);
         }
 
         public static Task SaveConfigAsync(ConfigData config)
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
             var task = JsonSerializer.SerializeAsync<ConfigData>(stream, config, _options);
             return task;
         }
 
         public static WholeSetting? LoadSetting()
         {
-            string json = File.ReadAllText(_settingFilePath);
-            var setting = JsonSerializer.Deserialize<WholeSetting>(json);
+            if (File.Exists(_settingFilePath))
+            {
+                SaveSetting(new WholeSetting(WholeSetting.CreateEmptyWholeSettingDict()));
+            }
+
+            using var stream = new FileStream(_settingFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var setting = JsonSerializer.Deserialize<WholeSetting>(stream);
             return setting;
         }
 
         public static ValueTask<WholeSetting?> LoadSettingAsync()
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+            if (File.Exists(_settingFilePath))
+            {
+                SaveSetting(new WholeSetting(WholeSetting.CreateEmptyWholeSettingDict()));
+            }
+
+            using var stream = new FileStream(_settingFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var setting = JsonSerializer.DeserializeAsync<WholeSetting>(stream);
             return setting;
         }
 
         public static ConfigData? LoadConfig()
         {
-            string json = File.ReadAllText(_configFilePath);
-            var config = JsonSerializer.Deserialize<ConfigData>(json);
+            if (File.Exists(_configFilePath))
+            {
+                SaveConfig(new ConfigData());
+            }
+
+            using var stream = new FileStream(_configFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var config = JsonSerializer.Deserialize<ConfigData>(stream);
             return config;
         }
 
         public static ValueTask<ConfigData?> LoadConfigAsync()
         {
-            using var stream = new FileStream(_configFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+            if (File.Exists(_configFilePath))
+            {
+                SaveConfig(new ConfigData());
+            }
+
+            using var stream = new FileStream(_configFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var config = JsonSerializer.DeserializeAsync<ConfigData>(stream);
             return config;
         }
