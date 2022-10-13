@@ -17,13 +17,13 @@ namespace VRChatLogEventOSC
         private static readonly JsonSerializerOptions _options = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
         public static void SaveSetting(WholeSetting setting)
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
             JsonSerializer.Serialize<WholeSetting>(stream, setting, _options);
         }
 
         public static Task SaveSettingAsync(WholeSetting setting)
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
             var task = JsonSerializer.SerializeAsync<WholeSetting>(stream, setting, _options);
             return task;
         }
@@ -43,7 +43,7 @@ namespace VRChatLogEventOSC
 
         public static WholeSetting? LoadSetting()
         {
-            if (File.Exists(_settingFilePath))
+            if (!File.Exists(_settingFilePath))
             {
                 SaveSetting(new WholeSetting(WholeSetting.CreateEmptyWholeSettingDict()));
             }
@@ -55,7 +55,7 @@ namespace VRChatLogEventOSC
 
         public static ValueTask<WholeSetting?> LoadSettingAsync()
         {
-            if (File.Exists(_settingFilePath))
+            if (!File.Exists(_settingFilePath))
             {
                 SaveSetting(new WholeSetting(WholeSetting.CreateEmptyWholeSettingDict()));
             }
@@ -67,7 +67,7 @@ namespace VRChatLogEventOSC
 
         public static ConfigData? LoadConfig()
         {
-            if (File.Exists(_configFilePath))
+            if (!File.Exists(_configFilePath))
             {
                 SaveConfig(new ConfigData());
             }
@@ -79,7 +79,7 @@ namespace VRChatLogEventOSC
 
         public static ValueTask<ConfigData?> LoadConfigAsync()
         {
-            if (File.Exists(_configFilePath))
+            if (!File.Exists(_configFilePath))
             {
                 SaveConfig(new ConfigData());
             }
