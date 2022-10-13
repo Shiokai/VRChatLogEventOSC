@@ -53,6 +53,12 @@ namespace VRChatLogEventOSC.SystrayIcon
             controlWindow.Show();
         }
 
+        public void OpenSettingWindow()
+        {
+            var settingWindow = new SettingWindow();
+            settingWindow.Show();
+        }
+
         private NotifyIconModel()
         {
             _logEventModel = LogEventModel.Instance;

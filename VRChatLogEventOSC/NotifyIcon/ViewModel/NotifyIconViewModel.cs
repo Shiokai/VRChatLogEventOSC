@@ -66,7 +66,8 @@ namespace VRChatLogEventOSC.SystrayIcon
         {
             _model = NotifyIconModel.Instance;
 
-            _notifyIcon.OpenSelected?.Subscribe(_ => _model.OpenControlWindow()).AddTo(_compositeDisposable);
+            _notifyIcon.OpenControlSelected?.Subscribe(_ => _model.OpenControlWindow()).AddTo(_compositeDisposable);
+            _notifyIcon.OpenSettingSelected?.Subscribe(_ => _model.OpenSettingWindow()).AddTo(_compositeDisposable);
             _notifyIcon.QuitSelected?.Subscribe(_ => Application.Current.Shutdown()).AddTo(_compositeDisposable);
             _notifyIcon.PauseSelected?.Subscribe(_ => 
             {
