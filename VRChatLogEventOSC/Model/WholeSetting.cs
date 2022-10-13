@@ -104,7 +104,7 @@ namespace VRChatLogEventOSC
 
         public WholeSetting()
         {
-            _settings = CreateDefaultWholeSettingDict();
+            _settings = CreateEmptyWholeSettingDict();
             Settings = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>()
             {
                 // {EventTypeEnum.ReceivedInvite, _settings[EventTypeEnum.ReceivedInvite].AsReadOnly()},
