@@ -95,7 +95,6 @@ namespace VRChatLogEventOSC
         public LogFileWatcher()
         {
             IsWatching = _isWatching.ToReadOnlyReactivePropertySlim(false, ReactivePropertyMode.DistinctUntilChanged);
-            // LoadLatestLogFile();
             _fileCreationDisposable = Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
                 h => (s, e) => h(e),
                 h => _watcher.Created += h,

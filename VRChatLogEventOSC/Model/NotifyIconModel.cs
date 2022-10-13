@@ -49,8 +49,8 @@ namespace VRChatLogEventOSC
 
         public void OpenControlWindow()
         {
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
+            var controlWindow = new ControlWindow();
+            controlWindow.Show();
         }
 
         private NotifyIconModel()

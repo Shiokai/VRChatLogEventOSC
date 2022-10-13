@@ -10,24 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Reactive.Bindings;
-using System.ComponentModel;
-
-using System.Diagnostics;
 
 namespace VRChatLogEventOSC
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// ControlWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ControlWindow : Window
     {
-        public MainWindow()
+        public ControlWindow()
         {
             InitializeComponent();
-            Closed += (s, e) => (DataContext as IDisposable)?.Dispose();
+            Closing += (s, e) => (DataContext as IDisposable)?.Dispose();
         }
     }
 }
