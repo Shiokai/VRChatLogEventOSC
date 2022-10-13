@@ -31,11 +31,11 @@ namespace VRChatLogEventOSC
         public ReactiveCommand FolderBrowseCommand { get; init; }
 
         [Required(ErrorMessage = "Required")]
-        [RegularExpression(@"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$", ErrorMessage = "Invalid IPAdress")]
+        [RegularExpression(@"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$", ErrorMessage = "不正なIPアドレスです")]
         public ReactiveProperty<string> ConfigIPAdress { get; init; }
         public ReadOnlyReactivePropertySlim<string> ConfigIPAdressError { get; init; }
         [Required(ErrorMessage = "Required")]
-        [Range(0, 65535)]
+        [Range(0, 65535, ErrorMessage = "ポート番号の範囲は0~65535です")]
         public ReactiveProperty<int> ConfigPort { get; init; }
         public ReadOnlyReactivePropertySlim<string> ConfigPortError { get; init; }
         [Required(ErrorMessage = "Required")]
@@ -107,7 +107,7 @@ namespace VRChatLogEventOSC
             .AddTo(_compositeDisposable);
 
             ConfigDirectoryPath = new ReactiveProperty<string>(_model.DefaultLogDirectoryPath)
-            .SetValidateNotifyError(val => !System.IO.Directory.Exists(val) ? "No such directory." : null)
+            .SetValidateNotifyError(val => !System.IO.Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
             .AddTo(_compositeDisposable);
 
             ConfigDirectoryPathError = ConfigDirectoryPath.ObserveErrorChanged

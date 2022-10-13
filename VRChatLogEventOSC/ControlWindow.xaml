@@ -5,64 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VRChatLogEventOSC"
         mc:Ignorable="d"
-        Title="ControlWindow" Height="450" Width="500">
+        Title="ControlWindow" Height="350" Width="350" MinHeight="300" MinWidth="300">
     <Window.DataContext>
         <local:ControlWindowViewModel/>
     </Window.DataContext>
-    <Canvas Height="430" Margin="0,2,0,2">
-        <Grid Height="200" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Button Content="Pause" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.416,-0.048" Grid.Row="0" Command="{Binding PauseCommand}" Width="120" Height="30"/>
-            <Button Content="Restart" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="0" Command="{Binding RestartCommand}" Width="120" Height="30"/>
-            <Button Content="RestartFromPaused" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="1" Command="{Binding RestartWithScanCommand}" Width="120" Height="30"/>
-            <Button Content="Rescan" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="2" Command="{Binding RescanCommand}" Width="120" Height="30"/>
-            <Button Content="Quit" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.416,-0.048" Grid.Row="2" Grid.Column="0" Command="{Binding QuitApplicationCommand}" Width="120" Height="30"/>
+            <Button Content="Pause" RenderTransformOrigin="-0.416,-0.048" Grid.Row="0" Command="{Binding PauseCommand}" Margin="5,5,5,5" ToolTip="ログの読み取りを一時停止します"/>
+            <Button Content="Restart" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="0" Command="{Binding RestartCommand}" Margin="5,5,5,5" ToolTip="現在の位置からログの読み取りを再開します"/>
+            <Button Content="Continue" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="1" Command="{Binding RestartWithScanCommand}" Margin="5,5,5,5" ToolTip="最後の読み取り位置からログの読み取りを再開します"/>
+            <Button Content="Rescan" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="2" Command="{Binding RescanCommand}" Margin="5,5,5,5" ToolTip="ログの先頭から読み取りを再開します"/>
+            <Button Content="Quit" RenderTransformOrigin="-0.416,-0.048" Grid.Row="2" Grid.Column="0" Command="{Binding QuitApplicationCommand}" Margin="5,5,5,5" ToolTip="アプリケーションを終了します"/>
         </Grid>
-        <Grid Width="500" Height="250" Canvas.Top="192">
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150*"></ColumnDefinition>
-                <ColumnDefinition Width="271*"></ColumnDefinition>
-                <ColumnDefinition Width="80*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Content="LogDirectory" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.474,0.194" Width="80" Height="30"/>
-            <Grid Grid.Row="0" Grid.Column="1">
+        <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="#FFADADAD">
+            <Grid Margin="0,16,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="25*"></ColumnDefinition>
+                    <ColumnDefinition Width="59*"></ColumnDefinition>
+                    <ColumnDefinition Width="16*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ConfigDirectoryPath.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Width="260" Height="20" Margin="0,0,0,0"/>
-                <Label Content="{Binding ConfigDirectoryPathError.Value, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" Grid.Column="1" Grid.Row="1" Width="260" Height="20" Margin="0,40,0,0"/>
+                <TextBlock Text="LogDirectory" Grid.Row="0" Grid.Column="0" TextAlignment="Center" ToolTip="ログファイルの出力されるフォルダを指定します"/>
+                <TextBox TextWrapping="NoWrap" Text="{Binding ConfigDirectoryPath.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigDirectoryPathError.Value, Mode=OneWay}" Foreground="Red" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap"/>
+                <Button Content="Browze" Command="{Binding FolderBrowseCommand}" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+
+                <TextBlock Text="IP Adress" Grid.Row="2" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のIPアドレスを指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigIPAdress.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigIPAdressError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
+
+                <TextBlock Text="Port" Grid.Row="4" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のポート番号を指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigPort.Value,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigPortError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"/>
+
+                <Button Content="Apply" RenderTransformOrigin="-0.165,0.062" Command="{Binding SaveAndLoadCommand}" Grid.Row="6" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+
             </Grid>
-            <Button Content="Browze" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding FolderBrowseCommand}" Grid.Column="2" Grid.Row="0" Height="20" Width="50"/>
+        </Border>
 
-            <Label Content="IP Adress" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.474,0.194" Width="80" Height="30" Grid.Row="1" Grid.Column="0"/>
-            <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ConfigIPAdress.Value, UpdateSourceTrigger=PropertyChanged}"  Width="260" Height="20" Grid.Row="1" Grid.Column="1"/>
-            <Label Content="{Binding ConfigIPAdressError.Value, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" Width="260" Height="20" Grid.Row="1" Grid.Column="1" Margin="0,40,0,0"/>
-
-            <Label Content="Port" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.474,0.194" Width="80" Height="30" Grid.Row="2" Grid.Column="0"/>
-            <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ConfigPort.Value,UpdateSourceTrigger=PropertyChanged}" Width="260" Height="20" Grid.Row="2" Grid.Column="1"/>
-            <Label Content="{Binding ConfigPortError.Value, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" Width="260" Height="20" Grid.Row="2" Grid.Column="1" Margin="0,40,0,0"/>
-
-            <Button Content="Apply" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="-0.165,0.062" Command="{Binding SaveAndLoadCommand}" Grid.Row="3" Grid.Column="2" Height="20" Width="50"/>
-
-        </Grid>
-    </Canvas>
+    </Grid>
 </Window>
