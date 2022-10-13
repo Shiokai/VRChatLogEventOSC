@@ -64,19 +64,24 @@ namespace VRChatLogEventOSC
         public void AttachConfig(ConfigData config)
         {
             _sender.ChangeClient(config.IPAddress.ToString(), config.Port);
+            
+            if (config.LogFileDirectory == _logFileWatcher.LogDirectoryPath)
+            {
+                return;
+            }
+
             _logFileWatcher.ChangeLogDerectory(config.LogFileDirectory);
+            _logFileWatcher.LoadLatestLogFile();
+            _logFileWatcher.SeekToCurrent();
         }
 
         private LogEventModel()
         {
             _lineClassifier = new LineClassifier(_logFileWatcher);
             _converter = new EventToOSCConverter(_lineClassifier, _sender);
-            // var settignLoader = new FileLoader();
-            // FileLoader.SaveSetting(new WholeSetting(WholeSetting.CreateDefaultWholeSettingDict()));
             _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();
             _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.IsDetectFileCreation = true;
-            // _logFileWatcher.StartWatchingFromTop();
             _logFileWatcher.StartWatchingFromCurrent();
             IsRunnging = _logFileWatcher.IsWatching;
         }

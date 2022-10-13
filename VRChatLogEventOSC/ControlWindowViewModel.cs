@@ -126,13 +126,14 @@ namespace VRChatLogEventOSC
                 _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
                 var config = _model.LoadConfig();
                 (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+                MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButtons.OK);
             }).AddTo(_compositeDisposable);
 
             FolderBrowseCommand = new ReactiveCommand().WithSubscribe(() =>
             {
                 using (var folderBrowserDialog = new FolderBrowserDialog())
                 {
-                    folderBrowserDialog.InitialDirectory = _model.DefaultLogDirectoryPath;
+                    folderBrowserDialog.InitialDirectory = ConfigDirectoryPath.Value;
                     folderBrowserDialog.Description = "VRChat outpulog directory";
                     var result = folderBrowserDialog.ShowDialog();
                     if (result == DialogResult.Cancel)

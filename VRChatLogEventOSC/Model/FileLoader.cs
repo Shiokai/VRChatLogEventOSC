@@ -17,26 +17,26 @@ namespace VRChatLogEventOSC
         private static readonly JsonSerializerOptions _options = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
         public static void SaveSetting(WholeSetting setting)
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            using var stream = new FileStream(_settingFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             JsonSerializer.Serialize<WholeSetting>(stream, setting, _options);
         }
 
         public static Task SaveSettingAsync(WholeSetting setting)
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            using var stream = new FileStream(_settingFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             var task = JsonSerializer.SerializeAsync<WholeSetting>(stream, setting, _options);
             return task;
         }
 
         public static void SaveConfig(ConfigData config)
         {
-            using var stream = new FileStream(_configFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            using var stream = new FileStream(_configFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             JsonSerializer.Serialize<ConfigData>(stream, config, _options);
         }
 
         public static Task SaveConfigAsync(ConfigData config)
         {
-            using var stream = new FileStream(_settingFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            using var stream = new FileStream(_settingFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             var task = JsonSerializer.SerializeAsync<ConfigData>(stream, config, _options);
             return task;
         }
