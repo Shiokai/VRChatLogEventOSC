@@ -102,7 +102,9 @@ namespace VRChatLogEventOSC
                 }
             }
         }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public OSCValueTypeEnum OSCValueType { get; private set; } = OSCValueTypeEnum.Int;
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public OSCTypeEnum OSCType { get; private set; } = OSCTypeEnum.Button;
         public string UserName { get; private set; } = string.Empty;
         public string UserID { get; private set; } = string.Empty;

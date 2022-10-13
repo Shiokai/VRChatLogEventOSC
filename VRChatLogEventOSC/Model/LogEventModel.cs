@@ -72,6 +72,7 @@ namespace VRChatLogEventOSC
             _lineClassifier = new LineClassifier(_logFileWatcher);
             _converter = new EventToOSCConverter(_lineClassifier, _sender);
             // var settignLoader = new FileLoader();
+            // FileLoader.SaveSetting(new WholeSetting(WholeSetting.CreateDefaultWholeSettingDict()));
             _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();
             _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.IsDetectFileCreation = true;
