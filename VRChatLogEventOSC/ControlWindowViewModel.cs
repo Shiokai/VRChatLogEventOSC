@@ -73,7 +73,8 @@ namespace VRChatLogEventOSC
                 _isPaused.Value = false;
             }).AddTo(_compositeDisposable);
 
-            RescanCommand = new ReactiveCommand().WithSubscribe(() => _model.Rescan()).AddTo(_compositeDisposable);
+            RescanCommand = _isPaused.ToReactiveCommand().WithSubscribe(() => _model.Rescan())
+            .AddTo(_compositeDisposable);
 
             RestartWithScanCommand = _isPaused.ToReactiveCommand().WithSubscribe(() =>
             {
