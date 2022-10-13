@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using static VRChatLogEventOSC.RegexPattern;
+using static VRChatLogEventOSC.Common.RegexPattern;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Common
 {
     public sealed record class WholeSetting
     {

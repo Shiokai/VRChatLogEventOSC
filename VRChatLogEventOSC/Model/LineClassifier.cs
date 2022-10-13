@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Reactive.Bindings.Extensions;
-using static VRChatLogEventOSC.RegexPattern;
+using static VRChatLogEventOSC.Common.RegexPattern;
 
 
 namespace VRChatLogEventOSC

@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Control
 {
     /// <summary>
     /// ControlWindow.xaml の相互作用ロジック

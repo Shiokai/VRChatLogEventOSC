@@ -12,7 +12,7 @@ using System.Reactive.Disposables;
 
 using System.Diagnostics;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.SystrayIcon
 {
     public sealed class NotifyIconModel : INotifyPropertyChanged, IDisposable
     {
@@ -49,7 +49,7 @@ namespace VRChatLogEventOSC
 
         public void OpenControlWindow()
         {
-            var controlWindow = new ControlWindow();
+            var controlWindow = new Control.ControlWindow();
             controlWindow.Show();
         }
 

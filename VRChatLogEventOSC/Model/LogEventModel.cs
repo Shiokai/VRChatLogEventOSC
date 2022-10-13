@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Reactive.Bindings;
 using System.ComponentModel;
 
-using VRChatLogEventOSC.Model;
+using VRChatLogEventOSC.Common;
 
 namespace VRChatLogEventOSC
 {

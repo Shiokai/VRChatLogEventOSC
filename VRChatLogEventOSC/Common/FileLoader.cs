@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
 
-using VRChatLogEventOSC.Model;
-
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Common
 {
     internal static class FileLoader
     {

@@ -8,7 +8,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 
 
-namespace VRChatLogEventOSC.Model
+namespace VRChatLogEventOSC.Common
 {
     internal sealed record class ConfigData
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Common
 {
     public sealed record class SingleSetting
     {

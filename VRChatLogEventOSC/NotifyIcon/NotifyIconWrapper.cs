@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Application = System.Windows.Application;
 using System.Reactive.Linq;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.SystrayIcon
 {
     public class NotifyIconWrapper : FrameworkElement, IDisposable
     {

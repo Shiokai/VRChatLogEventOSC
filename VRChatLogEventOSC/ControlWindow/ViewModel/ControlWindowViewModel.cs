@@ -14,7 +14,7 @@ using System.ComponentModel;
 
 using System.Diagnostics;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Control
 {
     internal sealed class ControlWindowViewModel : INotifyPropertyChanged, IDisposable
     {

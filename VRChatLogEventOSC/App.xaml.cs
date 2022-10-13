@@ -13,11 +13,11 @@ namespace VRChatLogEventOSC
     /// </summary>
     public partial class App : Application
     {
-        private NotifyIconViewModel? _notifyIcon;
+        private SystrayIcon.NotifyIconViewModel? _notifyIcon;
         public void CreateNotifyIcon(object sender, StartupEventArgs e)
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            _notifyIcon = new NotifyIconViewModel();
+            _notifyIcon = new SystrayIcon.NotifyIconViewModel();
         }
     }
 }

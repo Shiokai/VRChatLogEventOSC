@@ -12,7 +12,7 @@ using System.Reactive.Disposables;
 
 using System.Diagnostics;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.SystrayIcon
 {
     public sealed class NotifyIconViewModel : INotifyPropertyChanged, IDisposable
     {

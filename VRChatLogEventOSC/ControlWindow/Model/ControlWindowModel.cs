@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Net;
 using System.IO;
+using VRChatLogEventOSC.Common;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Control
 {
     internal class ControlWindowModel
     {
@@ -42,7 +43,7 @@ namespace VRChatLogEventOSC
             Application.Current.Shutdown();
         }
 
-        public Model.ConfigData LoadConfig()
+        public ConfigData LoadConfig()
         {
             var config = FileLoader.LoadConfig();
             if (config == null)
@@ -50,12 +51,12 @@ namespace VRChatLogEventOSC
                 var result = MessageBox.Show("Failed to load config.\nCreate default config.", "Load config", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
-                    config = new Model.ConfigData();
+                    config = new ConfigData();
                     FileLoader.SaveConfig(config);
                 }
                 else
                 {
-                    return new Model.ConfigData();
+                    return new ConfigData();
                 }
             }
 
@@ -65,7 +66,7 @@ namespace VRChatLogEventOSC
 
         public void SaveConfig(string ipAddress, int port, string logFileDirectory)
         {
-            var config = new Model.ConfigData(ipAddress, port, logFileDirectory);
+            var config = new ConfigData(ipAddress, port, logFileDirectory);
             FileLoader.SaveConfig(config);
             _logEventModel.AttachConfig(config);
         }
