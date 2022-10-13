@@ -31,27 +31,6 @@ namespace VRChatLogEventOSC
             OnPlayerLeft,
             TookScreenshot,
         }
-        private static readonly Dictionary<string, EventTypeEnum> EventType = new(){
-            {nameof(EventTypeEnum.ReceivedInvite), EventTypeEnum.ReceivedInvite},
-            {nameof(EventTypeEnum.ReceivedRequestInvite), EventTypeEnum.ReceivedRequestInvite},
-            {nameof(EventTypeEnum.SendInvite), EventTypeEnum.SendInvite},
-            {nameof(EventTypeEnum.SendRequestInvite), EventTypeEnum.SendRequestInvite},
-            {nameof(EventTypeEnum.JoinedRoomURL), EventTypeEnum.JoinedRoomURL},
-            {nameof(EventTypeEnum.JoinedRoomName), EventTypeEnum.JoinedRoomName},
-            {nameof(EventTypeEnum.SendFriendRequest), EventTypeEnum.SendFriendRequest},
-            {nameof(EventTypeEnum.ReceivedFriendRequest), EventTypeEnum.ReceivedFriendRequest},
-            {nameof(EventTypeEnum.AcceptFriendRequest), EventTypeEnum.AcceptFriendRequest},
-            {nameof(EventTypeEnum.ReceivedInviteResponse), EventTypeEnum.ReceivedInviteResponse},
-            {nameof(EventTypeEnum.ReceivedRequestInviteResponse), EventTypeEnum.ReceivedRequestInviteResponse},
-            {nameof(EventTypeEnum.PlayedVideo1), EventTypeEnum.PlayedVideo1},
-            {nameof(EventTypeEnum.PlayedVideo2), EventTypeEnum.PlayedVideo2},
-            {nameof(EventTypeEnum.AcceptInvite), EventTypeEnum.AcceptInvite},
-            {nameof(EventTypeEnum.AcceptRequestInvite), EventTypeEnum.AcceptRequestInvite},
-            {nameof(EventTypeEnum.OnPlayerJoined), EventTypeEnum.OnPlayerJoined},
-            {nameof(EventTypeEnum.OnPlayerLeft), EventTypeEnum.OnPlayerLeft},
-            {nameof(EventTypeEnum.TookScreenshot), EventTypeEnum.TookScreenshot},
-        };
-
         private static readonly Dictionary<EventTypeEnum, IEnumerable<string>> CaptureName = new(){
             {EventTypeEnum.ReceivedInvite, Enumerable.Empty<string>()},
             {EventTypeEnum.ReceivedRequestInvite, Enumerable.Empty<string>()},
@@ -79,16 +58,19 @@ namespace VRChatLogEventOSC
 
         public static EventTypeEnum GetMatchGropeType(Match match)
         {
-            // return EventType.Keys.Where(k => match.Groups[k].Value.Length != 0).Select(k => EventType[k]).FirstOrDefault(EventTypeEnum.None);
-            foreach (var key in EventType.Keys)
+            foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
-                if (match.Groups[key].Value.Length == 0)
+                if (type == EventTypeEnum.None)
                 {
                     continue;
                 }
 
-                EventTypeEnum eventType = EventType[key];
-                return eventType;
+                if (match.Groups[type.ToString()].Value.Length == 0)
+                {
+                    continue;
+                }
+
+                return type;
             }
 
             return EventTypeEnum.None;
@@ -116,27 +98,9 @@ namespace VRChatLogEventOSC
         public static Regex OnPlayerLeftRegex { get; }
         public static Regex TookScreenshotRegex { get; }
 
-        public static IReadOnlyDictionary<EventTypeEnum, Regex> Regexes => new Dictionary<EventTypeEnum, Regex>()
-        {
-            // {EventTypeEnum.ReceivedInvite, ReceivedInviteRegex},
-            // {EventTypeEnum.ReceivedRequestInvite, ReceivedRequestInviteRegex},
-            // {EventTypeEnum.SendInvite, SendInviteRegex},
-            // {EventTypeEnum.SendRequestInvite, SendRequestInviteRegex},
-            {EventTypeEnum.JoinedRoomURL, JoinedRoomURLRegex},
-            {EventTypeEnum.JoinedRoomName, JoinedRoomNameRegex},
-            // {EventTypeEnum.SendFriendRequest, SendFriendRequestRegex},
-            // {EventTypeEnum.ReceivedFriendRequest, ReceivedFriendRequestRegex},
-            {EventTypeEnum.AcceptFriendRequest, AcceptFriendRequestRegex},
-            // {EventTypeEnum.ReceivedInviteResponse, ReceivedInviteResponseRegex},
-            // {EventTypeEnum.ReceivedRequestInviteResponse, ReceivedRequestInviteResponseRegex},
-            {EventTypeEnum.PlayedVideo1, PlayedVideo1Regex},
-            {EventTypeEnum.PlayedVideo2, PlayedVideo2Regex},
-            {EventTypeEnum.AcceptInvite, AcceptInviteRegex},
-            {EventTypeEnum.AcceptRequestInvite, AcceptRequestInviteRegex},
-            {EventTypeEnum.OnPlayerJoined, OnPlayerJoinedRegex},
-            {EventTypeEnum.OnPlayerLeft, OnPlayerLeftRegex},
-            {EventTypeEnum.TookScreenshot, TookScreenshotRegex},
-    };
+        private static readonly IReadOnlyDictionary<EventTypeEnum, Regex> _regexes;
+
+        public static IReadOnlyDictionary<EventTypeEnum, Regex> Regexes => _regexes;
 
         static RegexPattern()
         {
@@ -238,6 +202,29 @@ namespace VRChatLogEventOSC
             OnPlayerJoinedRegex = new(onPlayerJoinedPattern, RegexOptions.Compiled);
             OnPlayerLeftRegex = new(onPlayerLeftPattern, RegexOptions.Compiled);
             TookScreenshotRegex = new(tookScreenshotPattern, RegexOptions.Compiled);
+
+
+            _regexes = new Dictionary<EventTypeEnum, Regex>()
+            {
+                // {EventTypeEnum.ReceivedInvite, ReceivedInviteRegex},
+                // {EventTypeEnum.ReceivedRequestInvite, ReceivedRequestInviteRegex},
+                // {EventTypeEnum.SendInvite, SendInviteRegex},
+                // {EventTypeEnum.SendRequestInvite, SendRequestInviteRegex},
+                {EventTypeEnum.JoinedRoomURL, JoinedRoomURLRegex},
+                {EventTypeEnum.JoinedRoomName, JoinedRoomNameRegex},
+                // {EventTypeEnum.SendFriendRequest, SendFriendRequestRegex},
+                // {EventTypeEnum.ReceivedFriendRequest, ReceivedFriendRequestRegex},
+                {EventTypeEnum.AcceptFriendRequest, AcceptFriendRequestRegex},
+                // {EventTypeEnum.ReceivedInviteResponse, ReceivedInviteResponseRegex},
+                // {EventTypeEnum.ReceivedRequestInviteResponse, ReceivedRequestInviteResponseRegex},
+                {EventTypeEnum.PlayedVideo1, PlayedVideo1Regex},
+                {EventTypeEnum.PlayedVideo2, PlayedVideo2Regex},
+                {EventTypeEnum.AcceptInvite, AcceptInviteRegex},
+                {EventTypeEnum.AcceptRequestInvite, AcceptRequestInviteRegex},
+                {EventTypeEnum.OnPlayerJoined, OnPlayerJoinedRegex},
+                {EventTypeEnum.OnPlayerLeft, OnPlayerLeftRegex},
+                {EventTypeEnum.TookScreenshot, TookScreenshotRegex},
+            };
 
         }
 

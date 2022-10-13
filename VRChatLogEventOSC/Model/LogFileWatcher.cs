@@ -4,16 +4,19 @@ using System.Reactive.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Reactive.Bindings;
+using System.ComponentModel;
 
 namespace VRChatLogEventOSC
 {
-    public sealed class LogFileWatcher : IDisposable
+    public sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
     {
-        private static readonly string _logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private static readonly string _defaultLogDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
+        public string LogDirectoryPath { get; private set; } = _defaultLogDirectoryPath;
         private string _logFilePath = "";
         private readonly FileSystemWatcher _watcher = new()
         {
-            Path = _logDirectoryPath,
+            Path = _defaultLogDirectoryPath,
             Filter = "*.txt",
             NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName,
             IncludeSubdirectories = false
@@ -48,22 +51,24 @@ namespace VRChatLogEventOSC
 
         public void LoadLatestLogFile()
         {
-            _logFilePath = Directory.GetFiles(_logDirectoryPath, "output_log_*.txt", SearchOption.TopDirectoryOnly).OrderByDescending(file => Directory.GetCreationTime(file)).First();
+            _logFilePath = Directory.GetFiles(LogDirectoryPath, "output_log_*.txt", SearchOption.TopDirectoryOnly).OrderByDescending(file => Directory.GetCreationTime(file)).FirstOrDefault() ?? "";
             _lastLength = 0;
         }
 
-        public void StartWatchingFromCurrent()
+        public void SeekToCurrent()
         {
             if (!File.Exists(_logFilePath))
             {
                 return;
             }
             
-            using (var fileStream = new FileStream(_logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                    _lastLength = fileStream.Length;
-            }
+            using var fileStream = new FileStream(_logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            _lastLength = fileStream.Length;
+        }
 
+        public void StartWatchingFromCurrent()
+        {
+            SeekToCurrent();
             _isWatching.Value = true;
         }
 
@@ -83,10 +88,15 @@ namespace VRChatLogEventOSC
             _isWatching.Value = false;
         }
 
+        public void ChangeLogDerectory(string dirPath)
+        {
+            LogDirectoryPath = dirPath;
+            _watcher.Path = dirPath;
+        }
+
         public LogFileWatcher()
         {
             IsWatching = _isWatching.ToReadOnlyReactivePropertySlim(false, ReactivePropertyMode.DistinctUntilChanged);
-            // LoadLatestLogFile();
             _fileCreationDisposable = Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
                 h => (s, e) => h(e),
                 h => _watcher.Created += h,

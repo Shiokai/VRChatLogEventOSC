@@ -12,29 +12,22 @@ namespace VRChatLogEventOSC.Model
 {
     internal sealed record class ConfigData
     {
-        public IPAddress IPAddress { get; init; }
+        public string IPAddress { get; init; }
         public int Port { get; init; }
         public string LogFileDirectory { get; init; }
-        public bool DetectLatestLogFile { get; init; }
-        public bool FullScanWithDetect { get; init; }
-
         public ConfigData()
         {
-            IPAddress = IPAddress.Loopback;
+            IPAddress = System.Net.IPAddress.Loopback.ToString();
             Port = 9000;
             LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
-            DetectLatestLogFile = true;
-            FullScanWithDetect = false;
         }
 
         [JsonConstructor]
-        public ConfigData(IPAddress ipAddress, int port, string logFileDirectory, bool detectLatestLogFile, bool fullScanWithDetect)
+        public ConfigData(string ipAddress, int port, string logFileDirectory)
         {
             IPAddress = ipAddress;
             Port = port;
             LogFileDirectory = logFileDirectory;
-            DetectLatestLogFile = detectLatestLogFile;
-            FullScanWithDetect = fullScanWithDetect;
         }
     }
 }

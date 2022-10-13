@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Net;
+using System.IO;
 
 namespace VRChatLogEventOSC
 {
@@ -12,6 +14,8 @@ namespace VRChatLogEventOSC
         private static ControlWindowModel? _instance;
         public static ControlWindowModel Instance => _instance ??= new ControlWindowModel();
         private LogEventModel _logEventModel;
+        private static readonly string _defaultLogDirectoryPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat"));
+        public string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
 
         public void PuaseLogWEvent()
         {
@@ -33,9 +37,37 @@ namespace VRChatLogEventOSC
             _logEventModel.Rescan();
         }
 
-        public void QuitApplication()
+        public static void QuitApplication()
         {
             Application.Current.Shutdown();
+        }
+
+        public Model.ConfigData LoadConfig()
+        {
+            var config = FileLoader.LoadConfig();
+            if (config == null)
+            {
+                var result = MessageBox.Show("Failed to load config.\nCreate default config.", "Load config", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    config = new Model.ConfigData();
+                    FileLoader.SaveConfig(config);
+                }
+                else
+                {
+                    return new Model.ConfigData();
+                }
+            }
+
+            _logEventModel.AttachConfig(config);
+            return config;
+        }
+
+        public void SaveConfig(string ipAddress, int port, string logFileDirectory)
+        {
+            var config = new Model.ConfigData(ipAddress, port, logFileDirectory);
+            FileLoader.SaveConfig(config);
+            _logEventModel.AttachConfig(config);
         }
 
         private ControlWindowModel()

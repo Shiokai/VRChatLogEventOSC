@@ -1,23 +1,73 @@
-﻿<Window x:Class="VRChatLogEventOSC.MainWindow"
+﻿<Window x:Class="VRChatLogEventOSC.ControlWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:VRChatLogEventOSC"
         mc:Ignorable="d"
-        Title="ControlWindow" Height="500" Width="300">
+        Title="ControlWindow" Height="350" Width="350" MinHeight="300" MinWidth="300">
     <Window.DataContext>
         <local:ControlWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <Button Content="Pause" HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding PauseCommand}"/>
-        <Button Content="Restart" HorizontalAlignment="Center" Margin="0,99,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding RestartCommand}"/>
-        <Button Content="Rescan" HorizontalAlignment="Center" Margin="0,141,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding RescanCommand}"/>
-        <Button Content="RestartWithScan" HorizontalAlignment="Center" Margin="0,194,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.416,-0.048" Command="{Binding RestartWithScanCommand}"/>
-        <Button Content="Quit" HorizontalAlignment="Left" Margin="133,301,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.879" Command="{Binding QuitApplicationCommand}"/>
-        <!--<Button Content="Notify" Margin="10" Width="100" Height="50" Command="{Binding NotifyCommand}"/>-->
-        <!--<Button Content="Pause"  Margin="350,286,350,98" Width="100" Height="50" Command="{Binding PauseCommand}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="226,114,0,0" TextWrapping="Wrap" Text="{Binding Status.Value, Mode=OneWay}" VerticalAlignment="Top"/>-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Content="Pause" RenderTransformOrigin="-0.416,-0.048" Grid.Row="0" Command="{Binding PauseCommand}" Margin="5,5,5,5" ToolTip="ログの読み取りを一時停止します"/>
+            <Button Content="Restart" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="0" Command="{Binding RestartCommand}" Margin="5,5,5,5" ToolTip="現在の位置からログの読み取りを再開します"/>
+            <Button Content="Continue" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="1" Command="{Binding RestartWithScanCommand}" Margin="5,5,5,5" ToolTip="最後の読み取り位置からログの読み取りを再開します"/>
+            <Button Content="Rescan" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="2" Command="{Binding RescanCommand}" Margin="5,5,5,5" ToolTip="ログの先頭から読み取りを再開します"/>
+            <Button Content="Quit" RenderTransformOrigin="-0.416,-0.048" Grid.Row="2" Grid.Column="0" Command="{Binding QuitApplicationCommand}" Margin="5,5,5,5" ToolTip="アプリケーションを終了します"/>
+        </Grid>
+        <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="#FFADADAD">
+            <Grid Margin="0,16,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*"></ColumnDefinition>
+                    <ColumnDefinition Width="59*"></ColumnDefinition>
+                    <ColumnDefinition Width="16*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="LogDirectory" Grid.Row="0" Grid.Column="0" TextAlignment="Center" ToolTip="ログファイルの出力されるフォルダを指定します"/>
+                <TextBox TextWrapping="NoWrap" Text="{Binding ConfigDirectoryPath.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigDirectoryPathError.Value, Mode=OneWay}" Foreground="Red" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap"/>
+                <Button Content="Browze" Command="{Binding FolderBrowseCommand}" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+
+                <TextBlock Text="IP Adress" Grid.Row="2" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のIPアドレスを指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigIPAdress.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigIPAdressError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
+
+                <TextBlock Text="Port" Grid.Row="4" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のポート番号を指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigPort.Value,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigPortError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"/>
+
+                <Button Content="Apply" RenderTransformOrigin="-0.165,0.062" Command="{Binding SaveAndLoadCommand}" Grid.Row="6" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+
+            </Grid>
+        </Border>
+
     </Grid>
 </Window>
