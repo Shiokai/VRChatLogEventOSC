@@ -8,11 +8,35 @@
         Title="SettingWindow" Height="450" Width="800">
     <Grid>
         <TabControl TabStripPlacement="Left">
-            <TabItem Header="Item">
-                <TextBlock Text="Hoge"></TextBlock>
+            <TabItem Header="JoinedRoomURL" FlowDirection="LeftToRight">
+
             </TabItem>
-            <TabItem Header="Another">
-                <TextBlock Text="Fuga"></TextBlock>
+            <TabItem Header="JoinedRoomName">
+
+            </TabItem>
+            <TabItem Header="AcceptFriendRequest">
+
+            </TabItem>
+            <TabItem Header="PlayedVideo1">
+
+            </TabItem>
+            <TabItem Header="PlayedVideo2">
+
+            </TabItem>
+            <TabItem Header="AcceptInvite">
+
+            </TabItem>
+            <TabItem Header="AcceptRequestInvite">
+
+            </TabItem>
+            <TabItem Header="OnPlayerJoined">
+
+            </TabItem>
+            <TabItem Header="OnPlayerLeft">
+
+            </TabItem>
+            <TabItem Header="TookScreenshot">
+
             </TabItem>
         </TabControl>
     </Grid>
