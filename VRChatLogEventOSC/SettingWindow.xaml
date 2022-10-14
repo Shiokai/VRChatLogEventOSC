@@ -6,38 +6,38 @@
         xmlns:local="clr-namespace:VRChatLogEventOSC"
         mc:Ignorable="d"
         Title="SettingWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:SettingWindowViewModel/>
+    </Window.DataContext>
     <Grid>
-        <TabControl TabStripPlacement="Left">
-            <TabItem Header="JoinedRoomURL" FlowDirection="LeftToRight">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ToggleButton Content="JoinedRoomURL" Grid.Row="0" Grid.Column="0" Command="{Binding JoinedRoomURLButton}" IsChecked="{Binding IsJoinedRoomURLButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="JoinedRoomName" Grid.Row="1" Grid.Column="0" Command="{Binding JoinedRoomNameButton}" IsChecked="{Binding IsJoinedRoomNameButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="AcceptFriendRequest" Grid.Row="2" Grid.Column="0" Command="{Binding AcceptFriendRequestButton}" IsChecked="{Binding IsAcceptFriendRequestButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="PlayedVideo1" Grid.Row="3" Grid.Column="0" Command="{Binding PlayedVideo1Button}" IsChecked="{Binding IsPlayedVideo1ButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="PlayedVideo2" Grid.Row="4" Grid.Column="0" Command="{Binding PlayedVideo2Button}" IsChecked="{Binding IsPlayedVideo2ButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="AcceptInvite" Grid.Row="5" Grid.Column="0" Command="{Binding AcceptInviteButton}" IsChecked="{Binding IsAcceptInviteButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="AcceptRequestInvite" Grid.Row="6" Grid.Column="0" Command="{Binding AcceptRequestInviteButton}" IsChecked="{Binding IsAcceptRequestInviteButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="OnPlayerJoined" Grid.Row="7" Grid.Column="0" Command="{Binding OnPlayerJoinedButton}" IsChecked="{Binding IsOnPlayerJoinedButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="OnPlayerLeft" Grid.Row="8" Grid.Column="0" Command="{Binding OnPlayerLeftButton}" IsChecked="{Binding IsOnPlayerLeftButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="TookScreenshot" Grid.Row="9" Grid.Column="0" Command="{Binding TookScreenshotButton}" IsChecked="{Binding IsTookScreenshotButtonChecked.Value, Mode=TwoWay}"/>
+        </Grid>
 
-            </TabItem>
-            <TabItem Header="JoinedRoomName">
-
-            </TabItem>
-            <TabItem Header="AcceptFriendRequest">
-
-            </TabItem>
-            <TabItem Header="PlayedVideo1">
-
-            </TabItem>
-            <TabItem Header="PlayedVideo2">
-
-            </TabItem>
-            <TabItem Header="AcceptInvite">
-
-            </TabItem>
-            <TabItem Header="AcceptRequestInvite">
-
-            </TabItem>
-            <TabItem Header="OnPlayerJoined">
-
-            </TabItem>
-            <TabItem Header="OnPlayerLeft">
-
-            </TabItem>
-            <TabItem Header="TookScreenshot">
-
-            </TabItem>
-        </TabControl>
     </Grid>
 </Window>
