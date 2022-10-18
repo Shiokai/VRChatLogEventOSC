@@ -10,7 +10,14 @@
         <local:SettingWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -24,20 +31,22 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ToggleButton Content="JoinedRoomURL" Grid.Row="0" Grid.Column="0" Command="{Binding JoinedRoomURLButton}" IsChecked="{Binding IsJoinedRoomURLButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="JoinedRoomName" Grid.Row="1" Grid.Column="0" Command="{Binding JoinedRoomNameButton}" IsChecked="{Binding IsJoinedRoomNameButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="AcceptFriendRequest" Grid.Row="2" Grid.Column="0" Command="{Binding AcceptFriendRequestButton}" IsChecked="{Binding IsAcceptFriendRequestButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="PlayedVideo1" Grid.Row="3" Grid.Column="0" Command="{Binding PlayedVideo1Button}" IsChecked="{Binding IsPlayedVideo1ButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="PlayedVideo2" Grid.Row="4" Grid.Column="0" Command="{Binding PlayedVideo2Button}" IsChecked="{Binding IsPlayedVideo2ButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="AcceptInvite" Grid.Row="5" Grid.Column="0" Command="{Binding AcceptInviteButton}" IsChecked="{Binding IsAcceptInviteButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="AcceptRequestInvite" Grid.Row="6" Grid.Column="0" Command="{Binding AcceptRequestInviteButton}" IsChecked="{Binding IsAcceptRequestInviteButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="OnPlayerJoined" Grid.Row="7" Grid.Column="0" Command="{Binding OnPlayerJoinedButton}" IsChecked="{Binding IsOnPlayerJoinedButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="OnPlayerLeft" Grid.Row="8" Grid.Column="0" Command="{Binding OnPlayerLeftButton}" IsChecked="{Binding IsOnPlayerLeftButtonChecked.Value, Mode=TwoWay}"/>
-            <ToggleButton Content="TookScreenshot" Grid.Row="9" Grid.Column="0" Command="{Binding TookScreenshotButton}" IsChecked="{Binding IsTookScreenshotButtonChecked.Value, Mode=TwoWay}"/>
+            <ToggleButton Content="JoinedRoomURL" Grid.Row="0" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[JoinedRoomURL].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="JoinedRoomName" Grid.Row="1" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[JoinedRoomName].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="AcceptFriendRequest" Grid.Row="2" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[AcceptFriendRequest].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="PlayedVideo1" Grid.Row="3" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[PlayedVideo1].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="PlayedVideo2" Grid.Row="4" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[PlayedVideo2].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="AcceptInvite" Grid.Row="5" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[AcceptInvite].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="AcceptRequestInvite" Grid.Row="6" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[AcceptRequestInvite].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="OnPlayerJoined" Grid.Row="7" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[OnPlayerJoined].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="OnPlayerLeft" Grid.Row="8" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[OnPlayerLeft].Value, Mode=TwoWay}"/>
+            <ToggleButton Content="TookScreenshot" Grid.Row="9" Grid.Column="0" IsChecked="{Binding EventsButtonChecked[TookScreenshot].Value, Mode=TwoWay}"/>
+            
         </Grid>
-
+        <ListView Grid.Column="1" Grid.Row="0">
+            
+        </ListView>
     </Grid>
 </Window>

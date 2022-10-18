@@ -22,6 +22,7 @@ namespace VRChatLogEventOSC
         public SettingWindow()
         {
             InitializeComponent();
+            Closing += (s, e) => (DataContext as IDisposable)?.Dispose();
         }
     }
 }
