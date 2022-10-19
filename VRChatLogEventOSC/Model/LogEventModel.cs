@@ -26,6 +26,12 @@ namespace VRChatLogEventOSC
         
         public ReadOnlyReactivePropertySlim<bool> IsRunnging;
 
+        public IReadOnlyList<SingleSetting>? GetTypeSettings(RegexPattern.EventTypeEnum type)
+        {
+            _converter.CurrentSetting.Settings.TryGetValue(type, out var settings);
+            return settings;
+        }
+
         private bool _disposed = false;
 
         public void Dispose()
