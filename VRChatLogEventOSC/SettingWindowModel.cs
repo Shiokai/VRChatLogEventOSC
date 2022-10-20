@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
+using System.Reactive.Disposables;
+using Reactive.Bindings.Extensions;
+using System.ComponentModel;
 
 using System.Diagnostics;
 
@@ -11,8 +14,9 @@ using VRChatLogEventOSC.Common;
 
 namespace VRChatLogEventOSC
 {
-    internal class SettingWindowModel
+    internal class SettingWindowModel : IDisposable, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
         private static SettingWindowModel? _instance;
         public static SettingWindowModel Instance => _instance ??= new SettingWindowModel();
         private LogEventModel _logEventModel;
@@ -74,11 +78,31 @@ namespace VRChatLogEventOSC
             }
         }
 
+        private CompositeDisposable _compositeDisposables = new();
+
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _compositeDisposables.Dispose();
+
+        }
         private SettingWindowModel()
         {
             _logEventModel = LogEventModel.Instance;
             UpdateSetting();
             ShownSetting = _shownSetting.ToReadOnlyReactiveCollection();
+            _shownSetting.AddTo(_compositeDisposables);
+            ShownSetting.AddTo(_compositeDisposables);
+
+            foreach (var cache in _settingsCache.Values)
+            {
+                cache.AddTo(_compositeDisposables);
+            }
         }
     }
 }
