@@ -56,8 +56,8 @@ namespace VRChatLogEventOSC
                 {
                     continue;
                 }
-                
-                var settings = _logEventModel.GetTypeSettings(type);
+                _settingsCache[type].Clear();
+                var settings = _logEventModel.GetCurrentSettingsOfType(type);
 
                 foreach (var setting in settings ?? Enumerable.Empty<SingleSetting>())
                 {

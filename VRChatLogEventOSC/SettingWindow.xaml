@@ -85,7 +85,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button Grid.Column="0" Grid.Row="3" Content="Apply" HorizontalAlignment="Right" Width="100"/>
+            <Button Grid.Column="0" Grid.Row="3" Content="Apply" HorizontalAlignment="Right" Width="100" Command="{Binding ApplyCommand}"/>
         </Grid>
     </Grid>
 </Window>
