@@ -20,18 +20,7 @@ namespace VRChatLogEventOSC
         private readonly LogFileWatcher _logFileWatcher;
         private readonly IDisposable _classifyDisposable;
         private readonly CompositeDisposable _eventsDisposable;
-        private readonly Dictionary<EventTypeEnum, ReactivePropertySlim<string>> _eventReactiveProperties = new(){
-            {EventTypeEnum.JoinedRoomURL, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.JoinedRoomName, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.AcceptFriendRequest, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.PlayedVideo1, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.PlayedVideo2, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.AcceptInvite, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.AcceptRequestInvite, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.OnPlayerJoined, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.OnPlayerLeft, new(string.Empty, ReactivePropertyMode.None)},
-            {EventTypeEnum.TookScreenshot, new(string.Empty, ReactivePropertyMode.None)},
-        };
+        private readonly Dictionary<EventTypeEnum, ReactivePropertySlim<string>> _eventReactiveProperties;
 
         public IReadOnlyDictionary<EventTypeEnum, ReadOnlyReactivePropertySlim<string>> EventReactiveProperties { get; }
 
@@ -51,23 +40,19 @@ namespace VRChatLogEventOSC
 
         public LineClassifier(LogFileWatcher logFileWatcher)
         {
-            _eventsDisposable = new CompositeDisposable(_eventReactiveProperties.Values);
-            EventReactiveProperties = new Dictionary<EventTypeEnum, ReadOnlyReactivePropertySlim<string>>()
+            _eventReactiveProperties = new Dictionary<EventTypeEnum, ReactivePropertySlim<string>>();
+            foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
-                {EventTypeEnum.JoinedRoomURL, _eventReactiveProperties[EventTypeEnum.JoinedRoomURL].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.JoinedRoomName, _eventReactiveProperties[EventTypeEnum.JoinedRoomName].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.AcceptFriendRequest, _eventReactiveProperties[EventTypeEnum.AcceptFriendRequest].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.PlayedVideo1, _eventReactiveProperties[EventTypeEnum.PlayedVideo1].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.PlayedVideo2, _eventReactiveProperties[EventTypeEnum.PlayedVideo2].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.AcceptInvite, _eventReactiveProperties[EventTypeEnum.AcceptInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.AcceptRequestInvite, _eventReactiveProperties[EventTypeEnum.AcceptRequestInvite].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.OnPlayerJoined, _eventReactiveProperties[EventTypeEnum.OnPlayerJoined].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.OnPlayerLeft, _eventReactiveProperties[EventTypeEnum.OnPlayerLeft].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-                {EventTypeEnum.TookScreenshot, _eventReactiveProperties[EventTypeEnum.TookScreenshot].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable)},
-            };
+                _eventReactiveProperties.Add(type, new(string.Empty, ReactivePropertyMode.None));
+            }
 
-
-
+            _eventsDisposable = new CompositeDisposable(_eventReactiveProperties.Values);
+            var eventReactiveProperties = new Dictionary<EventTypeEnum, ReadOnlyReactivePropertySlim<string>>();
+            foreach (var type in Enum.GetValues<EventTypeEnum>())
+            {
+                eventReactiveProperties.Add(type, _eventReactiveProperties[type].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable));
+            }
+            EventReactiveProperties = eventReactiveProperties;
 
             _logFileWatcher = logFileWatcher;
 
