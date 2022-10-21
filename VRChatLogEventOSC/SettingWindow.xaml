@@ -50,6 +50,7 @@
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="10*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -67,14 +68,14 @@
                     <ColumnDefinition Width="10*"></ColumnDefinition>
                     <ColumnDefinition Width="10*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="Up"></Button>
-                <Button Grid.Row="0" Grid.Column="1" Content="Down"></Button>
-                <Button Grid.Row="0" Grid.Column="3" Content="Add"></Button>
-                <Button Grid.Row="0" Grid.Column="5" Content="Edit"></Button>
-                <Button Grid.Row="0" Grid.Column="6" Content="Delete" BorderBrush="Red"></Button>
+                <Button Grid.Row="0" Grid.Column="0" Content="Up" Command="{Binding UpCommand}"/>
+                <Button Grid.Row="0" Grid.Column="1" Content="Down" Command="{Binding DownCommand}"/>
+                <Button Grid.Row="0" Grid.Column="3" Content="Add" Command="{Binding AddCommand}"/>
+                <Button Grid.Row="0" Grid.Column="5" Content="Edit" Command="{Binding EditCommand}"/>
+                <Button Grid.Row="0" Grid.Column="6" Content="Delete" BorderBrush="Red" Command="{Binding DeleteCommand}"/>
             </Grid>
             <TextBlock Text="{Binding SelectedEvent.Value}" Grid.Row="1" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-            <ListView Grid.Column="0" Grid.Row="2" ItemsSource="{Binding SelectedTypeSettings}">
+            <ListView Grid.Column="0" Grid.Row="2" SelectionMode="Single" ItemsSource="{Binding SelectedTypeSettings}" SelectedItem="{Binding SelectedItem.Value}" SelectedIndex="{Binding SelectedIndex.Value}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding SettingName}"/>
@@ -84,6 +85,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <Button Grid.Column="0" Grid.Row="3" Content="Apply" HorizontalAlignment="Right" Width="100"/>
         </Grid>
     </Grid>
 </Window>
