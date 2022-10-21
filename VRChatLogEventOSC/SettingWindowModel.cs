@@ -78,6 +78,10 @@ namespace VRChatLogEventOSC
             Dictionary<RegexPattern.EventTypeEnum, List<SingleSetting>> settings = new();
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
             {
+                if (type == RegexPattern.EventTypeEnum.None)
+                {
+                    continue;
+                }
                 settings.Add(type, _settingsCache[type].ToList());
             }
             settings[_shownEventType] = _shownSetting.ToList();
