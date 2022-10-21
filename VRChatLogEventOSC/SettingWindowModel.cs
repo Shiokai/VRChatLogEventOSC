@@ -21,27 +21,7 @@ namespace VRChatLogEventOSC
         public static SettingWindowModel Instance => _instance ??= new SettingWindowModel();
         private LogEventModel _logEventModel;
 
-        private Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache = new()
-        {
-            // {RegexPattern.EventTypeEnum.ReceivedInvite, new()},
-            // {RegexPattern.EventTypeEnum.ReceivedRequestInvite, new()},
-            // {RegexPattern.EventTypeEnum.SendInvite, new()},
-            // {RegexPattern.EventTypeEnum.SendRequestInvite, new()},
-            {RegexPattern.EventTypeEnum.JoinedRoomURL, new()},
-            {RegexPattern.EventTypeEnum.JoinedRoomName, new()},
-            // {RegexPattern.EventTypeEnum.SendFriendRequest, new()},
-            // {RegexPattern.EventTypeEnum.ReceivedFriendRequest, new()},
-            {RegexPattern.EventTypeEnum.AcceptFriendRequest, new()},
-            // {RegexPattern.EventTypeEnum.ReceivedInviteResponse, new()},
-            // {RegexPattern.EventTypeEnum.ReceivedRequestInviteResponse, new()},
-            {RegexPattern.EventTypeEnum.PlayedVideo1, new()},
-            {RegexPattern.EventTypeEnum.PlayedVideo2, new()},
-            {RegexPattern.EventTypeEnum.AcceptInvite, new()},
-            {RegexPattern.EventTypeEnum.AcceptRequestInvite, new()},
-            {RegexPattern.EventTypeEnum.OnPlayerJoined, new()},
-            {RegexPattern.EventTypeEnum.OnPlayerLeft, new()},
-            {RegexPattern.EventTypeEnum.TookScreenshot, new()},
-        };
+        private Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache;
 
         private ReactiveCollection<SingleSetting> _shownSetting = new();
 
@@ -95,27 +75,11 @@ namespace VRChatLogEventOSC
 
         public void ApplySetting()
         {
-            Dictionary<RegexPattern.EventTypeEnum, List<SingleSetting>> settings = new()
+            Dictionary<RegexPattern.EventTypeEnum, List<SingleSetting>> settings = new();
+            foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
             {
-                // {RegexPattern.EventTypeEnum.ReceivedInvite, _settingsCache[RegexPattern.EventTypeEnum.ReceivedInvite].ToList()},
-                // {RegexPattern.EventTypeEnum.ReceivedRequestInvite, _settingsCache[RegexPattern.EventTypeEnum.ReceivedRequestInvite].ToList()},
-                // {RegexPattern.EventTypeEnum.SendInvite, _settingsCache[RegexPattern.EventTypeEnum.SendInvite].ToList()},
-                // {RegexPattern.EventTypeEnum.SendRequestInvite, _settingsCache[RegexPattern.EventTypeEnum.SendRequestInvite].ToList()},
-                {RegexPattern.EventTypeEnum.JoinedRoomURL, _settingsCache[RegexPattern.EventTypeEnum.JoinedRoomURL].ToList()},
-                {RegexPattern.EventTypeEnum.JoinedRoomName, _settingsCache[RegexPattern.EventTypeEnum.JoinedRoomName].ToList()},
-                // {RegexPattern.EventTypeEnum.SendFriendRequest, _settingsCache[RegexPattern.EventTypeEnum.SendFriendRequest].ToList()},
-                // {RegexPattern.EventTypeEnum.ReceivedFriendRequest, _settingsCache[RegexPattern.EventTypeEnum.ReceivedFriendRequest].ToList()},
-                {RegexPattern.EventTypeEnum.AcceptFriendRequest, _settingsCache[RegexPattern.EventTypeEnum.AcceptFriendRequest].ToList()},
-                // {RegexPattern.EventTypeEnum.ReceivedInviteResponse, _settingsCache[RegexPattern.EventTypeEnum.ReceivedInviteResponse].ToList()},
-                // {RegexPattern.EventTypeEnum.ReceivedRequestInviteResponse, _settingsCache[RegexPattern.EventTypeEnum.ReceivedRequestInviteResponse].ToList()},
-                {RegexPattern.EventTypeEnum.PlayedVideo1, _settingsCache[RegexPattern.EventTypeEnum.PlayedVideo1].ToList()},
-                {RegexPattern.EventTypeEnum.PlayedVideo2, _settingsCache[RegexPattern.EventTypeEnum.PlayedVideo2].ToList()},
-                {RegexPattern.EventTypeEnum.AcceptInvite, _settingsCache[RegexPattern.EventTypeEnum.AcceptInvite].ToList()},
-                {RegexPattern.EventTypeEnum.AcceptRequestInvite, _settingsCache[RegexPattern.EventTypeEnum.AcceptRequestInvite].ToList()},
-                {RegexPattern.EventTypeEnum.OnPlayerJoined, _settingsCache[RegexPattern.EventTypeEnum.OnPlayerJoined].ToList()},
-                {RegexPattern.EventTypeEnum.OnPlayerLeft, _settingsCache[RegexPattern.EventTypeEnum.OnPlayerLeft].ToList()},
-                {RegexPattern.EventTypeEnum.TookScreenshot, _settingsCache[RegexPattern.EventTypeEnum.TookScreenshot].ToList()},
-            };
+                settings.Add(type, _settingsCache[type].ToList());
+            }
             settings[_shownEventType] = _shownSetting.ToList();
             FileLoader.SaveSetting(new WholeSetting(settings));
             FileLoader.LoadSetting();
@@ -137,6 +101,17 @@ namespace VRChatLogEventOSC
         private SettingWindowModel()
         {
             _logEventModel = LogEventModel.Instance;
+
+            _settingsCache = new Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>>();
+            foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
+            {
+                if (type == RegexPattern.EventTypeEnum.None)
+                {
+                    continue;
+                }
+                _settingsCache.Add(type, new ReactiveCollection<SingleSetting>().AddTo(_compositeDisposables));
+            }
+
             UpdateSetting();
             ShownSetting = _shownSetting.ToReadOnlyReactiveCollection();
             _shownSetting.AddTo(_compositeDisposables);
