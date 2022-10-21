@@ -43,6 +43,10 @@ namespace VRChatLogEventOSC
             _eventReactiveProperties = new Dictionary<EventTypeEnum, ReactivePropertySlim<string>>();
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 _eventReactiveProperties.Add(type, new(string.Empty, ReactivePropertyMode.None));
             }
 
@@ -50,6 +54,10 @@ namespace VRChatLogEventOSC
             var eventReactiveProperties = new Dictionary<EventTypeEnum, ReadOnlyReactivePropertySlim<string>>();
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 eventReactiveProperties.Add(type, _eventReactiveProperties[type].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable));
             }
             EventReactiveProperties = eventReactiveProperties;

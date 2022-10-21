@@ -38,6 +38,10 @@ namespace VRChatLogEventOSC.Common
             
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 settings.Add(type, new(0));
             }
             return settings;
@@ -49,6 +53,10 @@ namespace VRChatLogEventOSC.Common
             
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 settings.Add(type, new(){new(oscAddress: "/avatar/parameters/" + type.ToString())});
             }
             return settings;
@@ -60,6 +68,10 @@ namespace VRChatLogEventOSC.Common
             var settingsBase = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>();
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 settingsBase.Add(type, _settings[type].AsReadOnly());
             }
             Settings = settingsBase;
@@ -71,6 +83,10 @@ namespace VRChatLogEventOSC.Common
             var settingsBase = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>();
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 settingsBase.Add(type, _settings[type].AsReadOnly());
             }
             Settings = settingsBase;
@@ -91,6 +107,11 @@ namespace VRChatLogEventOSC.Common
             var convertedSetting = new Dictionary<EventTypeEnum, List<SingleSetting>>();
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
+                
                 if (settings.TryGetValue(EventTypeEnum.JoinedRoomURL, out var value))
                 {
                     convertedSetting.Add(type, value.ToList());
@@ -106,6 +127,10 @@ namespace VRChatLogEventOSC.Common
             var settingsBase = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>();
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
+                if (type == EventTypeEnum.None)
+                {
+                    continue;
+                }
                 settingsBase.Add(type, _settings[type].AsReadOnly());
             }
 
