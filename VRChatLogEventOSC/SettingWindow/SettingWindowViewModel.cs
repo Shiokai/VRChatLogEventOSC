@@ -83,7 +83,11 @@ namespace VRChatLogEventOSC
                 _model.SwapItem(SelectedIndex.Value, SelectedIndex.Value + 1);
             }).AddTo(_compositeDisposable);
 
-            AddCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
+            AddCommand = new ReactiveCommand().WithSubscribe(() =>
+            {
+                var editor = new EditorWindow();
+                editor.Show();
+            }).AddTo(_compositeDisposable);
             EditCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
             DeleteCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
             ApplyCommand = new ReactiveCommand().WithSubscribe(() =>
