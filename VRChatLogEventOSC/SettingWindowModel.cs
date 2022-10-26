@@ -26,8 +26,10 @@ namespace VRChatLogEventOSC
         private ReactiveCollection<SingleSetting> _shownSetting = new();
 
         public ReadOnlyReactiveCollection<SingleSetting> ShownSetting { get; set; }
-        private RegexPattern.EventTypeEnum _shownEventType;
+        private RegexPattern.EventTypeEnum _shownEventType = RegexPattern.EventTypeEnum.None;
 
+        private bool _isShownDirty = false;
+        
         private void UpdateSetting()
         {
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
@@ -44,11 +46,41 @@ namespace VRChatLogEventOSC
                     _settingsCache[type].Add(setting);
                 }
             }
+            _isShownDirty = false;
+        }
+
+        private void ApplyShownDirty()
+        {
+            if (_isShownDirty)
+            {
+                Debug.Print("Changed!");
+                var showedSetting = _settingsCache[_shownEventType];
+                showedSetting.Clear();
+                foreach (var setting in _shownSetting)
+                {
+                    showedSetting.Add(setting);
+                }
+            }
+        }
+
+        private void LoadShownFromCache(RegexPattern.EventTypeEnum type)
+        {
+            if (!_settingsCache.ContainsKey(type))
+            {
+                return;
+            }
+
+            _shownSetting.Clear();
+            foreach (var setting in _settingsCache[type])
+            {
+                _shownSetting.Add(setting);
+            }
         }
 
         public void ChangeShownSetting(RegexPattern.EventTypeEnum type)
         {
-            _shownSetting.Clear();
+            ApplyShownDirty();
+
             if (!_settingsCache.ContainsKey(type))
             {
                 _shownEventType = RegexPattern.EventTypeEnum.None;
@@ -56,11 +88,8 @@ namespace VRChatLogEventOSC
             }
 
             _shownEventType = type;
-            
-            foreach (var setting in _settingsCache[type])
-            {
-                _shownSetting.Add(setting);
-            }
+            LoadShownFromCache(type);
+            _isShownDirty = false;
         }
 
         public void SwapItem(int selected, int target)
@@ -71,10 +100,13 @@ namespace VRChatLogEventOSC
             }
 
             (_shownSetting[selected], _shownSetting[target]) = (_shownSetting[target], _shownSetting[selected]);
+            _isShownDirty = true;
         }
 
         public void ApplySetting()
         {
+            ApplyShownDirty();
+
             Dictionary<RegexPattern.EventTypeEnum, List<SingleSetting>> settings = new();
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
             {
@@ -84,10 +116,10 @@ namespace VRChatLogEventOSC
                 }
                 settings.Add(type, _settingsCache[type].ToList());
             }
-            settings[_shownEventType] = _shownSetting.ToList();
             FileLoader.SaveSetting(new WholeSetting(settings));
-            FileLoader.LoadSetting();
+            _logEventModel.LoadCurrentSetting();
             UpdateSetting();
+            LoadShownFromCache(_shownEventType);
         }
         private CompositeDisposable _compositeDisposables = new();
 

@@ -81,6 +81,11 @@ namespace VRChatLogEventOSC
             _logFileWatcher.SeekToCurrent();
         }
 
+        public void LoadCurrentSetting()
+        {
+            _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();
+        }
+
         private LogEventModel()
         {
             _lineClassifier = new LineClassifier(_logFileWatcher);
