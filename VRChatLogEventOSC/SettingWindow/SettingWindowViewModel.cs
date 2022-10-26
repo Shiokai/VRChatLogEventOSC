@@ -86,7 +86,7 @@ namespace VRChatLogEventOSC
             AddCommand = new ReactiveCommand().WithSubscribe(() =>
             {
                 var editor = new EditorWindow();
-                editor.Show();
+                editor.ShowDialog();
             }).AddTo(_compositeDisposable);
             EditCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
             DeleteCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
