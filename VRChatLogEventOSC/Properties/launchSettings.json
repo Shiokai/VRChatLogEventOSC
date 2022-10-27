@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "VRChatLogEventOSC": {
+      "commandName": "Project"
+    },
+    "VRChatLogEventSetting": {
+      "commandName": "Project",
+      "commandLineArgs": "-s"
+    }
+  }
+}

@@ -14,7 +14,21 @@ namespace VRChatLogEventOSC
     public partial class App : Application
     {
         private SystrayIcon.NotifyIconViewModel? _notifyIcon;
-        public void CreateNotifyIcon(object sender, StartupEventArgs e)
+
+        public void StartUp(object sender, StartupEventArgs e)
+        {
+            if (e.Args.Contains("--setting") || e.Args.Contains("-s"))
+            {
+                ShutdownMode = ShutdownMode.OnLastWindowClose;
+                var settingWindow = new Setting.SettingWindow();
+                settingWindow.Show();
+            }
+            else
+            {
+                CreateNotifyIcon();
+            }
+        }
+        private void CreateNotifyIcon()
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             _notifyIcon = new SystrayIcon.NotifyIconViewModel();
