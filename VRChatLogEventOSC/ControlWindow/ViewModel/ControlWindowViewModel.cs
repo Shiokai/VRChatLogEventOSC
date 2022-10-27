@@ -161,8 +161,6 @@ namespace VRChatLogEventOSC.Control
                 System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
             }).AddTo(_compositeDisposable);
 
-            Observable.Merge(ConfigIPAdress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
-            .Subscribe(_ => _isDirty = true).AddTo(_compositeDisposable);
 
             FolderBrowseCommand = new ReactiveCommand().WithSubscribe(() =>
             {
@@ -181,6 +179,9 @@ namespace VRChatLogEventOSC.Control
 
             var config = _model.LoadConfig();
             (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            
+            Observable.Merge(ConfigIPAdress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
+            .Subscribe(_ => _isDirty = true).AddTo(_compositeDisposable);
 
         }
 
