@@ -20,7 +20,7 @@ namespace VRChatLogEventOSC.SystrayIcon
         public static NotifyIconModel Instance => _instance ??= new NotifyIconModel();
         
         public event PropertyChangedEventHandler? PropertyChanged;
-        private LogEventModel _logEventModel;
+        private Core _core;
         public ReadOnlyReactivePropertySlim<bool> IsLogEventRunning;
 
         private CompositeDisposable _compositeDisposable = new();
@@ -33,18 +33,18 @@ namespace VRChatLogEventOSC.SystrayIcon
                 return;
             }
 
-            _logEventModel.Dispose();
+            _core.Dispose();
             _compositeDisposable.Dispose();
         }
 
         public void PuaseLogWEvent()
         {
-            _logEventModel.Pause();
+            _core.Pause();
         }
 
         public void RestartLogEvent()
         {
-            _logEventModel.Restart();
+            _core.Restart();
         }
 
         public void OpenControlWindow()
@@ -75,9 +75,9 @@ namespace VRChatLogEventOSC.SystrayIcon
 
         private NotifyIconModel()
         {
-            _logEventModel = LogEventModel.Instance;
+            _core = Core.Instance;
 
-            IsLogEventRunning = _logEventModel.IsRunnging;
+            IsLogEventRunning = _core.IsRunnging;
             IsLogEventRunning.AddTo(_compositeDisposable);
 
             Application.Current.Exit += (obj, args) =>

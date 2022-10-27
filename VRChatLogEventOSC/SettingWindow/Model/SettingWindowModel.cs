@@ -19,7 +19,7 @@ namespace VRChatLogEventOSC
         public event PropertyChangedEventHandler? PropertyChanged;
         private static SettingWindowModel? _instance;
         public static SettingWindowModel Instance => _instance ??= new SettingWindowModel();
-        private LogEventModel _logEventModel;
+        private Core _core;
 
         private Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache;
 
@@ -43,7 +43,7 @@ namespace VRChatLogEventOSC
                     continue;
                 }
                 _settingsCache[type].Clear();
-                var settings = _logEventModel.GetCurrentSettingsOfType(type);
+                var settings = _core.GetCurrentSettingsOfType(type);
 
                 foreach (var setting in settings ?? Enumerable.Empty<SingleSetting>())
                 {
@@ -131,7 +131,7 @@ namespace VRChatLogEventOSC
                 settings.Add(type, _settingsCache[type].ToList());
             }
             FileLoader.SaveSetting(new WholeSetting(settings));
-            _logEventModel.LoadCurrentSetting();
+            _core.LoadCurrentSetting();
             UpdateSetting();
             LoadShownFromCache(_shownEventType);
             IsDirty = false;
@@ -201,7 +201,7 @@ namespace VRChatLogEventOSC
         }
         private SettingWindowModel()
         {
-            _logEventModel = LogEventModel.Instance;
+            _core = Core.Instance;
 
             _settingsCache = new Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>>();
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
