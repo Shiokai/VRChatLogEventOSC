@@ -29,13 +29,6 @@ namespace VRChatLogEventOSC.Common
             CanRequestInvite,
         }
 
-        private static readonly Dictionary<ReqInvEnum, string> _reqInvDict = new()
-        {
-            {ReqInvEnum.NotSpecified, ""},
-            {ReqInvEnum.None, "None"},
-            {ReqInvEnum.CanRequestInvite, "~canRequestInvite"}
-        };
-
         public string SettingName { get; private set; } = string.Empty;
         public string OSCAddress { get; private set; } = string.Empty;
         public bool? OSCBool {get; private set;} = null;
@@ -113,7 +106,8 @@ namespace VRChatLogEventOSC.Common
         public string WorldID { get; private set; } = string.Empty;
         public string InstanceID { get; private set; } = string.Empty;
         public string InstanceType { get; private set; } = string.Empty;
-        public string ReqInv {get; private set;} = string.Empty;
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public ReqInvEnum ReqInv {get; private set;} = ReqInvEnum.NotSpecified;
         public string WorldUserID { get; private set; } = string.Empty;
         public string Region { get; private set; } = string.Empty;
         public string Message { get; private set; } = string.Empty;
@@ -155,7 +149,7 @@ namespace VRChatLogEventOSC.Common
             WorldID = worldID;
             InstanceID = instanceID;
             InstanceType = instanceType;
-            ReqInv = _reqInvDict[reqInv];
+            ReqInv = reqInv;
             WorldUserID = worldUserID;
             Region = region;
             Message = message;
@@ -171,7 +165,7 @@ namespace VRChatLogEventOSC.Common
                 {nameof(WorldID), WorldID},
                 {nameof(InstanceID), InstanceID},
                 {nameof(InstanceType), InstanceType},
-                {nameof(ReqInv), ReqInv},
+                {nameof(ReqInv), ReqInv.ToString()},
                 {nameof(WorldUserID), WorldUserID},
                 {nameof(Region), Region},
                 {nameof(Message), Message},
@@ -199,7 +193,7 @@ namespace VRChatLogEventOSC.Common
             string worldID,
             string instanceID,
             string instanceType,
-            string reqInv,
+            ReqInvEnum reqInv,
             string worldUserID,
             string region,
             string message,
@@ -237,7 +231,7 @@ namespace VRChatLogEventOSC.Common
                 {nameof(WorldID), WorldID},
                 {nameof(InstanceID), InstanceID},
                 {nameof(InstanceType), InstanceType},
-                {nameof(ReqInv), ReqInv},
+                {nameof(ReqInv), ReqInv.ToString()},
                 {nameof(WorldUserID), WorldUserID},
                 {nameof(Region), Region},
                 {nameof(Message), Message},

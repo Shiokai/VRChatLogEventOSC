@@ -39,21 +39,28 @@ namespace VRChatLogEventOSC.SystrayIcon
             _notifyIcon?.Dispose();
         }
 
-        public IObservable<EventArgs>? OpenSelected;
+        public IObservable<EventArgs>? OpenControlSelected;
+        public IObservable<EventArgs>? OpenSettingSelected;
         public IObservable<EventArgs>? QuitSelected;
         public IObservable<EventArgs>? DoubleClicked;
         public IObservable<EventArgs>? PauseSelected;
 
-        private ToolStripMenuItem _openItem = new("Open Control");
+        private ToolStripMenuItem _openControlItem = new("Open Control");
+        private ToolStripMenuItem _openSetingItem = new("Open Setting");
         private ToolStripMenuItem _quitItem = new("Quit");
         private ToolStripMenuItem _pauseItem = new("Pause [ ]");
 
         private ContextMenuStrip CreateContextMenu()
         {
-            OpenSelected = Observable.FromEvent<EventHandler, EventArgs>(
+            OpenControlSelected = Observable.FromEvent<EventHandler, EventArgs>(
                 h => (s, e) => h(e),
-                h => _openItem.Click += h,
-                h => _openItem.Click -= h
+                h => _openControlItem.Click += h,
+                h => _openControlItem.Click -= h
+            );
+            OpenSettingSelected = Observable.FromEvent<EventHandler, EventArgs>(
+                h => (s, e) => h(e),
+                h => _openSetingItem.Click += h,
+                h => _openSetingItem.Click -= h
             );
             PauseSelected = Observable.FromEvent<EventHandler, EventArgs>(
                 h => (s, e) => h(e),
@@ -66,7 +73,7 @@ namespace VRChatLogEventOSC.SystrayIcon
                 h => _quitItem.Click -= h
             );
             var separator = new ToolStripSeparator();
-            var contextMenu = new ContextMenuStrip { Items = { _openItem, _pauseItem, separator, _quitItem } };
+            var contextMenu = new ContextMenuStrip { Items = { _openControlItem, _openSetingItem, _pauseItem, separator, _quitItem } };
             return contextMenu;
         }
 

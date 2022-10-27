@@ -12,17 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace VRChatLogEventOSC.Control
+namespace VRChatLogEventOSC
 {
     /// <summary>
-    /// ControlWindow.xaml の相互作用ロジック
+    /// SettingWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class ControlWindow : Window
+    public partial class SettingWindow : Window
     {
-        public ControlWindow()
+        public SettingWindow()
         {
             InitializeComponent();
             Closed += (s, e) => (DataContext as IDisposable)?.Dispose();
+            Closing += (s, e) => (DataContext as IClosing)?.Closing(e);
         }
     }
 }

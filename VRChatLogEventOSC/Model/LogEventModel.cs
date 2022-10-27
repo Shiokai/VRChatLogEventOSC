@@ -26,6 +26,12 @@ namespace VRChatLogEventOSC
         
         public ReadOnlyReactivePropertySlim<bool> IsRunnging;
 
+        public IReadOnlyList<SingleSetting>? GetCurrentSettingsOfType(RegexPattern.EventTypeEnum type)
+        {
+            _converter.CurrentSetting.Settings.TryGetValue(type, out var settings);
+            return settings;
+        }
+
         private bool _disposed = false;
 
         public void Dispose()
@@ -73,6 +79,11 @@ namespace VRChatLogEventOSC
             _logFileWatcher.ChangeLogDerectory(config.LogFileDirectory);
             _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.SeekToCurrent();
+        }
+
+        public void LoadCurrentSetting()
+        {
+            _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();
         }
 
         private LogEventModel()

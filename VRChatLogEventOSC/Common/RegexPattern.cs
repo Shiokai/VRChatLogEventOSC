@@ -24,7 +24,7 @@ namespace VRChatLogEventOSC.Common
             TookScreenshot,
         }
         private static readonly Dictionary<EventTypeEnum, IEnumerable<string>> CaptureName = new(){
-            {EventTypeEnum.JoinedRoomURL, new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "UserID", "ReqInv", "Region"}},
+            {EventTypeEnum.JoinedRoomURL, new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "WorldUserID", "ReqInv", "Region"}},
             {EventTypeEnum.JoinedRoomName, new[]{"WorldName"}},
             {EventTypeEnum.AcceptFriendRequest, new[]{"UserName", "UserID"}},
             {EventTypeEnum.PlayedVideo1, new[]{"URL"}},
@@ -89,7 +89,7 @@ namespace VRChatLogEventOSC.Common
 
             string datetimePattern = @"^[0-9]{4}\.[0-9]{2}\.[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} Log {8}- {2}";
 
-            string joinedRoomURLPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<UserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?~region\((?<Region>.+)\).+)$";
+            string joinedRoomURLPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?~region\((?<Region>.+)\).+)$";
             string joinedRoomNamePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room: (?<WorldName>(.+))$";
             string acceptFriendRequestPattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: friendRequest, id: (.{40}),.+type:friendRequest,.+$";
             string playedVideo1Pattern = @"User (.+) added URL (?<URL>(.+))$";

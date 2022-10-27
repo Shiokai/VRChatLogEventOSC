@@ -112,7 +112,7 @@ namespace VRChatLogEventOSC.Common
                     continue;
                 }
                 
-                if (settings.TryGetValue(EventTypeEnum.JoinedRoomURL, out var value))
+                if (settings.TryGetValue(type, out var value))
                 {
                     convertedSetting.Add(type, value.ToList());
                 }
