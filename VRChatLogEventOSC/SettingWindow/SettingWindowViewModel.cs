@@ -25,21 +25,21 @@ namespace VRChatLogEventOSC
         private ReactivePropertySlim<string> _selectedEvent = new(string.Empty);
         public ReadOnlyReactivePropertySlim<string> SelectedEvent { get; init; }
 
-        private readonly Dictionary<Common.RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new()
+        private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new()
         {
-            {Common.RegexPattern.EventTypeEnum.JoinedRoomURL, new()},
-            {Common.RegexPattern.EventTypeEnum.JoinedRoomName, new()},
-            {Common.RegexPattern.EventTypeEnum.AcceptFriendRequest, new()},
-            {Common.RegexPattern.EventTypeEnum.PlayedVideo1, new()},
-            {Common.RegexPattern.EventTypeEnum.PlayedVideo2, new()},
-            {Common.RegexPattern.EventTypeEnum.AcceptInvite, new()},
-            {Common.RegexPattern.EventTypeEnum.AcceptRequestInvite, new()},
-            {Common.RegexPattern.EventTypeEnum.OnPlayerJoined, new()},
-            {Common.RegexPattern.EventTypeEnum.OnPlayerLeft, new()},
-            {Common.RegexPattern.EventTypeEnum.TookScreenshot, new()},
+            {RegexPattern.EventTypeEnum.JoinedRoomURL, new()},
+            {RegexPattern.EventTypeEnum.JoinedRoomName, new()},
+            {RegexPattern.EventTypeEnum.AcceptFriendRequest, new()},
+            {RegexPattern.EventTypeEnum.PlayedVideo1, new()},
+            {RegexPattern.EventTypeEnum.PlayedVideo2, new()},
+            {RegexPattern.EventTypeEnum.AcceptInvite, new()},
+            {RegexPattern.EventTypeEnum.AcceptRequestInvite, new()},
+            {RegexPattern.EventTypeEnum.OnPlayerJoined, new()},
+            {RegexPattern.EventTypeEnum.OnPlayerLeft, new()},
+            {RegexPattern.EventTypeEnum.TookScreenshot, new()},
         };
-        public IReadOnlyDictionary<Common.RegexPattern.EventTypeEnum, ReactiveCommand> EventsButtonCommand { get; init; }
-        public ReadOnlyReactiveCollection<Common.SingleSetting> SelectedTypeSettings { get; set; }
+        public IReadOnlyDictionary<RegexPattern.EventTypeEnum, ReactiveCommand> EventsButtonCommand { get; init; }
+        public ReadOnlyReactiveCollection<SingleSetting> SelectedTypeSettings { get; set; }
 
         // public ReactiveCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; init; } = new();
         public ReactivePropertySlim<SingleSetting> SelectedItem { get; init; } = new();
@@ -85,8 +85,7 @@ namespace VRChatLogEventOSC
 
             AddCommand = new ReactiveCommand().WithSubscribe(() =>
             {
-                var editor = new EditorWindow();
-                editor.ShowDialog();
+                _model.OpenEditor();
             }).AddTo(_compositeDisposable);
             EditCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
             DeleteCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
@@ -95,7 +94,7 @@ namespace VRChatLogEventOSC
                 _model.ApplySetting();
             }).AddTo(_compositeDisposable);
 
-            foreach (var type in Enum.GetValues<Common.RegexPattern.EventTypeEnum>())
+            foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
             {
                 if (!_eventsButtonCommand.ContainsKey(type))
                 {

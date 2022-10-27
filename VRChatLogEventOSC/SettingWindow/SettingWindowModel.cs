@@ -27,6 +27,7 @@ namespace VRChatLogEventOSC
 
         public ReadOnlyReactiveCollection<SingleSetting> ShownSetting { get; set; }
         private RegexPattern.EventTypeEnum _shownEventType = RegexPattern.EventTypeEnum.None;
+        public RegexPattern.EventTypeEnum ShownEventType => _shownEventType;
 
         private bool _isShownDirty = false;
         
@@ -53,7 +54,6 @@ namespace VRChatLogEventOSC
         {
             if (_isShownDirty)
             {
-                Debug.Print("Changed!");
                 var showedSetting = _settingsCache[_shownEventType];
                 showedSetting.Clear();
                 foreach (var setting in _shownSetting)
@@ -90,6 +90,7 @@ namespace VRChatLogEventOSC
             _shownEventType = type;
             LoadShownFromCache(type);
             _isShownDirty = false;
+            Debug.WriteLine(_shownEventType);
         }
 
         public void SwapItem(int selected, int target)
@@ -119,6 +120,23 @@ namespace VRChatLogEventOSC
             FileLoader.SaveSetting(new WholeSetting(settings));
             _logEventModel.LoadCurrentSetting();
             UpdateSetting();
+            LoadShownFromCache(_shownEventType);
+        }
+
+        public void OpenEditor()
+        {
+            if (_shownEventType == RegexPattern.EventTypeEnum.None)
+            {
+                return;
+            }
+
+            var editor = new EditorWindow();
+            editor.ShowDialog();
+        }
+        public void AddSetting(RegexPattern.EventTypeEnum eventType, SingleSetting setting)
+        {
+            _settingsCache[eventType].Add(setting);
+            _isShownDirty = true;
             LoadShownFromCache(_shownEventType);
         }
         private CompositeDisposable _compositeDisposables = new();
