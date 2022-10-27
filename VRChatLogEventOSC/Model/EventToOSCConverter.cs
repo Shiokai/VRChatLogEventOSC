@@ -37,6 +37,7 @@ namespace VRChatLogEventOSC
 
         private static bool IsEventMatchSetting(Match match, SingleSetting setting, IEnumerable<string> captures)
         {
+            // "continue" is resolved as "matched" or "pass".
             bool matchAll = true;
             foreach (var capture in captures)
             {
@@ -60,6 +61,11 @@ namespace VRChatLogEventOSC
                 }
 
                 if (string.IsNullOrWhiteSpace(settingCapture))
+                {
+                    continue;
+                }
+
+                if (capture == "InstanceType" && string.IsNullOrEmpty(matchCapture) && settingCapture == "public")
                 {
                     continue;
                 }
