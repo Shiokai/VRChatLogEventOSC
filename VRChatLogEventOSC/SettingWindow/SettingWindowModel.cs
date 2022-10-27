@@ -92,7 +92,6 @@ namespace VRChatLogEventOSC
             _shownEventType = type;
             LoadShownFromCache(type);
             _isShownDirty = false;
-            Debug.WriteLine(_shownEventType);
         }
 
         public void UpSelectedItem()
@@ -178,7 +177,7 @@ namespace VRChatLogEventOSC
 
         public void DeleteSetting()
         {
-            _settingsCache[_shownEventType].RemoveAt(SelectedIndex);
+            _shownSetting.RemoveAt(SelectedIndex);
             _isShownDirty = true;
             LoadShownFromCache(_shownEventType);
         }
