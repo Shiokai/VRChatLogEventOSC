@@ -49,14 +49,41 @@ namespace VRChatLogEventOSC.Control
 
         public ConfigData LoadConfig()
         {
-            var config = FileLoader.LoadConfig();
+            ConfigData? config;
+            try
+            {
+                config = FileLoader.LoadConfig();
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show($"Configファイルの読み込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                config = null;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                MessageBox.Show($"Configファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                config = null;
+            }
+
             if (config == null)
             {
                 var result = MessageBox.Show("Failed to load config.\nCreate default config.", "Load config", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
                     config = new ConfigData();
-                    FileLoader.SaveConfig(config);
+                    
+                    try
+                    {
+                        FileLoader.SaveConfig(config);
+                    }
+                    catch (IOException e)
+                    {
+                        MessageBox.Show($"Configファイルの書き込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                    }
+                    catch(UnauthorizedAccessException e)
+                    {
+                        MessageBox.Show($"Configファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                    }
                 }
                 else
                 {
@@ -71,7 +98,20 @@ namespace VRChatLogEventOSC.Control
         public void SaveConfig(string ipAddress, int port, string logFileDirectory)
         {
             var config = new ConfigData(ipAddress, port, logFileDirectory);
-            FileLoader.SaveConfig(config);
+            try
+            {
+                FileLoader.SaveConfig(config);
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show($"Configファイルの書き込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                return;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                MessageBox.Show($"Configファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                return;
+            }
             _core.AttachConfig(config);
         }
 

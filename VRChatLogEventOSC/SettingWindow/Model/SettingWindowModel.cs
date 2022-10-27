@@ -7,6 +7,7 @@ using Reactive.Bindings;
 using System.Reactive.Disposables;
 using Reactive.Bindings.Extensions;
 using System.ComponentModel;
+using System.Windows;
 
 using VRChatLogEventOSC.Core;
 using VRChatLogEventOSC.Editor;
@@ -131,8 +132,37 @@ namespace VRChatLogEventOSC.Setting
                 }
                 settings.Add(type, _settingsCache[type].ToList());
             }
-            FileLoader.SaveSetting(new WholeSetting(settings));
-            _core.LoadCurrentSetting();
+
+            try
+            {
+                FileLoader.SaveSetting(new WholeSetting(settings));
+            }
+            catch (System.IO.IOException e)
+            {
+                MessageBox.Show($"設定ファイルの書き込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                return;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                MessageBox.Show($"設定ファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                return;
+            }
+
+            try
+            {
+                _core.LoadCurrentSetting();
+            }
+            catch (System.IO.IOException e)
+            {
+                MessageBox.Show($"設定ファイルの書き込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                return;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                MessageBox.Show($"設定ファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                return;
+            }
+            
             UpdateSetting();
             LoadShownFromCache(_shownEventType);
             IsDirty = false;

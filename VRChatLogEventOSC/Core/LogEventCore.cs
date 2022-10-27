@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
 using System.ComponentModel;
+using System.Windows;
 
 using VRChatLogEventOSC.Common;
 
@@ -90,11 +91,28 @@ namespace VRChatLogEventOSC.Core
         {
             _lineClassifier = new LineClassifier(_logFileWatcher);
             _converter = new EventToOSCConverter(_lineClassifier, _sender);
-            _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();
+            IsRunnging = _logFileWatcher.IsWatching;
+            
+            try
+            {
+                LoadCurrentSetting();
+            }
+            catch (System.IO.IOException e)
+            {
+                MessageBox.Show($"設定ファイルの読み込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+                return;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                MessageBox.Show($"設定ファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+                return;
+            }
+            
             _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.IsDetectFileCreation = true;
             _logFileWatcher.StartWatchingFromCurrent();
-            IsRunnging = _logFileWatcher.IsWatching;
         }
     }
 }
