@@ -43,10 +43,11 @@ namespace VRChatLogEventOSC
             {
                 string settingCapture = setting.CaptureProperty(capture);
                 string matchCapture = match.Groups[capture].Value;
+                Debug.WriteLine(matchCapture);
 
                 if (capture == "ReqInv")
                 {
-                    if (string.IsNullOrEmpty(settingCapture))
+                    if (settingCapture == "NotSpecified")
                     {
                         continue;
                     }
@@ -80,6 +81,7 @@ namespace VRChatLogEventOSC
 
                 if (matchAll == false)
                 {
+                    Debug.WriteLine($"{capture} Not Matched: setting is {settingCapture} but event is {matchCapture}");
                     return false;
                 }
             }
