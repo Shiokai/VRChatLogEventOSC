@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VRChatLogEventOSC.Common
 {
-    public sealed record class SingleSetting
+    internal sealed record class SingleSetting
     {
         public enum OSCTypeEnum
         {
@@ -24,8 +24,17 @@ namespace VRChatLogEventOSC.Common
 
         public enum ReqInvEnum
         {
+            /// <summary>
+            /// 指定しない
+            /// </summary>
             NotSpecified,
+            /// <summary>
+            /// Invite+以外
+            /// </summary>
             None,
+            /// <summary>
+            /// Invite+
+            /// </summary>
             CanRequestInvite,
         }
 
@@ -35,6 +44,10 @@ namespace VRChatLogEventOSC.Common
         public int? OSCInt {get; private set;} = null;
         public float? OSCFloat {get; private set;} = null;
         public string? OSCString {get; private set;} = null;
+
+        /// <summary>
+        /// 種類と値を自動的に振り分けて代入します
+        /// </summary>
         [JsonIgnore]
         public object? OSCValue
         {

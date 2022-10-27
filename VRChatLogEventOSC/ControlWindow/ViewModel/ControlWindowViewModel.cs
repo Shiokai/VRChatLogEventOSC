@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.IO;
 
-using System.Diagnostics;
 
 namespace VRChatLogEventOSC.Control
 {
@@ -167,6 +166,7 @@ namespace VRChatLogEventOSC.Control
                 using (var folderBrowserDialog = new FolderBrowserDialog())
                 {
                     folderBrowserDialog.InitialDirectory = ConfigDirectoryPath.Value;
+                    // ここの文字がダイアログの表示上で折り返してしまうの何とかしたい
                     folderBrowserDialog.Description = "VRChat outpulog directory";
                     var result = folderBrowserDialog.ShowDialog();
                     if (result == DialogResult.Cancel)
@@ -179,7 +179,9 @@ namespace VRChatLogEventOSC.Control
 
             var config = _model.LoadConfig();
             (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
-            
+
+            // 最初のLoadCinfigより後に行う
+            // そうでなければ、読み込んだコンフィグがデフォルト値と異なる場合編集していなくてもDirtyになる
             Observable.Merge(ConfigIPAdress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
             .Subscribe(_ => _isDirty = true).AddTo(_compositeDisposable);
 

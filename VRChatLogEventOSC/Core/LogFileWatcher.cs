@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace VRChatLogEventOSC.Core
 {
-    public sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
+    internal sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private static readonly string _defaultLogDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
@@ -27,12 +27,18 @@ namespace VRChatLogEventOSC.Core
 
         private long _lastLength = 0;
 
+        /// <summary>
+        /// ログの読み取り間隔
+        /// インスタンス初期化後の変更は無効
+        /// </summary>
         public float Interval { get; set; } = 0.1f;
 
         private readonly ReactivePropertySlim<string> _logLine = new(string.Empty);
         public IObservable<string> LogLineObservable => _logLine.Skip(1);
-        // private bool _isWatching = false;
         private readonly ReactivePropertySlim<bool> _isWatching = new(false);
+        /// <summary>
+        /// 今現在ログの読み取りが行われているか
+        /// </summary>
         public ReadOnlyReactivePropertySlim<bool> IsWatching;
         public bool IsDetectFileCreation {get; set;} = false;
 
@@ -49,12 +55,18 @@ namespace VRChatLogEventOSC.Core
             _disposed = true;
         }
 
+        /// <summary>
+        /// 指定されたフォルダ内にある、作成日が最新のログファイルを読み取り対象のログファイルに設定します
+        /// </summary>
         public void LoadLatestLogFile()
         {
             _logFilePath = Directory.GetFiles(LogDirectoryPath, "output_log_*.txt", SearchOption.TopDirectoryOnly).OrderByDescending(file => Directory.GetCreationTime(file)).FirstOrDefault() ?? "";
             _lastLength = 0;
         }
 
+        /// <summary>
+        /// 最終読み取り位置をログファイルの最後尾に移動します
+        /// </summary>
         public void SeekToCurrent()
         {
             if (!File.Exists(_logFilePath))
@@ -66,28 +78,44 @@ namespace VRChatLogEventOSC.Core
             _lastLength = fileStream.Length;
         }
 
+        /// <summary>
+        /// 読み取り開始位置をログファイルの末尾に移動し、ログの読み取りが行われるように設定します
+        /// </summary>
         public void StartWatchingFromCurrent()
         {
             SeekToCurrent();
             _isWatching.Value = true;
         }
 
+        /// <summary>
+        /// 読み取り開始位置をログファイルの先頭に移動し、ログの読み取りが行われるように設定します
+        /// </summary>
         public void StartWatchingFromTop()
         {
             _lastLength = 0;
             _isWatching.Value = true;
         }
 
+        /// <summary>
+        /// 読み取り開始位置は変更せず、ログの読み取りが行われるように設定します
+        /// </summary>
         public void StartWatchingFromLatest()
         {
             _isWatching.Value = true;
         }
 
+        /// <summary>
+        /// ログの読み取りが行われないように設定します
+        /// </summary>
         public void PauseWatching()
         {
             _isWatching.Value = false;
         }
 
+        /// <summary>
+        /// ログファイルの作製を検知するフォルダを変更します
+        /// </summary>
+        /// <param name="dirPath">ログファイルの作製を検知するフォルダへのパス</param>
         public void ChangeLogDerectory(string dirPath)
         {
             LogDirectoryPath = dirPath;

@@ -3,11 +3,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
 
 namespace VRChatLogEventOSC.Common
 {
-    public static class RegexPattern
+    internal static class RegexPattern
     {
         public enum EventTypeEnum
         {
@@ -23,6 +22,10 @@ namespace VRChatLogEventOSC.Common
             OnPlayerLeft,
             TookScreenshot,
         }
+
+        /// <summary>
+        /// 各イベントの正規表現の名前付きグループの名前の一覧
+        /// </summary>
         private static readonly Dictionary<EventTypeEnum, IEnumerable<string>> CaptureName = new(){
             {EventTypeEnum.JoinedRoomURL, new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "WorldUserID", "ReqInv", "Region"}},
             {EventTypeEnum.JoinedRoomName, new[]{"WorldName"}},
@@ -33,13 +36,22 @@ namespace VRChatLogEventOSC.Common
             {EventTypeEnum.AcceptRequestInvite, new[]{"UserName", "UserID", "Message"}},
             {EventTypeEnum.OnPlayerJoined, new[]{"DisplayName"}},
             {EventTypeEnum.OnPlayerLeft, new[]{"DisplayName"}},
-            // {EventTypeEnum.TookScreenshot, new[]{"Path"}},
             {EventTypeEnum.TookScreenshot, Enumerable.Empty<string>()},
 
         };
 
+        /// <summary>
+        /// イベントの正規表現の名前付きグループの名前の一覧を取得します
+        /// </summary>
+        /// <param name="eventType">名前付きグループの名前を取得するイベント</param>
+        /// <returns>名前付きグループの名前の一覧</returns>
         public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CaptureName[eventType];
 
+        /// <summary>
+        /// 正規表現へのマッチがどのイベントのものかを取得します
+        /// </summary>
+        /// <param name="match">イベントを調べる正規表現へのマッチ</param>
+        /// <returns>対応するイベント</returns>
         public static EventTypeEnum GetMatchGropeType(Match match)
         {
             foreach (var type in Enum.GetValues<EventTypeEnum>())

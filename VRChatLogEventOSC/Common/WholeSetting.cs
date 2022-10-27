@@ -8,7 +8,7 @@ using static VRChatLogEventOSC.Common.RegexPattern;
 
 namespace VRChatLogEventOSC.Common
 {
-    public sealed record class WholeSetting
+    internal sealed record class WholeSetting
     {
         public int JsonVersion { get; init; } = 0;
 
@@ -32,6 +32,10 @@ namespace VRChatLogEventOSC.Common
             return result.ToString();
         }
 
+        /// <summary>
+        /// イベント毎の設定の一覧が空の設定
+        /// </summary>
+        /// <returns>空の設定</returns>
         public static Dictionary<EventTypeEnum, List<SingleSetting>> CreateEmptyWholeSettingDict()
         {
             var settings = new Dictionary<EventTypeEnum, List<SingleSetting>>();
@@ -47,6 +51,10 @@ namespace VRChatLogEventOSC.Common
             return settings;
         }
 
+        /// <summary>
+        /// イベント毎の設定にデフォルト値で一つ追加された設定
+        /// </summary>
+        /// <returns>デフォルト値一つで構成された設定</returns>
         public static Dictionary<EventTypeEnum, List<SingleSetting>> CreateDefaultWholeSettingDict()
         {
             var settings = new Dictionary<EventTypeEnum, List<SingleSetting>>();
@@ -95,6 +103,7 @@ namespace VRChatLogEventOSC.Common
         [JsonConstructor]
         public WholeSetting(int jsonVersion, IReadOnlyDictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> settings)
         {
+            // 設定ファイルの書式が変わった場合バージョンを見てマイグレート
             // if (jsonVersion < JsonVersion)
             // {
             //     MigrateSetting();

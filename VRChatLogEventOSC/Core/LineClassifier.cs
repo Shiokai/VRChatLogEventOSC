@@ -7,14 +7,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Reactive.Bindings.Extensions;
 using static VRChatLogEventOSC.Common.RegexPattern;
 
 
 namespace VRChatLogEventOSC.Core
 {
-    public sealed class LineClassifier : INotifyPropertyChanged, IDisposable
+    internal sealed class LineClassifier : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly LogFileWatcher _logFileWatcher;
@@ -73,7 +72,6 @@ namespace VRChatLogEventOSC.Core
             {
                 EventTypeEnum eventType = GetMatchGropeType(m);
                 _eventReactiveProperties[eventType].Value = m.Value;
-                // Debug.Print($"{eventType}: {m.Value}");
             });
         }
     }
