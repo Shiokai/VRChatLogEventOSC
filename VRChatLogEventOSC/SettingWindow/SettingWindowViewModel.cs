@@ -115,7 +115,7 @@ namespace VRChatLogEventOSC
             DeleteCommand = _isSelected.ToReactiveCommand()
             .WithSubscribe(() =>
             {
-
+                _model.DeleteSetting();
             }).AddTo(_compositeDisposable);
 
             ApplyCommand = new ReactiveCommand()

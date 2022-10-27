@@ -166,14 +166,19 @@ namespace VRChatLogEventOSC
 
         public void AddSetting(SingleSetting setting)
         {
-            _settingsCache[_shownEventType].Add(setting);
+           _shownSetting.Add(setting);
             _isShownDirty = true;
-            LoadShownFromCache(_shownEventType);
         }
 
         public void EditOverrideSetting(SingleSetting setting)
         {
-            _settingsCache[_shownEventType][SelectedIndex] = setting;
+            _shownSetting[SelectedIndex] = setting;
+            _isShownDirty = true;
+        }
+
+        public void DeleteSetting()
+        {
+            _settingsCache[_shownEventType].RemoveAt(SelectedIndex);
             _isShownDirty = true;
             LoadShownFromCache(_shownEventType);
         }
