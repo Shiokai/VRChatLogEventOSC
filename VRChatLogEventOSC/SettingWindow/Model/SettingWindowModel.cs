@@ -11,8 +11,6 @@ using System.ComponentModel;
 using VRChatLogEventOSC.Core;
 using VRChatLogEventOSC.Editor;
 
-using System.Diagnostics;
-
 using VRChatLogEventOSC.Common;
 
 namespace VRChatLogEventOSC.Setting

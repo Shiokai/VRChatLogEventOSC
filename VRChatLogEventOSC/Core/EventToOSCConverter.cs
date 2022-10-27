@@ -10,8 +10,6 @@ using Reactive.Bindings.Extensions;
 using VRChatLogEventOSC.Common;
 using static VRChatLogEventOSC.Common.RegexPattern;
 
-using System.Diagnostics;
-
 namespace VRChatLogEventOSC.Core
 {
     internal sealed class EventToOSCConverter : IDisposable
@@ -43,7 +41,6 @@ namespace VRChatLogEventOSC.Core
             {
                 string settingCapture = setting.CaptureProperty(capture);
                 string matchCapture = match.Groups[capture].Value;
-                Debug.WriteLine(matchCapture);
 
                 if (capture == "ReqInv")
                 {
@@ -81,7 +78,6 @@ namespace VRChatLogEventOSC.Core
 
                 if (matchAll == false)
                 {
-                    Debug.WriteLine($"{capture} Not Matched: setting is {settingCapture} but event is {matchCapture}");
                     return false;
                 }
             }

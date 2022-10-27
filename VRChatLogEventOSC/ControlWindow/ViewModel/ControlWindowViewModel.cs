@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.IO;
 
-using System.Diagnostics;
 
 namespace VRChatLogEventOSC.Control
 {

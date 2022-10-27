@@ -13,9 +13,6 @@ using Reactive.Bindings.Extensions;
 
 using VRChatLogEventOSC.Common;
 
-using System.Diagnostics;
-
-
 namespace VRChatLogEventOSC.Setting
 {
     internal class SettingWindowViewModel : INotifyPropertyChanged, IDisposable, IClosing
@@ -42,7 +39,6 @@ namespace VRChatLogEventOSC.Setting
         public IReadOnlyDictionary<RegexPattern.EventTypeEnum, ReactiveCommand> EventsButtonCommand { get; init; }
         public ReadOnlyReactiveCollection<SingleSetting> SelectedTypeSettings { get; set; }
 
-        // public ReactiveCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; init; } = new();
         public ReactivePropertySlim<SingleSetting?> SelectedItem { get; init; } = new();
         public ReactivePropertySlim<int> SelectedIndex { get; init; } = new();
         public ReactiveCommand UpCommand { get; init; }

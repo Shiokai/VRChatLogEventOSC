@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
 
 namespace VRChatLogEventOSC.Common
 {
@@ -33,7 +32,6 @@ namespace VRChatLogEventOSC.Common
             {EventTypeEnum.AcceptRequestInvite, new[]{"UserName", "UserID", "Message"}},
             {EventTypeEnum.OnPlayerJoined, new[]{"DisplayName"}},
             {EventTypeEnum.OnPlayerLeft, new[]{"DisplayName"}},
-            // {EventTypeEnum.TookScreenshot, new[]{"Path"}},
             {EventTypeEnum.TookScreenshot, Enumerable.Empty<string>()},
 
         };

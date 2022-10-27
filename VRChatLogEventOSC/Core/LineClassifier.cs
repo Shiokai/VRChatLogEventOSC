@@ -7,7 +7,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Reactive.Bindings.Extensions;
 using static VRChatLogEventOSC.Common.RegexPattern;
 

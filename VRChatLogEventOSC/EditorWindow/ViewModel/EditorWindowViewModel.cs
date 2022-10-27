@@ -11,8 +11,6 @@ using Reactive.Bindings.Extensions;
 using Reactive.Bindings;
 using System.Reactive.Linq;
 
-using System.Diagnostics;
-
 using VRChatLogEventOSC.Common;
 using static VRChatLogEventOSC.Common.SingleSetting;
 
