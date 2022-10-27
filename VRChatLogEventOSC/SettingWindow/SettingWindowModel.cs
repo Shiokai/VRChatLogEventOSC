@@ -28,9 +28,11 @@ namespace VRChatLogEventOSC
         public ReadOnlyReactiveCollection<SingleSetting> ShownSetting { get; set; }
         private RegexPattern.EventTypeEnum _shownEventType = RegexPattern.EventTypeEnum.None;
         public RegexPattern.EventTypeEnum ShownEventType => _shownEventType;
+        public SingleSetting? SelectedSetting { get; set; }
+        public int SelectedIndex { get; set; }
 
         private bool _isShownDirty = false;
-        
+
         private void UpdateSetting()
         {
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
@@ -93,7 +95,17 @@ namespace VRChatLogEventOSC
             Debug.WriteLine(_shownEventType);
         }
 
-        public void SwapItem(int selected, int target)
+        public void UpSelectedItem()
+        {
+            SwapItem(SelectedIndex, SelectedIndex - 1);
+        }
+
+        public void DownSelectedItem()
+        {
+            SwapItem(SelectedIndex, SelectedIndex + 1);
+        }
+
+        private void SwapItem(int selected, int target)
         {
             if (selected < 0 || target < 0 || target > _shownSetting.Count - 1)
             {
@@ -123,9 +135,27 @@ namespace VRChatLogEventOSC
             LoadShownFromCache(_shownEventType);
         }
 
-        public void OpenEditor()
+        public void OpenEditorAsAdd()
         {
             if (_shownEventType == RegexPattern.EventTypeEnum.None)
+            {
+                return;
+            }
+
+            SelectedSetting = null;
+
+            var editor = new EditorWindow();
+            editor.ShowDialog();
+        }
+
+        public void OpenEditorAsEdit()
+        {
+            if (_shownEventType == RegexPattern.EventTypeEnum.None)
+            {
+                return;
+            }
+
+            if (SelectedSetting == null)
             {
                 return;
             }
@@ -133,9 +163,17 @@ namespace VRChatLogEventOSC
             var editor = new EditorWindow();
             editor.ShowDialog();
         }
-        public void AddSetting(RegexPattern.EventTypeEnum eventType, SingleSetting setting)
+
+        public void AddSetting(SingleSetting setting)
         {
-            _settingsCache[eventType].Add(setting);
+            _settingsCache[_shownEventType].Add(setting);
+            _isShownDirty = true;
+            LoadShownFromCache(_shownEventType);
+        }
+
+        public void EditOverrideSetting(SingleSetting setting)
+        {
+            _settingsCache[_shownEventType][SelectedIndex] = setting;
             _isShownDirty = true;
             LoadShownFromCache(_shownEventType);
         }

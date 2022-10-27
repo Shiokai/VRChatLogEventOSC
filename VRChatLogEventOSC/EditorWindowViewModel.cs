@@ -94,7 +94,37 @@ namespace VRChatLogEventOSC
             _compositeDisposable.Dispose();
         }
 
-        private string InstanceTypeTpStr()
+        private void LoadOldSetting()
+        {
+            var oldSetting = _model.OldSetting;
+            if (oldSetting == null)
+            {
+                return;
+            }
+            
+            SettingName.Value = oldSetting.SettingName;
+            OSCAddress.Value = oldSetting.OSCAddress;
+            OSCBool.Value = oldSetting.OSCBool;
+            OSCInt.Value = oldSetting.OSCInt;
+            OSCFloat = oldSetting.OSCFloat;
+            OSCString.Value = oldSetting.OSCString;
+            OSCValueType.Value = oldSetting.OSCValueType;
+            OSCType.Value = oldSetting.OSCType;
+            UserName.Value = oldSetting.UserName;
+            UserID.Value = oldSetting.UserID;
+            WorldName.Value = oldSetting.WorldName;
+            WorldURL.Value = oldSetting.WorldURL;
+            WorldID.Value = oldSetting.WorldID;
+            InstanceID.Value = oldSetting.InstanceID;
+            InstanceType.Value = SettingToInstanceTypeEnum(oldSetting.InstanceType, oldSetting.ReqInv);
+            WorldUserID.Value = oldSetting.WorldUserID;
+            Region.Value = SettingToRegionEnum(oldSetting.Region);
+            Message.Value = oldSetting.Message;
+            URL.Value = oldSetting.URL;
+
+        }
+
+        private string InstanceTypeEnumToStr()
         {
             return InstanceType.Value switch
             {
@@ -107,7 +137,32 @@ namespace VRChatLogEventOSC
             };
         }
 
-        private ReqInvEnum InstanceTypeToReqInv()
+        private static InstanceTypeEnum SettingToInstanceTypeEnum(string instanceType, ReqInvEnum reqInv)
+        {
+            return (instanceType, reqInv) switch
+            {
+                ("public", _) => InstanceTypeEnum.Public,
+                ("hidden", _) => InstanceTypeEnum.FriendsPlus,
+                ("friends", _) => InstanceTypeEnum.Friends,
+                ("private", ReqInvEnum.CanRequestInvite) => InstanceTypeEnum.InvitePlus,
+                ("private", ReqInvEnum.None) => InstanceTypeEnum.Invite,
+                (_, _) => InstanceTypeEnum.None,
+            };
+        }
+
+        private static RegionEnum SettingToRegionEnum(string region)
+        {
+            return region switch
+            {
+                "us" => RegionEnum.US,
+                "use" => RegionEnum.USE,
+                "eu" => RegionEnum.EU,
+                "jp" => RegionEnum.JP,
+                _ => RegionEnum.None,
+            };
+        }
+
+        private ReqInvEnum InstanceTypeEnumToReqInv()
         {
             return InstanceType.Value switch
             {
@@ -206,6 +261,7 @@ namespace VRChatLogEventOSC
             Message = new ReactivePropertySlim<string>(string.Empty).AddTo(_compositeDisposable);
             URL = new ReactivePropertySlim<string>(string.Empty).AddTo(_compositeDisposable);
 
+            LoadOldSetting();
 
             OSCValueType.Subscribe(vtype =>
             {
@@ -244,14 +300,14 @@ namespace VRChatLogEventOSC
                     worldURL: WorldURL.Value,
                     worldID: WorldID.Value,
                     instanceID: InstanceID.Value,
-                    instanceType: InstanceTypeTpStr(),
-                    reqInv: InstanceTypeToReqInv(),
+                    instanceType: InstanceTypeEnumToStr(),
+                    reqInv: InstanceTypeEnumToReqInv(),
                     worldUserID: WorldUserID.Value,
                     region: RegionToStr(),
                     message: Message.Value,
                     url: URL.Value
                 );
-                _model.AddSetting(eventType, setting);
+                _model.AddSetting(setting);
             }).AddTo(_compositeDisposable);
 
             CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w => w.DialogResult = false).AddTo(_compositeDisposable);

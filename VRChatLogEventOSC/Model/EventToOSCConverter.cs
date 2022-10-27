@@ -54,7 +54,7 @@ namespace VRChatLogEventOSC
                     {
                         continue;
                     }
-                    else if (settingCapture == "~canRequestInvite" && "~canRequestInvite" == matchCapture)
+                    else if (settingCapture == "CanRequestInvite" && "~canRequestInvite" == matchCapture)
                     {
                         continue;
                     }

@@ -42,7 +42,7 @@ namespace VRChatLogEventOSC
         public ReadOnlyReactiveCollection<SingleSetting> SelectedTypeSettings { get; set; }
 
         // public ReactiveCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; init; } = new();
-        public ReactivePropertySlim<SingleSetting> SelectedItem { get; init; } = new();
+        public ReactivePropertySlim<SingleSetting?> SelectedItem { get; init; } = new();
         public ReactivePropertySlim<int> SelectedIndex { get; init; } = new();
         public ReactiveCommand UpCommand { get; init; }
         public ReactiveCommand DownCommand { get; init; }
@@ -50,6 +50,8 @@ namespace VRChatLogEventOSC
         public ReactiveCommand EditCommand { get; init; }
         public ReactiveCommand DeleteCommand { get; init; }
         public ReactiveCommand ApplyCommand { get; init; }
+
+        private ReactivePropertySlim<bool> _isSelected;
         private readonly CompositeDisposable _compositeDisposable = new();
         private bool _disposed = false;
         public void Dispose()
@@ -70,26 +72,54 @@ namespace VRChatLogEventOSC
             _selectedEvent.AddTo(_compositeDisposable);
             SelectedEvent.AddTo(_compositeDisposable);
             SelectedItem.AddTo(_compositeDisposable);
+            _isSelected = new ReactivePropertySlim<bool>(false).AddTo(_compositeDisposable);
 
-            UpCommand = new ReactiveCommand().WithSubscribe(() =>
-            {
-                Debug.Print(SelectedIndex.Value.ToString());
-                _model.SwapItem(SelectedIndex.Value, SelectedIndex.Value -1);
+            SelectedItem.Subscribe(item => {
+                _model.SelectedSetting = item;
+                if (item == null)
+                {
+                    _isSelected.Value = false;
+                }
+                else
+                {
+                    _isSelected.Value = true;
+                }
             }).AddTo(_compositeDisposable);
 
-            DownCommand = new ReactiveCommand().WithSubscribe(() =>
+            SelectedIndex.Subscribe(index => _model.SelectedIndex = index);
+
+            UpCommand = _isSelected.ToReactiveCommand()
+            .WithSubscribe(() =>
             {
-                Debug.Print(SelectedIndex.Value.ToString());
-                _model.SwapItem(SelectedIndex.Value, SelectedIndex.Value + 1);
+                _model.UpSelectedItem();
             }).AddTo(_compositeDisposable);
 
-            AddCommand = new ReactiveCommand().WithSubscribe(() =>
+            DownCommand = _isSelected.ToReactiveCommand()
+            .WithSubscribe(() =>
             {
-                _model.OpenEditor();
+                _model.DownSelectedItem();
             }).AddTo(_compositeDisposable);
-            EditCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
-            DeleteCommand = new ReactiveCommand().WithSubscribe(() => { }).AddTo(_compositeDisposable);
-            ApplyCommand = new ReactiveCommand().WithSubscribe(() =>
+
+            AddCommand = new ReactiveCommand()
+            .WithSubscribe(() =>
+            {
+                _model.OpenEditorAsAdd();
+            }).AddTo(_compositeDisposable);
+
+            EditCommand = _isSelected.ToReactiveCommand()
+            .WithSubscribe(() =>
+            {
+                _model.OpenEditorAsEdit();
+            }).AddTo(_compositeDisposable);
+            
+            DeleteCommand = _isSelected.ToReactiveCommand()
+            .WithSubscribe(() =>
+            {
+
+            }).AddTo(_compositeDisposable);
+
+            ApplyCommand = new ReactiveCommand()
+            .WithSubscribe(() =>
             {
                 _model.ApplySetting();
             }).AddTo(_compositeDisposable);

@@ -15,15 +15,23 @@ namespace VRChatLogEventOSC
 
         private readonly SettingWindowModel _settingModel = SettingWindowModel.Instance;
         public RegexPattern.EventTypeEnum EventType => _settingModel.ShownEventType;
+        public SingleSetting? OldSetting => _settingModel.SelectedSetting;
 
-        public void AddSetting(RegexPattern.EventTypeEnum eventType, SingleSetting setting)
+        public void AddSetting(SingleSetting setting)
         {
-            _settingModel.AddSetting(eventType, setting);
+            if (OldSetting == null)
+            {
+                _settingModel.AddSetting(setting);
+            }
+            else
+            {
+                _settingModel.EditOverrideSetting(setting);
+            }
         }
 
         private EditorWindowModel()
         {
-
+            
         }
     }
 }
