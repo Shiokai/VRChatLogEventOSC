@@ -315,7 +315,14 @@ namespace VRChatLogEventOSC
                 _model.ApplyEdited(setting);
             }).AddTo(_compositeDisposable);
 
-            CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w => w.DialogResult = false).AddTo(_compositeDisposable);
+            CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w => 
+            {
+                var result = MessageBox.Show("編集中の内容を破棄しますか?", "Cancel", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    w.DialogResult = false;
+                }
+            }).AddTo(_compositeDisposable);
 
             // Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ => Debug.WriteLine(OSCFloat)).AddTo(_compositeDisposable);
         }
