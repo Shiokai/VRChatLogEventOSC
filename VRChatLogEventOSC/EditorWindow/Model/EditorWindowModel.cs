@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using VRChatLogEventOSC.Common;
+using VRChatLogEventOSC.Setting;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Editor
 {
     internal class EditorWindowModel
     {

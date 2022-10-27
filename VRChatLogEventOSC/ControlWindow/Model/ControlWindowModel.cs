@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using Reactive.Bindings;
 using VRChatLogEventOSC.Common;
+using VRChatLogEventOSC.Core;
 
 namespace VRChatLogEventOSC.Control
 {
@@ -15,30 +16,30 @@ namespace VRChatLogEventOSC.Control
     {
         private static ControlWindowModel? _instance;
         public static ControlWindowModel Instance => _instance ??= new ControlWindowModel();
-        private LogEventModel _logEventModel;
+        private LogEventCore _core;
         private static readonly string _defaultLogDirectoryPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat"));
         public string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
 
-        public ReadOnlyReactivePropertySlim<bool> IsRunning => _logEventModel.IsRunnging;
+        public ReadOnlyReactivePropertySlim<bool> IsRunning => _core.IsRunnging;
 
         public void PuaseLogWEvent()
         {
-            _logEventModel.Pause();
+            _core.Pause();
         }
 
         public void RestartLogEvent()
         {
-            _logEventModel.Restart();
+            _core.Restart();
         }
 
         public void RestartLogEventWithScan()
         {
-            _logEventModel.RestartWithScan();
+            _core.RestartWithScan();
         }
 
         public void Rescan()
         {
-            _logEventModel.Rescan();
+            _core.Rescan();
         }
 
         public static void QuitApplication()
@@ -63,7 +64,7 @@ namespace VRChatLogEventOSC.Control
                 }
             }
 
-            _logEventModel.AttachConfig(config);
+            _core.AttachConfig(config);
             return config;
         }
 
@@ -71,12 +72,12 @@ namespace VRChatLogEventOSC.Control
         {
             var config = new ConfigData(ipAddress, port, logFileDirectory);
             FileLoader.SaveConfig(config);
-            _logEventModel.AttachConfig(config);
+            _core.AttachConfig(config);
         }
 
         private ControlWindowModel()
         {
-            _logEventModel = LogEventModel.Instance;
+            _core = LogEventCore.Instance;
         }
     }
 }

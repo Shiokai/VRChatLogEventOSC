@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Rug.Osc;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Core
 {
     public sealed class OSCSender : IDisposable
     {

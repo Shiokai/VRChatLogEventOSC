@@ -12,7 +12,7 @@ using Reactive.Bindings.Extensions;
 using static VRChatLogEventOSC.Common.RegexPattern;
 
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Core
 {
     public sealed class LineClassifier : INotifyPropertyChanged, IDisposable
     {

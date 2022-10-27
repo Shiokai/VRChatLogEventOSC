@@ -6,7 +6,7 @@ using System.IO;
 using Reactive.Bindings;
 using System.ComponentModel;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Core
 {
     public sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
     {

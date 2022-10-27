@@ -12,7 +12,7 @@ using static VRChatLogEventOSC.Common.RegexPattern;
 
 using System.Diagnostics;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Core
 {
     internal sealed class EventToOSCConverter : IDisposable
     {
