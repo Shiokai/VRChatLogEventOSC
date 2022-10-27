@@ -82,6 +82,29 @@ namespace VRChatLogEventOSC
         public ReactivePropertySlim<string> Message { get; private set; }
         public ReactivePropertySlim<string> URL { get; private set; }
 
+        private ReactivePropertySlim<bool> _userNameEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> UserNameEditable { get; init; }
+        private ReactivePropertySlim<bool> _userIdEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> UserIDEditable { get; init; }
+        private ReactivePropertySlim<bool> _worldNameEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> WorldNameEditable { get; init; }
+        private ReactivePropertySlim<bool> _worldUrlEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> WorldURLEditable { get; init; }
+        private ReactivePropertySlim<bool> _worldIdEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> WorldIDEditable { get; init; }
+        private ReactivePropertySlim<bool> _instanceIdEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> InstanceIDEditable { get; init; }
+        private ReactivePropertySlim<bool> _instanceTypeEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> InstanceTypeEditable { get; init; }
+        private ReactivePropertySlim<bool> _worldUserIdEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> WorldUserIDEditable { get; init; }
+        private ReactivePropertySlim<bool> _regionEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> RegionEditable { get; init; }
+        private ReactivePropertySlim<bool> _messageEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> MessageEditable { get; init; }
+        private ReactivePropertySlim<bool> _urlEditable = new();
+        public ReadOnlyReactivePropertySlim<bool> URLEditable { get; init; }
+
         public ReactiveCommand<EditorWindow> OKCommand { get; init; }
         public ReactiveCommand<EditorWindow> CancelCommand { get; init; }
         private CompositeDisposable _compositeDisposable = new();
@@ -97,6 +120,180 @@ namespace VRChatLogEventOSC
             _compositeDisposable.Dispose();
         }
 
+        private void EventPropertyEditable(RegexPattern.EventTypeEnum eventType)
+        {   
+            (
+                _userNameEditable.Value,
+                _userIdEditable.Value,
+                _worldNameEditable.Value,
+                _worldUrlEditable.Value,
+                _worldIdEditable.Value,
+                _instanceIdEditable.Value,
+                _instanceTypeEditable.Value,
+                _worldUserIdEditable.Value,
+                _regionEditable.Value,
+                _messageEditable.Value,
+                _urlEditable.Value
+            ) = eventType switch
+            {
+                RegexPattern.EventTypeEnum.None => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.JoinedRoomURL => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: true,
+                    worldId: true,
+                    instanceId: true,
+                    instanceType: true,
+                    worldUserId: true,
+                    region: true,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.JoinedRoomName => (
+                    userName: false,
+                    userId: false,
+                    worldName: true,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.AcceptFriendRequest => (
+                    userName: true,
+                    userId: true,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.PlayedVideo1 => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: true
+                ),
+                RegexPattern.EventTypeEnum.PlayedVideo2 => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: true
+                ),
+                RegexPattern.EventTypeEnum.AcceptInvite => (
+                    userName: true,
+                    userId: true,
+                    worldName: true,
+                    worldUrl: true,
+                    worldId: true,
+                    instanceId: true,
+                    instanceType: true,
+                    worldUserId: true,
+                    region: true,
+                    message: true,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.AcceptRequestInvite => (
+                    userName: true,
+                    userId: true,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: true,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.OnPlayerJoined => (
+                    userName: true,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.OnPlayerLeft => (
+                    userName: true,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.TookScreenshot => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                _ => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+            };
+        }
         private void LoadOldSetting()
         {
             var oldSetting = _model.OldSetting;
@@ -126,6 +323,7 @@ namespace VRChatLogEventOSC
             URL.Value = oldSetting.URL;
 
         }
+
 
         private string InstanceTypeEnumToStr()
         {
@@ -209,6 +407,20 @@ namespace VRChatLogEventOSC
             {
                 _comboRegion.Add(region.ToString(), region);
             }
+
+            UserNameEditable = _userNameEditable.ToReadOnlyReactivePropertySlim<bool>();
+            UserIDEditable = _userIdEditable.ToReadOnlyReactivePropertySlim<bool>();
+            WorldNameEditable = _worldNameEditable.ToReadOnlyReactivePropertySlim<bool>();
+            WorldURLEditable = _worldUrlEditable.ToReadOnlyReactivePropertySlim<bool>();
+            WorldIDEditable = _worldIdEditable.ToReadOnlyReactivePropertySlim<bool>();
+            InstanceIDEditable = _instanceIdEditable.ToReadOnlyReactivePropertySlim<bool>();
+            InstanceTypeEditable = _instanceTypeEditable.ToReadOnlyReactivePropertySlim<bool>();
+            WorldUserIDEditable = _worldUserIdEditable.ToReadOnlyReactivePropertySlim<bool>();
+            RegionEditable = _regionEditable.ToReadOnlyReactivePropertySlim<bool>();
+            MessageEditable = _messageEditable.ToReadOnlyReactivePropertySlim<bool>();
+            URLEditable = _urlEditable.ToReadOnlyReactivePropertySlim<bool>();
+
+            EventPropertyEditable(eventType);
 
             OSCBoolVisibility = new ReactivePropertySlim<Visibility>();
             OSCIntVisibility = new ReactivePropertySlim<Visibility>();
@@ -315,7 +527,7 @@ namespace VRChatLogEventOSC
                 _model.ApplyEdited(setting);
             }).AddTo(_compositeDisposable);
 
-            CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w => 
+            CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w =>
             {
                 var result = MessageBox.Show("編集中の内容を破棄しますか?", "Cancel", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)

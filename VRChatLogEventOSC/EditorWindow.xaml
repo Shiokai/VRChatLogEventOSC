@@ -45,14 +45,17 @@
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="4*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                
                 <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="Setting Name"/>
                 </Border>
                 <TextBox Grid.Column="1" Grid.Row="0" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding SettingName.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                
                 <Border Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="OSC Address"/>
                 </Border>
                 <TextBox Grid.Column="1" Grid.Row="1" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding OSCAddress.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                
                 <Border Grid.Column="0" Grid.Row="2" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="OSC Value"/>
                 </Border>
@@ -65,59 +68,73 @@
                         <ColumnDefinition Width="4*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <ComboBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding ComboOSCValueType}" SelectedValuePath="Value" DisplayMemberPath="Key" SelectedValue="{Binding OSCValueType.Value, Mode=TwoWay}" FontSize="20" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                
                     <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding OSCBool.Value, Mode=TwoWay}" Content="{Binding OSCBool.Value, Mode=OneWay}" Visibility="{Binding OSCBoolVisibility.Value}" IsEnabled="True" FontSize="20" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding OSCInt.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Visibility="{Binding OSCIntVisibility.Value}" VerticalContentAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding OSCFloatAsStr.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Visibility="{Binding OSCFloatVisibility.Value}" VerticalContentAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding OSCString.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Visibility="{Binding OSCStringVisibility.Value}" VerticalContentAlignment="Center"/>
                 </Grid>
+                
                 <Border Grid.Column="0" Grid.Row="3" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="OSC Type"/>
                 </Border>
                 <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding ComboOSCType}" SelectedValuePath="Value" DisplayMemberPath="Key" SelectedValue="{Binding OSCType.Value, Mode=TwoWay}" FontSize="20" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                
                 <Border Grid.Column="0" Grid.Row="4" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="User Name"/>
+                    <Label Content="User Name" IsEnabled="{Binding UserNameEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="4" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding UserName.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="4" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding UserName.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding UserNameEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="5" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="User ID"/>
+                    <Label Content="User ID" IsEnabled="{Binding UserIDEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="5" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding UserID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="5" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding UserID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding UserIDEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="6" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="World Name"/>
+                    <Label Content="World Name" IsEnabled="{Binding WorldNameEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="6" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldName.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="6" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldName.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding WorldNameEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="7" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="World URL"/>
+                    <Label Content="World URL" IsEnabled="{Binding WorldURLEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="7" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldURL.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="7" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldURL.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding WorldURLEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="8" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="World ID"/>
+                    <Label Content="World ID" IsEnabled="{Binding WorldIDEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="8" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="8" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding WorldIDEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="9" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="Instance ID"/>
+                    <Label Content="Instance ID" IsEnabled="{Binding InstanceIDEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="9" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding InstanceID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="9" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding InstanceID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding InstanceIDEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="10" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="Instance Type"/>
+                    <Label Content="Instance Type" IsEnabled="{Binding InstanceTypeEditable.Value}"/>
                 </Border>
-                <ComboBox Grid.Column="1" Grid.Row="10" ItemsSource="{Binding ComboInstanceType}" SelectedValuePath="Value" DisplayMemberPath="Key" SelectedValue="{Binding InstanceType.Value, Mode=TwoWay}" FontSize="20"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <ComboBox Grid.Column="1" Grid.Row="10" ItemsSource="{Binding ComboInstanceType}" SelectedValuePath="Value" DisplayMemberPath="Key" SelectedValue="{Binding InstanceType.Value, Mode=TwoWay}" FontSize="20"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsEnabled="{Binding InstanceTypeEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="11" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="World User ID"/>
+                    <Label Content="World User ID" IsEnabled="{Binding WorldUserIDEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="11" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldUserID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="11" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding WorldUserID.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding WorldUserIDEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="12" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="Region"/>
+                    <Label Content="Region" IsEnabled="{Binding RegionEditable.Value}"/>
                 </Border>
-                <ComboBox Grid.Column="1" Grid.Row="12" ItemsSource="{Binding ComboRegion}" SelectedValuePath="Value" DisplayMemberPath="Key" SelectedValue="{Binding Region.Value, Mode=TwoWay}" FontSize="20"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <ComboBox Grid.Column="1" Grid.Row="12" ItemsSource="{Binding ComboRegion}" SelectedValuePath="Value" DisplayMemberPath="Key" SelectedValue="{Binding Region.Value, Mode=TwoWay}" FontSize="20"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsEnabled="{Binding RegionEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="13" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="Message"/>
+                    <Label Content="Message" IsEnabled="{Binding MessageEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="13" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding Message.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="13" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding Message.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding MessageEditable.Value}"/>
+                
                 <Border Grid.Column="0" Grid.Row="14" BorderThickness="1" BorderBrush="Gainsboro">
-                    <Label Content="URL"/>
+                    <Label Content="URL" IsEnabled="{Binding URLEditable.Value}"/>
                 </Border>
-                <TextBox Grid.Column="1" Grid.Row="14" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding URL.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="14" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding URL.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" IsEnabled="{Binding URLEditable.Value}"/>
+                
                 <Grid Grid.Column="1" Grid.Row="15">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"></ColumnDefinition>
