@@ -8,15 +8,15 @@ using System.ComponentModel;
 
 using VRChatLogEventOSC.Common;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Core
 {
-    internal class Core : IDisposable, INotifyPropertyChanged
+    internal class LogEventCore : IDisposable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private static Core? _instance;
-        public static Core Instance
+        private static LogEventCore? _instance;
+        public static LogEventCore Instance
         { 
-            get => _instance ??= new Core();
+            get => _instance ??= new LogEventCore();
         }
 
         private readonly LogFileWatcher _logFileWatcher = new();
@@ -86,7 +86,7 @@ namespace VRChatLogEventOSC
             _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();
         }
 
-        private Core()
+        private LogEventCore()
         {
             _lineClassifier = new LineClassifier(_logFileWatcher);
             _converter = new EventToOSCConverter(_lineClassifier, _sender);

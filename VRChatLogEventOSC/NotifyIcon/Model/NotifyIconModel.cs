@@ -10,6 +10,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Disposables;
 
+using VRChatLogEventOSC.Core;
+using VRChatLogEventOSC.Setting;
+
 using System.Diagnostics;
 
 namespace VRChatLogEventOSC.SystrayIcon
@@ -20,7 +23,7 @@ namespace VRChatLogEventOSC.SystrayIcon
         public static NotifyIconModel Instance => _instance ??= new NotifyIconModel();
         
         public event PropertyChangedEventHandler? PropertyChanged;
-        private Core _core;
+        private LogEventCore _core;
         public ReadOnlyReactivePropertySlim<bool> IsLogEventRunning;
 
         private CompositeDisposable _compositeDisposable = new();
@@ -75,7 +78,7 @@ namespace VRChatLogEventOSC.SystrayIcon
 
         private NotifyIconModel()
         {
-            _core = Core.Instance;
+            _core = LogEventCore.Instance;
 
             IsLogEventRunning = _core.IsRunnging;
             IsLogEventRunning.AddTo(_compositeDisposable);

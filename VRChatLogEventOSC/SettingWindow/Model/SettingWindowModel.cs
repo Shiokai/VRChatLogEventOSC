@@ -8,18 +8,21 @@ using System.Reactive.Disposables;
 using Reactive.Bindings.Extensions;
 using System.ComponentModel;
 
+using VRChatLogEventOSC.Core;
+using VRChatLogEventOSC.Editor;
+
 using System.Diagnostics;
 
 using VRChatLogEventOSC.Common;
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Setting
 {
     internal class SettingWindowModel : IDisposable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private static SettingWindowModel? _instance;
         public static SettingWindowModel Instance => _instance ??= new SettingWindowModel();
-        private Core _core;
+        private LogEventCore _core;
 
         private Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache;
 
@@ -201,7 +204,7 @@ namespace VRChatLogEventOSC
         }
         private SettingWindowModel()
         {
-            _core = Core.Instance;
+            _core = LogEventCore.Instance;
 
             _settingsCache = new Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>>();
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())

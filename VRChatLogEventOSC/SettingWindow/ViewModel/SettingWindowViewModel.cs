@@ -16,7 +16,7 @@ using VRChatLogEventOSC.Common;
 using System.Diagnostics;
 
 
-namespace VRChatLogEventOSC
+namespace VRChatLogEventOSC.Setting
 {
     internal class SettingWindowViewModel : INotifyPropertyChanged, IDisposable, IClosing
     {
