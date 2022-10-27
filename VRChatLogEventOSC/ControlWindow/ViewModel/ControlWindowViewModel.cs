@@ -8,6 +8,7 @@ using System.Reactive.Disposables;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System.Net;
+using System.Windows;
 using System.Windows.Forms;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ using System.Diagnostics;
 
 namespace VRChatLogEventOSC.Control
 {
-    internal sealed class ControlWindowViewModel : INotifyPropertyChanged, IDisposable
+    internal sealed class ControlWindowViewModel : INotifyPropertyChanged, IDisposable, IClosing
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly ControlWindowModel _model;
@@ -44,6 +45,7 @@ namespace VRChatLogEventOSC.Control
         public ReadOnlyReactivePropertySlim<string> ConfigDirectoryPathError { get; init; }
 
         public ReactiveCommand SaveAndLoadCommand { get; init; }
+        private bool _isDirty = false;
 
         private readonly CompositeDisposable _compositeDisposable = new();
 
@@ -58,9 +60,40 @@ namespace VRChatLogEventOSC.Control
             _disposed = true;
         }
 
+        public void Closing(CancelEventArgs cancelEventArgs)
+        {
+            if (!_isDirty)
+            {
+                return;
+            }
+
+            var result = System.Windows.MessageBox.Show("Configを保存しますか?", "Closing", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Cancel)
+            {
+                cancelEventArgs.Cancel = true;
+                return;
+            }
+            else if (result == MessageBoxResult.Yes)
+            {
+                SaveAndLoad();
+                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
+                return;
+            }
+        }
+
+        private void SaveAndLoad()
+        {
+            _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
+            var config = _model.LoadConfig();
+            (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            _isDirty = false;
+        }
+
         public ControlWindowViewModel()
         {
             _model = ControlWindowModel.Instance;
+
+            _model.IsRunning.Subscribe(running => _isPaused.Value = !running).AddTo(_compositeDisposable);
 
             PauseCommand = _isPaused.Inverse().ToReactiveCommand().WithSubscribe(() =>
             {
@@ -89,7 +122,7 @@ namespace VRChatLogEventOSC.Control
             QuitApplicationCommand = new ReactiveCommand().WithSubscribe(() => ControlWindowModel.QuitApplication()).AddTo(_compositeDisposable);
 
 
-            ConfigIPAdress = new ReactiveProperty<string>(IPAddress.Loopback.ToString())
+            ConfigIPAdress = new ReactiveProperty<string>(IPAddress.Loopback.ToString(), ReactivePropertyMode.DistinctUntilChanged)
             .SetValidateAttribute(() => ConfigIPAdress)
             .AddTo(_compositeDisposable);
 
@@ -98,7 +131,7 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigPort = new ReactiveProperty<int>(9000)
+            ConfigPort = new ReactiveProperty<int>(9000, ReactivePropertyMode.DistinctUntilChanged)
             .SetValidateAttribute(() => ConfigPort)
             .AddTo(_compositeDisposable);
 
@@ -107,8 +140,8 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(_model.DefaultLogDirectoryPath))
-            .SetValidateNotifyError(val => !System.IO.Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
+            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(_model.DefaultLogDirectoryPath), ReactivePropertyMode.DistinctUntilChanged)
+            .SetValidateNotifyError(val => !Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
             .AddTo(_compositeDisposable);
 
             ConfigDirectoryPathError = ConfigDirectoryPath.ObserveErrorChanged
@@ -124,11 +157,12 @@ namespace VRChatLogEventOSC.Control
             .ToReactiveCommand()
             .WithSubscribe(() => 
             {
-                _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
-                var config = _model.LoadConfig();
-                (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
-                MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButtons.OK);
+                SaveAndLoad();
+                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
             }).AddTo(_compositeDisposable);
+
+            Observable.Merge(ConfigIPAdress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
+            .Subscribe(_ => _isDirty = true).AddTo(_compositeDisposable);
 
             FolderBrowseCommand = new ReactiveCommand().WithSubscribe(() =>
             {

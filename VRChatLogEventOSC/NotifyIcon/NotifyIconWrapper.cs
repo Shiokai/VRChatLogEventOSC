@@ -27,8 +27,6 @@ namespace VRChatLogEventOSC.SystrayIcon
             }
         }
 
-        private bool _isPaused = false;
-
         public void RequestNotify(NotifyRequestRecord record)
         {
             _notifyIcon?.ShowBalloonTip(record.Duration, record.Title, record.Text, record.Icon);
@@ -49,6 +47,11 @@ namespace VRChatLogEventOSC.SystrayIcon
         private ToolStripMenuItem _openSetingItem = new("Open Setting");
         private ToolStripMenuItem _quitItem = new("Quit");
         private ToolStripMenuItem _pauseItem = new("Pause [ ]");
+        public string PauseItemText
+        {
+            get => _pauseItem.Text;
+            set => _pauseItem.Text = value;
+        }
 
         private ContextMenuStrip CreateContextMenu()
         {
@@ -96,12 +99,6 @@ namespace VRChatLogEventOSC.SystrayIcon
                 h => _notifyIcon.DoubleClick += h,
                 h => _notifyIcon.DoubleClick -= h
             );
-
-            PauseSelected?.Subscribe(_ => 
-            {
-                _isPaused = !_isPaused;
-                _pauseItem.Text = $"Pause [{(_isPaused ? "✓" : " ")}]";
-            });
 
             Application.Current.Exit += (obj, args) => { _notifyIcon.Dispose(); };
         }
