@@ -10,7 +10,7 @@ using Rug.Osc;
 
 namespace VRChatLogEventOSC.Core
 {
-    public sealed class OSCSender : IDisposable
+    internal sealed class OSCSender : IDisposable
     {
         private static readonly IPAddress DefaultIPAddress = IPAddress.Loopback;
         private static readonly int DefaultPort = 9000;

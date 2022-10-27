@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VRChatLogEventOSC.Common
 {
-    public sealed record class SingleSetting
+    internal sealed record class SingleSetting
     {
         public enum OSCTypeEnum
         {

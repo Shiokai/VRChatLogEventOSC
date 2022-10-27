@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace VRChatLogEventOSC.Common
 {
-    public static class RegexPattern
+    internal static class RegexPattern
     {
         public enum EventTypeEnum
         {

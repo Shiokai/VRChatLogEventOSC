@@ -8,7 +8,7 @@ using static VRChatLogEventOSC.Common.RegexPattern;
 
 namespace VRChatLogEventOSC.Common
 {
-    public sealed record class WholeSetting
+    internal sealed record class WholeSetting
     {
         public int JsonVersion { get; init; } = 0;
 

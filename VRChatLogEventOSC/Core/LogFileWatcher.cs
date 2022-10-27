@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace VRChatLogEventOSC.Core
 {
-    public sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
+    internal sealed class LogFileWatcher : IDisposable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private static readonly string _defaultLogDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");

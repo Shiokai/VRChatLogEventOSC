@@ -13,7 +13,7 @@ using static VRChatLogEventOSC.Common.RegexPattern;
 
 namespace VRChatLogEventOSC.Core
 {
-    public sealed class LineClassifier : INotifyPropertyChanged, IDisposable
+    internal sealed class LineClassifier : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly LogFileWatcher _logFileWatcher;

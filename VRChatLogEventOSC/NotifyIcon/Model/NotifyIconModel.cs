@@ -15,7 +15,7 @@ using VRChatLogEventOSC.Setting;
 
 namespace VRChatLogEventOSC.SystrayIcon
 {
-    public sealed class NotifyIconModel : INotifyPropertyChanged, IDisposable
+    internal sealed class NotifyIconModel : INotifyPropertyChanged, IDisposable
     {
         private static NotifyIconModel? _instance;
         public static NotifyIconModel Instance => _instance ??= new NotifyIconModel();

@@ -9,7 +9,7 @@ using System.Reactive.Linq;
 
 namespace VRChatLogEventOSC.SystrayIcon
 {
-    public class NotifyIconWrapper : FrameworkElement, IDisposable
+    internal class NotifyIconWrapper : FrameworkElement, IDisposable
     {
         private readonly NotifyIcon? _notifyIcon;
         private readonly ContextMenuStrip? _contextMenuStrip;
