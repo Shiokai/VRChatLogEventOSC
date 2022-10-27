@@ -55,6 +55,9 @@ namespace VRChatLogEventOSC
         public ReactivePropertySlim<Visibility> OSCFloatVisibility { get; init; }
         public ReactivePropertySlim<Visibility> OSCStringVisibility { get; init; }
 
+        private readonly ReactivePropertySlim<string> _eventTypeText = new(string.Empty);
+        public ReadOnlyReactivePropertySlim<string> EventTypeText { get; init; }
+
 
         public ReactivePropertySlim<string> SettingName { get; private set; }
         [Required(ErrorMessage = "Required")]
@@ -101,7 +104,7 @@ namespace VRChatLogEventOSC
             {
                 return;
             }
-            
+
             SettingName.Value = oldSetting.SettingName;
             OSCAddress.Value = oldSetting.OSCAddress;
             OSCBool.Value = oldSetting.OSCBool;
@@ -184,7 +187,9 @@ namespace VRChatLogEventOSC
         public EditorWindowViewModel()
         {
             var eventType = _model.EventType;
-            
+            EventTypeText = _eventTypeText.ToReadOnlyReactivePropertySlim<string>();
+            _eventTypeText.Value = eventType.ToString();
+
             foreach (var oscvtype in Enum.GetValues<OSCValueTypeEnum>())
             {
                 _comboOSCValueType.Add(oscvtype.ToString(), oscvtype);
@@ -279,7 +284,7 @@ namespace VRChatLogEventOSC
             .Select(_ => OSCAddress.HasErrors || OSCInt.HasErrors || OSCFloatAsStr.HasErrors)
             .Inverse()
             .ToReactiveCommand<EditorWindow>()
-            .WithSubscribe(w => 
+            .WithSubscribe(w =>
             {
                 w.DialogResult = true;
                 var setting = new SingleSetting(
@@ -307,7 +312,7 @@ namespace VRChatLogEventOSC
                     message: Message.Value,
                     url: URL.Value
                 );
-                _model.AddSetting(setting);
+                _model.ApplyEdited(setting);
             }).AddTo(_compositeDisposable);
 
             CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w => w.DialogResult = false).AddTo(_compositeDisposable);

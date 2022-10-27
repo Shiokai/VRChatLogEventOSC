@@ -17,7 +17,7 @@ namespace VRChatLogEventOSC
         public RegexPattern.EventTypeEnum EventType => _settingModel.ShownEventType;
         public SingleSetting? OldSetting => _settingModel.SelectedSetting;
 
-        public void AddSetting(SingleSetting setting)
+        public void ApplyEdited(SingleSetting setting)
         {
             if (OldSetting == null)
             {
