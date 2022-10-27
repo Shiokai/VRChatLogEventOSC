@@ -49,13 +49,27 @@ namespace VRChatLogEventOSC.SystrayIcon
 
         public void OpenControlWindow()
         {
-            var controlWindow = new Control.ControlWindow();
+            var controlWindow = Application.Current.Windows.OfType<Control.ControlWindow>().FirstOrDefault();
+            if (controlWindow != null)
+            {
+                controlWindow.Activate();
+                return;
+            }
+            
+            controlWindow = new Control.ControlWindow();
             controlWindow.Show();
         }
 
         public void OpenSettingWindow()
         {
-            var settingWindow = new SettingWindow();
+            var settingWindow = Application.Current.Windows.OfType<SettingWindow>().FirstOrDefault();
+            if (settingWindow != null)
+            {
+                settingWindow.Activate();
+                return;
+            }
+
+            settingWindow = new SettingWindow();
             settingWindow.Show();
         }
 
