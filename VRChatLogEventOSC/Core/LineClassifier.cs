@@ -72,7 +72,6 @@ namespace VRChatLogEventOSC.Core
             {
                 EventTypeEnum eventType = GetMatchGropeType(m);
                 _eventReactiveProperties[eventType].Value = m.Value;
-                // Debug.Print($"{eventType}: {m.Value}");
             });
         }
     }

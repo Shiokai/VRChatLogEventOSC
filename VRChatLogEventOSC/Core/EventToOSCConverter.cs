@@ -33,6 +33,24 @@ namespace VRChatLogEventOSC.Core
             _oSCSender.Dispose();
         }
 
+        private static bool IsMatchReqInvSetting(string settingCapture, string matchCapture)
+        {
+            if (settingCapture == "NotSpecified")
+            {
+                return true;
+            }
+            else if (settingCapture == "None" && string.IsNullOrEmpty(matchCapture))
+            {
+                return true;
+            }
+            else if (settingCapture == "CanRequestInvite" && "~canRequestInvite" == matchCapture)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private static bool IsEventMatchSetting(Match match, SingleSetting setting, IEnumerable<string> captures)
         {
             // "continue" is resolved as "matched" or "pass".
@@ -42,20 +60,9 @@ namespace VRChatLogEventOSC.Core
                 string settingCapture = setting.CaptureProperty(capture);
                 string matchCapture = match.Groups[capture].Value;
 
-                if (capture == "ReqInv")
+                if (capture == "ReqInv" && IsMatchReqInvSetting(settingCapture, matchCapture))
                 {
-                    if (settingCapture == "NotSpecified")
-                    {
-                        continue;
-                    }
-                    else if (settingCapture == "None" && string.IsNullOrEmpty(matchCapture))
-                    {
-                        continue;
-                    }
-                    else if (settingCapture == "CanRequestInvite" && "~canRequestInvite" == matchCapture)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
 
                 if (string.IsNullOrWhiteSpace(settingCapture))
@@ -75,7 +82,6 @@ namespace VRChatLogEventOSC.Core
 
                 matchAll = false;
 
-
                 if (matchAll == false)
                 {
                     return false;
@@ -83,6 +89,28 @@ namespace VRChatLogEventOSC.Core
             }
 
             return matchAll;
+        }
+
+        private void SendIfValid(Match match, SingleSetting setting, IEnumerable<string> captures)
+        {
+            if (setting.OSCValue == null)
+            {
+                return;
+            }
+
+            if (!IsEventMatchSetting(match, setting, captures))
+            {
+                return;
+            }
+
+            if (setting.OSCType == SingleSetting.OSCTypeEnum.Button)
+            {
+                _oSCSender.ButtomMessage(setting.OSCAddress, setting.OSCValue);
+            }
+            else if (setting.OSCType == SingleSetting.OSCTypeEnum.Toggle)
+            {
+                _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue);
+            }
         }
 
         public EventToOSCConverter(LineClassifier lineClassifier, OSCSender oSCSender)
@@ -107,25 +135,7 @@ namespace VRChatLogEventOSC.Core
 
                     foreach (var setting in CurrentSetting.Settings[type])
                     {
-                        if (setting.OSCValue == null)
-                        {
-                            continue;
-                        }
-
-                        if (!IsEventMatchSetting(match, setting, captures))
-                        {
-                            continue;
-                        }
-
-                        if (setting.OSCType == SingleSetting.OSCTypeEnum.Button)
-                        {
-                            _oSCSender.ButtomMessage(setting.OSCAddress, setting.OSCValue);
-                        }
-                        else if (setting.OSCType == SingleSetting.OSCTypeEnum.Toggle)
-                        {
-                            _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue);
-                        }
-                        
+                        SendIfValid(match, setting, captures);
                     }
                 }).AddTo(_eventsDisposables);
             }

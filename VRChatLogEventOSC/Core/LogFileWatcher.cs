@@ -31,7 +31,6 @@ namespace VRChatLogEventOSC.Core
 
         private readonly ReactivePropertySlim<string> _logLine = new(string.Empty);
         public IObservable<string> LogLineObservable => _logLine.Skip(1);
-        // private bool _isWatching = false;
         private readonly ReactivePropertySlim<bool> _isWatching = new(false);
         public ReadOnlyReactivePropertySlim<bool> IsWatching;
         public bool IsDetectFileCreation {get; set;} = false;
