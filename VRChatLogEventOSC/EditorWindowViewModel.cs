@@ -18,7 +18,7 @@ using static VRChatLogEventOSC.Common.SingleSetting;
 
 namespace VRChatLogEventOSC
 {
-    internal class EditorWindowViewModel : IDisposable, INotifyPropertyChanged
+    internal class EditorWindowViewModel : IDisposable, INotifyPropertyChanged, IClosing
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly EditorWindowModel _model = EditorWindowModel.Instance;
@@ -107,6 +107,7 @@ namespace VRChatLogEventOSC
 
         public ReactiveCommand<EditorWindow> OKCommand { get; init; }
         public ReactiveCommand<EditorWindow> CancelCommand { get; init; }
+        private bool _isPressedX = true;
         private CompositeDisposable _compositeDisposable = new();
         private bool _disposed = false;
 
@@ -118,6 +119,56 @@ namespace VRChatLogEventOSC
             }
 
             _compositeDisposable.Dispose();
+        }
+
+        private SingleSetting ToSingleSetting()
+        {
+            return new SingleSetting(
+                    settingName: SettingName.Value,
+                    oscAddress: OSCAddress.Value,
+                    oscValue: OSCValueType.Value switch
+                    {
+                        OSCValueTypeEnum.Bool => OSCBool.Value,
+                        OSCValueTypeEnum.Int => OSCInt.Value,
+                        OSCValueTypeEnum.Float => OSCFloat,
+                        OSCValueTypeEnum.String => OSCString,
+                        _ => null
+                    },
+                    oscType: OSCType.Value,
+                    userName: UserName.Value,
+                    userID: UserID.Value,
+                    worldName: WorldName.Value,
+                    worldURL: WorldURL.Value,
+                    worldID: WorldID.Value,
+                    instanceID: InstanceID.Value,
+                    instanceType: InstanceTypeEnumToStr(),
+                    reqInv: InstanceTypeEnumToReqInv(),
+                    worldUserID: WorldUserID.Value,
+                    region: RegionToStr(),
+                    message: Message.Value,
+                    url: URL.Value
+                );
+        }
+
+        public void Closing(CancelEventArgs cancelEventArgs)
+        {
+            if (!_isPressedX)
+            {
+                return;
+            }
+
+            var result = MessageBox.Show("編集内容を適用しますか?", "Closing", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Cancel)
+            {
+                cancelEventArgs.Cancel = true;
+                return;
+            }
+            else if (result == MessageBoxResult.Yes)
+            {
+                var setting = ToSingleSetting();
+                _model.ApplyEdited(setting);
+                return;
+            }
         }
 
         private void EventPropertyEditable(RegexPattern.EventTypeEnum eventType)
@@ -498,32 +549,9 @@ namespace VRChatLogEventOSC
             .ToReactiveCommand<EditorWindow>()
             .WithSubscribe(w =>
             {
+                _isPressedX = false;
                 w.DialogResult = true;
-                var setting = new SingleSetting(
-                    settingName: SettingName.Value,
-                    oscAddress: OSCAddress.Value,
-                    oscValue: OSCValueType.Value switch
-                    {
-                        OSCValueTypeEnum.Bool => OSCBool.Value,
-                        OSCValueTypeEnum.Int => OSCInt.Value,
-                        OSCValueTypeEnum.Float => OSCFloat,
-                        OSCValueTypeEnum.String => OSCString,
-                        _ => null
-                    },
-                    oscType: OSCType.Value,
-                    userName: UserName.Value,
-                    userID: UserID.Value,
-                    worldName: WorldName.Value,
-                    worldURL: WorldURL.Value,
-                    worldID: WorldID.Value,
-                    instanceID: InstanceID.Value,
-                    instanceType: InstanceTypeEnumToStr(),
-                    reqInv: InstanceTypeEnumToReqInv(),
-                    worldUserID: WorldUserID.Value,
-                    region: RegionToStr(),
-                    message: Message.Value,
-                    url: URL.Value
-                );
+                var setting = ToSingleSetting();
                 _model.ApplyEdited(setting);
             }).AddTo(_compositeDisposable);
 
@@ -532,11 +560,11 @@ namespace VRChatLogEventOSC
                 var result = MessageBox.Show("編集中の内容を破棄しますか?", "Cancel", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
+                    _isPressedX = false;
                     w.DialogResult = false;
                 }
             }).AddTo(_compositeDisposable);
 
-            // Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ => Debug.WriteLine(OSCFloat)).AddTo(_compositeDisposable);
         }
     }
 }

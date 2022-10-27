@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Windows;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Controls;
@@ -17,7 +18,7 @@ using System.Diagnostics;
 
 namespace VRChatLogEventOSC
 {
-    internal class SettingWindowViewModel : INotifyPropertyChanged, IDisposable
+    internal class SettingWindowViewModel : INotifyPropertyChanged, IDisposable, IClosing
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private SettingWindowModel _model;
@@ -61,6 +62,27 @@ namespace VRChatLogEventOSC
                 return;
             }
             _compositeDisposable.Dispose();
+        }
+
+        public void Closing(CancelEventArgs cancelEventArgs)
+        {
+            if (!_model.IsDirty)
+            {
+                return;
+            }
+
+            var result = MessageBox.Show("現在の設定を保存しますか?", "Closing", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Cancel)
+            {
+                cancelEventArgs.Cancel = true;
+                return;
+            }
+            else if (result == MessageBoxResult.Yes)
+            {
+                _model.ApplySetting();
+                MessageBox.Show("設定が適用されました", "Apply", MessageBoxButton.OK);
+                return;
+            }
         }
 
         public SettingWindowViewModel()
@@ -122,6 +144,7 @@ namespace VRChatLogEventOSC
             .WithSubscribe(() =>
             {
                 _model.ApplySetting();
+                MessageBox.Show("設定が適用されました", "Apply", MessageBoxButton.OK);
             }).AddTo(_compositeDisposable);
 
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())

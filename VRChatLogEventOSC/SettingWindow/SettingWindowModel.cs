@@ -32,6 +32,7 @@ namespace VRChatLogEventOSC
         public int SelectedIndex { get; set; }
 
         private bool _isShownDirty = false;
+        public bool IsDirty { get; private set; } = false;
 
         private void UpdateSetting()
         {
@@ -49,7 +50,6 @@ namespace VRChatLogEventOSC
                     _settingsCache[type].Add(setting);
                 }
             }
-            _isShownDirty = false;
         }
 
         private void ApplyShownDirty()
@@ -62,6 +62,7 @@ namespace VRChatLogEventOSC
                 {
                     showedSetting.Add(setting);
                 }
+                _isShownDirty = false;
             }
         }
 
@@ -113,6 +114,7 @@ namespace VRChatLogEventOSC
 
             (_shownSetting[selected], _shownSetting[target]) = (_shownSetting[target], _shownSetting[selected]);
             _isShownDirty = true;
+            IsDirty = true;
         }
 
         public void ApplySetting()
@@ -132,6 +134,7 @@ namespace VRChatLogEventOSC
             _logEventModel.LoadCurrentSetting();
             UpdateSetting();
             LoadShownFromCache(_shownEventType);
+            IsDirty = false;
         }
 
         public void OpenEditorAsAdd()
@@ -165,21 +168,23 @@ namespace VRChatLogEventOSC
 
         public void AddSetting(SingleSetting setting)
         {
-           _shownSetting.Add(setting);
+            _shownSetting.Add(setting);
             _isShownDirty = true;
+            IsDirty = true;
         }
 
         public void EditOverrideSetting(SingleSetting setting)
         {
             _shownSetting[SelectedIndex] = setting;
             _isShownDirty = true;
+            IsDirty = true;
         }
 
         public void DeleteSetting()
         {
             _shownSetting.RemoveAt(SelectedIndex);
             _isShownDirty = true;
-            LoadShownFromCache(_shownEventType);
+            IsDirty = true;
         }
         private CompositeDisposable _compositeDisposables = new();
 
