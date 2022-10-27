@@ -36,6 +36,9 @@ namespace VRChatLogEventOSC.Setting
         private bool _isShownDirty = false;
         public bool IsDirty { get; private set; } = false;
 
+        /// <summary>
+        /// 設定のキャッシュを現在読み込まれている設定に更新します
+        /// </summary>
         private void UpdateSetting()
         {
             foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
@@ -54,6 +57,9 @@ namespace VRChatLogEventOSC.Setting
             }
         }
 
+        /// <summary>
+        /// 表示中の設定が変更されていた場合、設定のキャッシュに書き戻します
+        /// </summary>
         private void ApplyShownDirty()
         {
             if (_isShownDirty)
@@ -68,6 +74,10 @@ namespace VRChatLogEventOSC.Setting
             }
         }
 
+        /// <summary>
+        /// 設定のキャッシュから表示中の設定を更新します
+        /// </summary>
+        /// <param name="type"></param>
         private void LoadShownFromCache(RegexPattern.EventTypeEnum type)
         {
             if (!_settingsCache.ContainsKey(type))
@@ -82,6 +92,10 @@ namespace VRChatLogEventOSC.Setting
             }
         }
 
+        /// <summary>
+        /// 表示する設定を変更します
+        /// </summary>
+        /// <param name="type"></param>
         public void ChangeShownSetting(RegexPattern.EventTypeEnum type)
         {
             ApplyShownDirty();
@@ -97,16 +111,27 @@ namespace VRChatLogEventOSC.Setting
             _isShownDirty = false;
         }
 
+        /// <summary>
+        /// 選択中の設定を上に移動します
+        /// </summary>
         public void UpSelectedItem()
         {
             SwapItem(SelectedIndex, SelectedIndex - 1);
         }
 
+        /// <summary>
+        /// 選択中の設定を下に移動します
+        /// </summary>
         public void DownSelectedItem()
         {
             SwapItem(SelectedIndex, SelectedIndex + 1);
         }
 
+        /// <summary>
+        /// 指定したIndexの設定を入れ替えます
+        /// </summary>
+        /// <param name="selected">入れ替える設定</param>
+        /// <param name="target">入れ替える設定</param>
         private void SwapItem(int selected, int target)
         {
             if (selected < 0 || target < 0 || target > _shownSetting.Count - 1)
@@ -119,6 +144,9 @@ namespace VRChatLogEventOSC.Setting
             IsDirty = true;
         }
 
+        /// <summary>
+        /// 設定を保存、読み込みし、キャッシュと表示を更新します
+        /// </summary>
         public void ApplySetting()
         {
             ApplyShownDirty();
@@ -168,6 +196,9 @@ namespace VRChatLogEventOSC.Setting
             IsDirty = false;
         }
 
+        /// <summary>
+        /// EditorWindowを設定の追加として表示します
+        /// </summary>
         public void OpenEditorAsAdd()
         {
             if (_shownEventType == RegexPattern.EventTypeEnum.None)
@@ -181,6 +212,9 @@ namespace VRChatLogEventOSC.Setting
             editor.ShowDialog();
         }
 
+        /// <summary>
+        /// EditorWindowを、選択している設定の編集として開きます
+        /// </summary>
         public void OpenEditorAsEdit()
         {
             if (_shownEventType == RegexPattern.EventTypeEnum.None)
@@ -197,6 +231,10 @@ namespace VRChatLogEventOSC.Setting
             editor.ShowDialog();
         }
 
+        /// <summary>
+        /// 現在表示中の設定の末尾に設定を追加します
+        /// </summary>
+        /// <param name="setting">追加する設定</param>
         public void AddSetting(SingleSetting setting)
         {
             _shownSetting.Add(setting);
@@ -204,6 +242,10 @@ namespace VRChatLogEventOSC.Setting
             IsDirty = true;
         }
 
+        /// <summary>
+        /// 選択中の設定を上書きします
+        /// </summary>
+        /// <param name="setting">上書きする設定</param>
         public void EditOverrideSetting(SingleSetting setting)
         {
             _shownSetting[SelectedIndex] = setting;
@@ -211,12 +253,16 @@ namespace VRChatLogEventOSC.Setting
             IsDirty = true;
         }
 
+        /// <summary>
+        /// 選択中の設定を削除します
+        /// </summary>
         public void DeleteSetting()
         {
             _shownSetting.RemoveAt(SelectedIndex);
             _isShownDirty = true;
             IsDirty = true;
         }
+
         private CompositeDisposable _compositeDisposables = new();
 
         private bool _disposed = false;

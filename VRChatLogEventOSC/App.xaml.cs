@@ -19,6 +19,7 @@ namespace VRChatLogEventOSC
         {
             if (e.Args.Contains("--setting") || e.Args.Contains("-s"))
             {
+                // 設定のみ行う場合
                 ShutdownMode = ShutdownMode.OnLastWindowClose;
                 var settingWindow = new Setting.SettingWindow();
                 settingWindow.Show();

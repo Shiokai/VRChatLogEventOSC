@@ -33,6 +33,13 @@ namespace VRChatLogEventOSC.Core
             _oSCSender.Dispose();
         }
 
+        /// <summary>
+        /// ReqestInviteの設定がイベントとマッチしているか判定します
+        /// </summary>
+        /// <param name="settingCapture">判定する設定のReqInv</param>
+        /// <param name="matchCapture">判定するイベントのReqInv</param>
+        /// <returns>設定とイベントがマッチする場合trueを、そうでなければfalseを返します</returns>
+        /// ReqInveはInvete+以外取れないので特殊判定
         private static bool IsMatchReqInvSetting(string settingCapture, string matchCapture)
         {
             if (settingCapture == "NotSpecified")
@@ -51,6 +58,13 @@ namespace VRChatLogEventOSC.Core
             return false;
         }
 
+        /// <summary>
+        /// イベントと設定がマッチするか判定します
+        /// </summary>
+        /// <param name="match">判定するイベントの正規表現マッチ</param>
+        /// <param name="setting">判定する設定</param>
+        /// <param name="captures">判定するイベントの正規表現の名前付きグループの名前一覧</param>
+        /// <returns></returns>
         private static bool IsEventMatchSetting(Match match, SingleSetting setting, IEnumerable<string> captures)
         {
             // "continue" is resolved as "matched" or "pass".
@@ -60,6 +74,7 @@ namespace VRChatLogEventOSC.Core
                 string settingCapture = setting.CaptureProperty(capture);
                 string matchCapture = match.Groups[capture].Value;
 
+                // ReqInvは特殊判定
                 if (capture == "ReqInv" && IsMatchReqInvSetting(settingCapture, matchCapture))
                 {
                     continue;
@@ -70,6 +85,7 @@ namespace VRChatLogEventOSC.Core
                     continue;
                 }
 
+                // インスタンスがpublicのとき、InstanceTypeが取れないので特殊判定
                 if (capture == "InstanceType" && string.IsNullOrEmpty(matchCapture) && settingCapture == "public")
                 {
                     continue;
@@ -91,6 +107,12 @@ namespace VRChatLogEventOSC.Core
             return matchAll;
         }
 
+        /// <summary>
+        /// 設定とイベントがマッチする場合に、設定に従いOSCを送信します
+        /// </summary>
+        /// <param name="match">判定するイベントの正規表現マッチ</param>
+        /// <param name="setting">判定する設定</param>
+        /// <param name="captures">判定するイベントの正規表現の名前付きグループの一覧</param>
         private void SendIfValid(Match match, SingleSetting setting, IEnumerable<string> captures)
         {
             if (setting.OSCValue == null)

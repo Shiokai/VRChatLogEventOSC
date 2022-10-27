@@ -48,26 +48,42 @@ namespace VRChatLogEventOSC.Core
             _disposed = true;
         }
 
+        /// <summary>
+        /// ログの読み取りを一時停止します
+        /// </summary>
         public void Pause()
         {
             _logFileWatcher.PauseWatching();
         }
 
+        /// <summary>
+        /// ログの最新部分からログの読み取りを再開します
+        /// </summary>
         public void Restart()
         {
             _logFileWatcher.StartWatchingFromCurrent();
         }
 
+        /// <summary>
+        /// 最後に読み取った位置からログの読み取りを再開します
+        /// </summary>
         public void RestartWithScan()
         {
             _logFileWatcher.StartWatchingFromLatest();
         }
 
+        /// <summary>
+        /// 現在のログファイル全体を再度読み取ります
+        /// </summary>
         public void Rescan()
         {
             _logFileWatcher.StartWatchingFromTop();
         }
 
+        /// <summary>
+        /// コンフィグを元にOSC送信先のIP Adress、Portおよびログのディレクトリを変更します
+        /// </summary>
+        /// <param name="config">変更先の情報を持ったコンフィグ</param>
         public void AttachConfig(ConfigData config)
         {
             _sender.ChangeClient(config.IPAddress.ToString(), config.Port);
@@ -82,6 +98,9 @@ namespace VRChatLogEventOSC.Core
             _logFileWatcher.SeekToCurrent();
         }
 
+        /// <summary>
+        /// 設定ファイルを読み取り、判定に用いる設定に適用します
+        /// </summary>
         public void LoadCurrentSetting()
         {
             _converter.CurrentSetting = FileLoader.LoadSetting() ?? new WholeSetting();

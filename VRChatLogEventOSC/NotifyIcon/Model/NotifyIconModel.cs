@@ -38,16 +38,25 @@ namespace VRChatLogEventOSC.SystrayIcon
             _compositeDisposable.Dispose();
         }
 
+        /// <summary>
+        /// ログの読み取りを一時停止します
+        /// </summary>
         public void PuaseLogWEvent()
         {
             _core.Pause();
         }
 
+        /// <summary>
+        /// 現在のログの位置からログの読み取りを再開します
+        /// </summary>
         public void RestartLogEvent()
         {
             _core.Restart();
         }
 
+        /// <summary>
+        /// ControlWindowを開きます
+        /// </summary>
         public void OpenControlWindow()
         {
             var controlWindow = Application.Current.Windows.OfType<Control.ControlWindow>().FirstOrDefault();
@@ -61,6 +70,9 @@ namespace VRChatLogEventOSC.SystrayIcon
             controlWindow.Show();
         }
 
+        /// <summary>
+        /// SettingWindowを開きます
+        /// </summary>
         public void OpenSettingWindow()
         {
             var settingWindow = Application.Current.Windows.OfType<SettingWindow>().FirstOrDefault();

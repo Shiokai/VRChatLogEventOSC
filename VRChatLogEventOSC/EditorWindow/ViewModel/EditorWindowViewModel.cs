@@ -64,6 +64,7 @@ namespace VRChatLogEventOSC.Editor
         [Range(0, 255)]
         public ReactiveProperty<int?> OSCInt { get; private set; }
         private float? OSCFloat { get; set; } = null;
+        // FloatをTextBoxにBindingすると少数の入力に難があるので、stringでBindingして自前でバリデーション
         public ReactiveProperty<string?> OSCFloatAsStr { get; private set; }
         public ReactivePropertySlim<string?> OSCString { get; private set; }
         public ReactivePropertySlim<OSCValueTypeEnum> OSCValueType { get; private set; }
@@ -119,6 +120,11 @@ namespace VRChatLogEventOSC.Editor
             _compositeDisposable.Dispose();
         }
 
+
+        /// <summary>
+        /// Bindingされている設定をSingleSettingに変換する
+        /// </summary>
+        /// <returns></returns>
         private SingleSetting ToSingleSetting()
         {
             return new SingleSetting(
@@ -169,6 +175,7 @@ namespace VRChatLogEventOSC.Editor
             }
         }
 
+        // これなんとかしたい
         private void EventPropertyEditable(RegexPattern.EventTypeEnum eventType)
         {   
             (
@@ -343,6 +350,10 @@ namespace VRChatLogEventOSC.Editor
                 ),
             };
         }
+
+        /// <summary>
+        /// EditでEditorWindowを開いた場合用の設定読み込み
+        /// </summary>
         private void LoadOldSetting()
         {
             var oldSetting = _model.OldSetting;
@@ -373,7 +384,10 @@ namespace VRChatLogEventOSC.Editor
 
         }
 
-
+        /// <summary>
+        /// インスタンスの種類のEnumを、ログのInstanceTypeの記法に変換する
+        /// </summary>
+        /// <returns>ログのInstanceTypeの記法</returns>
         private string InstanceTypeEnumToStr()
         {
             return InstanceType.Value switch
@@ -387,6 +401,12 @@ namespace VRChatLogEventOSC.Editor
             };
         }
 
+        /// <summary>
+        /// ログのInstanceTypeの記法を、インスタンスの種類のEnumに変換する
+        /// </summary>
+        /// <param name="instanceType">ログのInstanceTypeの記法でのインスタンスの種類</param>
+        /// <param name="reqInv">ログのReqInv</param>
+        /// <returns>インスタンスの種類のEnum</returns>
         private static InstanceTypeEnum SettingToInstanceTypeEnum(string instanceType, ReqInvEnum reqInv)
         {
             return (instanceType, reqInv) switch
@@ -400,6 +420,11 @@ namespace VRChatLogEventOSC.Editor
             };
         }
 
+        /// <summary>
+        /// ログのRegionの記法をRegionのEnumに変換する
+        /// </summary>
+        /// <param name="region">ログの記法のRegion</param>
+        /// <returns>RegionのEnum</returns>
         private static RegionEnum SettingToRegionEnum(string region)
         {
             return region switch
@@ -412,6 +437,10 @@ namespace VRChatLogEventOSC.Editor
             };
         }
 
+        /// <summary>
+        /// インスタンスの種類のEnumから対応するReqInvに変換する
+        /// </summary>
+        /// <returns></returns>
         private ReqInvEnum InstanceTypeEnumToReqInv()
         {
             return InstanceType.Value switch
@@ -422,6 +451,10 @@ namespace VRChatLogEventOSC.Editor
             };
         }
 
+        /// <summary>
+        /// RegionのEnumをログの記法のRegionに変換する
+        /// </summary>
+        /// <returns></returns>
         private string RegionToStr()
         {
             return Region.Value switch

@@ -72,17 +72,17 @@ namespace VRChatLogEventOSC.SystrayIcon
                 if (_model.IsLogEventRunning.Value)
                 {
                     _model.PuaseLogWEvent();
-                    _notifyIcon.PauseItemText = "Pause [✓]";
                 }
                 else
                 {
                     _model.RestartLogEvent();
-                    _notifyIcon.PauseItemText = "Pause [ ]";
                 }
             }).AddTo(_compositeDisposable);
 
             _model.IsLogEventRunning.Subscribe(running => 
             {
+                // ControlWindowからの変更に合わせるため、PauseSelectedではなくこちらで表示変更
+                // PauseSelectedでは間接的にIsLogEventRunningが変更される
                 _notifyIcon.Text = _iconTextBase + CurrentStatus;
                 _status.Value = _statusTextBase + CurrentStatus;
                 _notifyIcon.PauseItemText = $"Pause [{(running ? " " : "✓")}]";
