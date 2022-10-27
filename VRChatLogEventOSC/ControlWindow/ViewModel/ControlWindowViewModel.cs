@@ -93,6 +93,8 @@ namespace VRChatLogEventOSC.Control
         {
             _model = ControlWindowModel.Instance;
 
+            _model.IsRunning.Subscribe(running => _isPaused.Value = !running).AddTo(_compositeDisposable);
+
             PauseCommand = _isPaused.Inverse().ToReactiveCommand().WithSubscribe(() =>
             {
                 _model.PuaseLogWEvent();
@@ -120,7 +122,7 @@ namespace VRChatLogEventOSC.Control
             QuitApplicationCommand = new ReactiveCommand().WithSubscribe(() => ControlWindowModel.QuitApplication()).AddTo(_compositeDisposable);
 
 
-            ConfigIPAdress = new ReactiveProperty<string>(IPAddress.Loopback.ToString())
+            ConfigIPAdress = new ReactiveProperty<string>(IPAddress.Loopback.ToString(), ReactivePropertyMode.DistinctUntilChanged)
             .SetValidateAttribute(() => ConfigIPAdress)
             .AddTo(_compositeDisposable);
 
@@ -129,7 +131,7 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigPort = new ReactiveProperty<int>(9000)
+            ConfigPort = new ReactiveProperty<int>(9000, ReactivePropertyMode.DistinctUntilChanged)
             .SetValidateAttribute(() => ConfigPort)
             .AddTo(_compositeDisposable);
 
@@ -138,8 +140,8 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(_model.DefaultLogDirectoryPath))
-            .SetValidateNotifyError(val => !System.IO.Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
+            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(_model.DefaultLogDirectoryPath), ReactivePropertyMode.DistinctUntilChanged)
+            .SetValidateNotifyError(val => !Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
             .AddTo(_compositeDisposable);
 
             ConfigDirectoryPathError = ConfigDirectoryPath.ObserveErrorChanged

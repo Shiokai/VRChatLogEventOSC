@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Net;
 using System.IO;
+using Reactive.Bindings;
 using VRChatLogEventOSC.Common;
 
 namespace VRChatLogEventOSC.Control
@@ -17,6 +18,8 @@ namespace VRChatLogEventOSC.Control
         private LogEventModel _logEventModel;
         private static readonly string _defaultLogDirectoryPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat"));
         public string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
+
+        public ReadOnlyReactivePropertySlim<bool> IsRunning => _logEventModel.IsRunnging;
 
         public void PuaseLogWEvent()
         {
