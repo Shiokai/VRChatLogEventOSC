@@ -135,8 +135,33 @@ namespace VRChatLogEventOSC.Core
                 Application.Current.Shutdown();
                 return;
             }
+
+            ConfigData config;
+            try
+            {
+                config = FileLoader.LoadConfig() ?? new ConfigData();
+            }
+            catch (System.IO.IOException e)
+            {
+                MessageBox.Show($"コンフィグファイルの読み込みに失敗しました\nアプリケーションを終了します\n{e.Message}", "IOException", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+                return;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                MessageBox.Show($"コンフィグファイルへのアクセスが拒否されました\nアプリケーションを終了します\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+                return;
+            }
+            catch(System.Text.Json.JsonException e)
+            {
+                MessageBox.Show($"コンフィグファイルの内容が不正なため読み込めませんでした\nアプリケーションを終了します\n{e.Message}", "JssonException", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+                return;
+            }
+
+            AttachConfig(config);
             
-            _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.IsDetectFileCreation = true;
             _logFileWatcher.StartWatchingFromCurrent();
         }
