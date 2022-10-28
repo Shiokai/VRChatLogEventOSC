@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+
 using static VRChatLogEventOSC.Common.RegexPattern;
 
 namespace VRChatLogEventOSC.Common

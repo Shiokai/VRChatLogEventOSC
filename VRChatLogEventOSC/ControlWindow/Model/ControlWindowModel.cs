@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Net;
-using System.IO;
+
 using Reactive.Bindings;
+
 using VRChatLogEventOSC.Common;
 using VRChatLogEventOSC.Core;
 
@@ -16,9 +18,9 @@ namespace VRChatLogEventOSC.Control
     {
         private static ControlWindowModel? _instance;
         public static ControlWindowModel Instance => _instance ??= new ControlWindowModel();
-        private LogEventCore _core;
+        private readonly LogEventCore _core;
         private static readonly string _defaultLogDirectoryPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat"));
-        public string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
+        public static string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
 
         public ReadOnlyReactivePropertySlim<bool> IsRunning => _core.IsRunnging;
 

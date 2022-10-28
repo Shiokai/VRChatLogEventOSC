@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using System.Reactive.Disposables;
 
 using VRChatLogEventOSC.Core;
 using VRChatLogEventOSC.Setting;
@@ -21,10 +22,10 @@ namespace VRChatLogEventOSC.SystrayIcon
         public static NotifyIconModel Instance => _instance ??= new NotifyIconModel();
         
         public event PropertyChangedEventHandler? PropertyChanged;
-        private LogEventCore _core;
+        private readonly LogEventCore _core;
         public ReadOnlyReactivePropertySlim<bool> IsLogEventRunning;
 
-        private CompositeDisposable _compositeDisposable = new();
+        private readonly CompositeDisposable _compositeDisposable = new();
 
         private bool _disposed = false;
         public void Dispose()
@@ -36,6 +37,7 @@ namespace VRChatLogEventOSC.SystrayIcon
 
             _core.Dispose();
             _compositeDisposable.Dispose();
+            _disposed = true;
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace VRChatLogEventOSC.SystrayIcon
         /// <summary>
         /// ControlWindowを開きます
         /// </summary>
-        public void OpenControlWindow()
+        public static void OpenControlWindow()
         {
             var controlWindow = Application.Current.Windows.OfType<Control.ControlWindow>().FirstOrDefault();
             if (controlWindow != null)
@@ -73,7 +75,7 @@ namespace VRChatLogEventOSC.SystrayIcon
         /// <summary>
         /// SettingWindowを開きます
         /// </summary>
-        public void OpenSettingWindow()
+        public static void OpenSettingWindow()
         {
             var settingWindow = Application.Current.Windows.OfType<SettingWindow>().FirstOrDefault();
             if (settingWindow != null)

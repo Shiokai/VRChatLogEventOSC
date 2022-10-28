@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Reactive.Linq;
-using System.Reactive.Disposables;
-using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
-using System.Net;
 using System.Windows;
 using System.Windows.Forms;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using System.IO;
+
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 
 namespace VRChatLogEventOSC.Control
@@ -139,7 +140,7 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(_model.DefaultLogDirectoryPath), ReactivePropertyMode.DistinctUntilChanged)
+            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(ControlWindowModel.DefaultLogDirectoryPath), ReactivePropertyMode.DistinctUntilChanged)
             .SetValidateNotifyError(val => !Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
             .AddTo(_compositeDisposable);
 

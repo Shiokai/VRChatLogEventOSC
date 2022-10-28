@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
+
 using Application = System.Windows.Application;
-using System.Reactive.Linq;
 
 namespace VRChatLogEventOSC.SystrayIcon
 {
@@ -43,10 +44,10 @@ namespace VRChatLogEventOSC.SystrayIcon
         public IObservable<EventArgs>? DoubleClicked;
         public IObservable<EventArgs>? PauseSelected;
 
-        private ToolStripMenuItem _openControlItem = new("Open Control");
-        private ToolStripMenuItem _openSetingItem = new("Open Setting");
-        private ToolStripMenuItem _quitItem = new("Quit");
-        private ToolStripMenuItem _pauseItem = new("Pause [ ]");
+        private readonly ToolStripMenuItem _openControlItem = new("Open Control");
+        private readonly ToolStripMenuItem _openSetingItem = new("Open Setting");
+        private readonly ToolStripMenuItem _quitItem = new("Quit");
+        private readonly ToolStripMenuItem _pauseItem = new("Pause [ ]");
         public string PauseItemText
         {
             get => _pauseItem.Text;

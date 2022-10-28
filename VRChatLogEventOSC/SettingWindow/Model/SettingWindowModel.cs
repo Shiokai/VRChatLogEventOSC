@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
-using Reactive.Bindings;
-using System.Reactive.Disposables;
-using Reactive.Bindings.Extensions;
-using System.ComponentModel;
 using System.Windows;
 
-using VRChatLogEventOSC.Core;
-using VRChatLogEventOSC.Editor;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using VRChatLogEventOSC.Common;
+using VRChatLogEventOSC.Core;
+using VRChatLogEventOSC.Editor;
 
 namespace VRChatLogEventOSC.Setting
 {
@@ -21,11 +21,11 @@ namespace VRChatLogEventOSC.Setting
         public event PropertyChangedEventHandler? PropertyChanged;
         private static SettingWindowModel? _instance;
         public static SettingWindowModel Instance => _instance ??= new SettingWindowModel();
-        private LogEventCore _core;
+        private readonly LogEventCore _core;
 
-        private Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache;
+        private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache;
 
-        private ReactiveCollection<SingleSetting> _shownSetting = new();
+        private readonly ReactiveCollection<SingleSetting> _shownSetting = new();
 
         public ReadOnlyReactiveCollection<SingleSetting> ShownSetting { get; set; }
         private RegexPattern.EventTypeEnum _shownEventType = RegexPattern.EventTypeEnum.None;
@@ -263,7 +263,7 @@ namespace VRChatLogEventOSC.Setting
             IsDirty = true;
         }
 
-        private CompositeDisposable _compositeDisposables = new();
+        private readonly CompositeDisposable _compositeDisposables = new();
 
         private bool _disposed = false;
         public void Dispose()
@@ -274,7 +274,7 @@ namespace VRChatLogEventOSC.Setting
             }
 
             _compositeDisposables.Dispose();
-
+            _disposed = true;
         }
         private SettingWindowModel()
         {
