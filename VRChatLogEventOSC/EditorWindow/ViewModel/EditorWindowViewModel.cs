@@ -138,7 +138,7 @@ namespace VRChatLogEventOSC.Editor
                         OSCValueTypeEnum.Bool => OSCBool.Value,
                         OSCValueTypeEnum.Int => OSCInt.Value,
                         OSCValueTypeEnum.Float => OSCFloat,
-                        OSCValueTypeEnum.String => OSCString,
+                        OSCValueTypeEnum.String => OSCString.Value,
                         _ => null
                     },
                     oscType: OSCType.Value,

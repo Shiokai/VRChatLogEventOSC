@@ -135,6 +135,16 @@ namespace VRChatLogEventOSC.Core
             }
             else if (setting.OSCType == SingleSetting.OSCTypeEnum.Toggle)
             {
+                // VRChatのchatboxに送信するときは
+                // /chatbox/input s b
+                // の形で送る必要がある
+                // 自動送信でentry UIを表示させる需要は少ないと思われるため、直接chatboxに送信(true)する
+                if (setting.OSCAddress == "/chatbox/input")
+                {
+                    _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue, true);
+                    return;
+                }
+
                 _oSCSender.ToggleMessage(setting.OSCAddress, setting.OSCValue);
             }
         }
