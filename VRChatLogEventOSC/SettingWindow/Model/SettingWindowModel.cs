@@ -182,13 +182,17 @@ namespace VRChatLogEventOSC.Setting
             }
             catch (System.IO.IOException e)
             {
-                MessageBox.Show($"設定ファイルの書き込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                MessageBox.Show($"設定ファイルの読み込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
                 return;
             }
             catch(UnauthorizedAccessException e)
             {
                 MessageBox.Show($"設定ファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
                 return;
+            }
+            catch(System.Text.Json.JsonException e)
+            {
+                MessageBox.Show($"設定ファイルの内容が不正なため読み込めませんでした\n{e.Message}", "JsonException", MessageBoxButton.OK);
             }
             
             UpdateSetting();

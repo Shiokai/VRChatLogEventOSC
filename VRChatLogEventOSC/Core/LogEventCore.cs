@@ -119,13 +119,19 @@ namespace VRChatLogEventOSC.Core
             }
             catch (System.IO.IOException e)
             {
-                MessageBox.Show($"設定ファイルの読み込みに失敗しました\n{e.Message}", "IOException", MessageBoxButton.OK);
+                MessageBox.Show($"設定ファイルの読み込みに失敗しました\nアプリケーションを終了します\n{e.Message}", "IOException", MessageBoxButton.OK);
                 Application.Current.Shutdown();
                 return;
             }
             catch(UnauthorizedAccessException e)
             {
-                MessageBox.Show($"設定ファイルへのアクセスが拒否されました\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                MessageBox.Show($"設定ファイルへのアクセスが拒否されました\nアプリケーションを終了します\n{e.Message}", "UnauthorizedAccessException", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+                return;
+            }
+            catch(System.Text.Json.JsonException e)
+            {
+                MessageBox.Show($"設定ファイルの内容が不正なため読み込めませんでした\nアプリケーションを終了します\n{e.Message}", "JssonException", MessageBoxButton.OK);
                 Application.Current.Shutdown();
                 return;
             }
