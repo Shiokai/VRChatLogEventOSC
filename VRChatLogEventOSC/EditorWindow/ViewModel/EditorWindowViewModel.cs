@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Windows;
+using System.Linq;
 using System.Reactive.Disposables;
-using Reactive.Bindings.Extensions;
-using Reactive.Bindings;
 using System.Reactive.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using VRChatLogEventOSC.Common;
+
 using static VRChatLogEventOSC.Common.SingleSetting;
 
 namespace VRChatLogEventOSC.Editor

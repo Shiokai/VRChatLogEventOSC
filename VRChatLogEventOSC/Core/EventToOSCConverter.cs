@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using Reactive.Bindings.Extensions;
+
 using VRChatLogEventOSC.Common;
+
 using static VRChatLogEventOSC.Common.RegexPattern;
 
 namespace VRChatLogEventOSC.Core

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Net;
-using System.IO;
+
 using Reactive.Bindings;
+
 using VRChatLogEventOSC.Common;
 using VRChatLogEventOSC.Core;
 

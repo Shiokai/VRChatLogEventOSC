@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
-using Reactive.Bindings;
-using System.Reactive.Disposables;
-using Reactive.Bindings.Extensions;
-using System.ComponentModel;
 using System.Windows;
 
-using VRChatLogEventOSC.Core;
-using VRChatLogEventOSC.Editor;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using VRChatLogEventOSC.Common;
+using VRChatLogEventOSC.Core;
+using VRChatLogEventOSC.Editor;
 
 namespace VRChatLogEventOSC.Setting
 {

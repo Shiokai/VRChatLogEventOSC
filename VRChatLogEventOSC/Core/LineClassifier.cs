@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.ComponentModel;
-using Reactive.Bindings;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
+
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using static VRChatLogEventOSC.Common.RegexPattern;
 
 

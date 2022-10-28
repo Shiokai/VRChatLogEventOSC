@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
+
 using Application = System.Windows.Application;
-using System.Reactive.Linq;
 
 namespace VRChatLogEventOSC.SystrayIcon
 {
