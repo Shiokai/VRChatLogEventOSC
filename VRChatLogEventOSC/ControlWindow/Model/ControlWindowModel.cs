@@ -16,9 +16,9 @@ namespace VRChatLogEventOSC.Control
     {
         private static ControlWindowModel? _instance;
         public static ControlWindowModel Instance => _instance ??= new ControlWindowModel();
-        private LogEventCore _core;
+        private readonly LogEventCore _core;
         private static readonly string _defaultLogDirectoryPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat"));
-        public string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
+        public static string DefaultLogDirectoryPath => _defaultLogDirectoryPath;
 
         public ReadOnlyReactivePropertySlim<bool> IsRunning => _core.IsRunnging;
 

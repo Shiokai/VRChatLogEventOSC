@@ -18,9 +18,9 @@ namespace VRChatLogEventOSC.Setting
     internal class SettingWindowViewModel : INotifyPropertyChanged, IDisposable, IClosing
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private SettingWindowModel _model;
+        private readonly SettingWindowModel _model;
 
-        private ReactivePropertySlim<string> _selectedEvent = new(string.Empty);
+        private readonly ReactivePropertySlim<string> _selectedEvent = new(string.Empty);
         public ReadOnlyReactivePropertySlim<string> SelectedEvent { get; init; }
 
         private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new()
@@ -48,7 +48,7 @@ namespace VRChatLogEventOSC.Setting
         public ReactiveCommand DeleteCommand { get; init; }
         public ReactiveCommand ApplyCommand { get; init; }
 
-        private ReactivePropertySlim<bool> _isSelected;
+        private readonly ReactivePropertySlim<bool> _isSelected;
         private readonly CompositeDisposable _compositeDisposable = new();
         private bool _disposed = false;
         public void Dispose()
@@ -58,6 +58,7 @@ namespace VRChatLogEventOSC.Setting
                 return;
             }
             _compositeDisposable.Dispose();
+            _disposed = true;
         }
 
         public void Closing(CancelEventArgs cancelEventArgs)

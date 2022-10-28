@@ -139,7 +139,7 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
-            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(_model.DefaultLogDirectoryPath), ReactivePropertyMode.DistinctUntilChanged)
+            ConfigDirectoryPath = new ReactiveProperty<string>(Path.GetFullPath(ControlWindowModel.DefaultLogDirectoryPath), ReactivePropertyMode.DistinctUntilChanged)
             .SetValidateNotifyError(val => !Directory.Exists(val) ? "指定されたフォルダが見つかりません" : null)
             .AddTo(_compositeDisposable);
 

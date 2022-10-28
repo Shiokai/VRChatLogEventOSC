@@ -15,17 +15,17 @@ namespace VRChatLogEventOSC.SystrayIcon
     internal sealed class NotifyIconViewModel : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private NotifyIconWrapper _notifyIcon = new();
-        private NotifyIconModel _model;
-        private string _iconTextBase = "VRChatLogEventOSC: ";
-        private string _statusTextBase = "Status: ";
+        private readonly NotifyIconWrapper _notifyIcon = new();
+        private readonly NotifyIconModel _model;
+        private readonly string _iconTextBase = "VRChatLogEventOSC: ";
+        private readonly string _statusTextBase = "Status: ";
 
         private string CurrentStatus => _model.IsLogEventRunning.Value ? "Running" : "Paused";
 
-        private ReactivePropertySlim<string> _status = new(string.Empty);
+        private readonly ReactivePropertySlim<string> _status = new(string.Empty);
         public ReadOnlyReactivePropertySlim<string> Status => _status.ToReadOnlyReactivePropertySlim<string>();
 
-        private CompositeDisposable _compositeDisposable = new();
+        private readonly CompositeDisposable _compositeDisposable = new();
 
         private bool _disposed = false;
 
@@ -39,6 +39,7 @@ namespace VRChatLogEventOSC.SystrayIcon
             _notifyIcon.Dispose();
             _model.Dispose();
             _compositeDisposable.Dispose();
+            _disposed = true;
         }
         private void Notify(string message)
         {
@@ -64,8 +65,8 @@ namespace VRChatLogEventOSC.SystrayIcon
         {
             _model = NotifyIconModel.Instance;
 
-            _notifyIcon.OpenControlSelected?.Subscribe(_ => _model.OpenControlWindow()).AddTo(_compositeDisposable);
-            _notifyIcon.OpenSettingSelected?.Subscribe(_ => _model.OpenSettingWindow()).AddTo(_compositeDisposable);
+            _notifyIcon.OpenControlSelected?.Subscribe(_ => NotifyIconModel.OpenControlWindow()).AddTo(_compositeDisposable);
+            _notifyIcon.OpenSettingSelected?.Subscribe(_ => NotifyIconModel.OpenSettingWindow()).AddTo(_compositeDisposable);
             _notifyIcon.QuitSelected?.Subscribe(_ => Application.Current.Shutdown()).AddTo(_compositeDisposable);
             _notifyIcon.PauseSelected?.Subscribe(_ => 
             {
@@ -88,7 +89,7 @@ namespace VRChatLogEventOSC.SystrayIcon
                 _notifyIcon.PauseItemText = $"Pause [{(running ? " " : "✓")}]";
             });
 
-            _notifyIcon.DoubleClicked?.Subscribe(_ => _model.OpenControlWindow()).AddTo(_compositeDisposable);
+            _notifyIcon.DoubleClicked?.Subscribe(_ => NotifyIconModel.OpenControlWindow()).AddTo(_compositeDisposable);
 
             _notifyIcon.Text = _iconTextBase + CurrentStatus;
             _status.Value = _statusTextBase + CurrentStatus;

@@ -43,10 +43,10 @@ namespace VRChatLogEventOSC.SystrayIcon
         public IObservable<EventArgs>? DoubleClicked;
         public IObservable<EventArgs>? PauseSelected;
 
-        private ToolStripMenuItem _openControlItem = new("Open Control");
-        private ToolStripMenuItem _openSetingItem = new("Open Setting");
-        private ToolStripMenuItem _quitItem = new("Quit");
-        private ToolStripMenuItem _pauseItem = new("Pause [ ]");
+        private readonly ToolStripMenuItem _openControlItem = new("Open Control");
+        private readonly ToolStripMenuItem _openSetingItem = new("Open Setting");
+        private readonly ToolStripMenuItem _quitItem = new("Quit");
+        private readonly ToolStripMenuItem _pauseItem = new("Pause [ ]");
         public string PauseItemText
         {
             get => _pauseItem.Text;

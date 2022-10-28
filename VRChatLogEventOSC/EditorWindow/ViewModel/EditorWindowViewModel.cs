@@ -81,33 +81,33 @@ namespace VRChatLogEventOSC.Editor
         public ReactivePropertySlim<string> Message { get; private set; }
         public ReactivePropertySlim<string> URL { get; private set; }
 
-        private ReactivePropertySlim<bool> _userNameEditable = new();
+        private readonly ReactivePropertySlim<bool> _userNameEditable = new();
         public ReadOnlyReactivePropertySlim<bool> UserNameEditable { get; init; }
-        private ReactivePropertySlim<bool> _userIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _userIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> UserIDEditable { get; init; }
-        private ReactivePropertySlim<bool> _worldNameEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldNameEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldNameEditable { get; init; }
-        private ReactivePropertySlim<bool> _worldUrlEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldUrlEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldURLEditable { get; init; }
-        private ReactivePropertySlim<bool> _worldIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldIDEditable { get; init; }
-        private ReactivePropertySlim<bool> _instanceIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _instanceIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> InstanceIDEditable { get; init; }
-        private ReactivePropertySlim<bool> _instanceTypeEditable = new();
+        private readonly ReactivePropertySlim<bool> _instanceTypeEditable = new();
         public ReadOnlyReactivePropertySlim<bool> InstanceTypeEditable { get; init; }
-        private ReactivePropertySlim<bool> _worldUserIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldUserIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldUserIDEditable { get; init; }
-        private ReactivePropertySlim<bool> _regionEditable = new();
+        private readonly ReactivePropertySlim<bool> _regionEditable = new();
         public ReadOnlyReactivePropertySlim<bool> RegionEditable { get; init; }
-        private ReactivePropertySlim<bool> _messageEditable = new();
+        private readonly ReactivePropertySlim<bool> _messageEditable = new();
         public ReadOnlyReactivePropertySlim<bool> MessageEditable { get; init; }
-        private ReactivePropertySlim<bool> _urlEditable = new();
+        private readonly ReactivePropertySlim<bool> _urlEditable = new();
         public ReadOnlyReactivePropertySlim<bool> URLEditable { get; init; }
 
         public ReactiveCommand<EditorWindow> OKCommand { get; init; }
         public ReactiveCommand<EditorWindow> CancelCommand { get; init; }
         private bool _isPressedX = true;
-        private CompositeDisposable _compositeDisposable = new();
+        private readonly CompositeDisposable _compositeDisposable = new();
         private bool _disposed = false;
 
         public void Dispose()
@@ -118,6 +118,7 @@ namespace VRChatLogEventOSC.Editor
             }
 
             _compositeDisposable.Dispose();
+            _disposed = true;
         }
 
 

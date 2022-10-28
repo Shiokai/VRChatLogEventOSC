@@ -31,6 +31,7 @@ namespace VRChatLogEventOSC.Core
             _lineClassifier.Dispose();
             _eventsDisposables.Dispose();
             _oSCSender.Dispose();
+            _disposed = true;
         }
 
         /// <summary>
