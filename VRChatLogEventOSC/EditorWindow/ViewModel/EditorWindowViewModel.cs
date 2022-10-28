@@ -517,7 +517,7 @@ namespace VRChatLogEventOSC.Editor
             .AddTo(_compositeDisposable);
             OSCAddress.Value = $"/avatar/parameters/{eventType}";
 
-            OSCBool = new ReactivePropertySlim<bool?>((bool?)null).AddTo(_compositeDisposable);
+            OSCBool = new ReactivePropertySlim<bool?>(false).AddTo(_compositeDisposable);
 
             OSCInt = new ReactiveProperty<int?>((int?)null)
             .SetValidateAttribute(() => OSCInt).AddTo(_compositeDisposable);
