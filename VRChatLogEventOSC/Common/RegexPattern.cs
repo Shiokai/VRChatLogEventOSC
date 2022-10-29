@@ -40,13 +40,29 @@ namespace VRChatLogEventOSC.Common
 
         };
 
+        private static readonly IReadOnlyDictionary<EventTypeEnum, Regex> _regexes;
+        public static IReadOnlyDictionary<EventTypeEnum, Regex> Regexes => _regexes;
+
+        public static Regex AnyEventRegex { get; }
+        public static Regex DatetimeRegex { get; }
+        public static Regex JoinedRoomURLRegex { get; }
+        public static Regex JoinedRoomNameRegex { get; }
+        public static Regex AcceptFriendRequestRegex { get; }
+        public static Regex PlayedVideo1Regex { get; }
+        public static Regex PlayedVideo2Regex { get; }
+        public static Regex AcceptInviteRegex { get; }
+        public static Regex AcceptRequestInviteRegex { get; }
+        public static Regex OnPlayerJoinedRegex { get; }
+        public static Regex OnPlayerLeftRegex { get; }
+        public static Regex TookScreenshotRegex { get; }
+
         /// <summary>
         /// イベントの正規表現の名前付きグループの名前の一覧を取得します
         /// </summary>
         /// <param name="eventType">名前付きグループの名前を取得するイベント</param>
         /// <returns>名前付きグループの名前の一覧</returns>
         public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CaptureName[eventType];
-
+        
         /// <summary>
         /// 正規表現へのマッチがどのイベントのものかを取得します
         /// </summary>
@@ -71,22 +87,6 @@ namespace VRChatLogEventOSC.Common
 
             return EventTypeEnum.None;
         }
-        public static Regex AnyEventRegex { get; }
-        public static Regex DatetimeRegex { get; }
-        public static Regex JoinedRoomURLRegex { get; }
-        public static Regex JoinedRoomNameRegex { get; }
-        public static Regex AcceptFriendRequestRegex { get; }
-        public static Regex PlayedVideo1Regex { get; }
-        public static Regex PlayedVideo2Regex { get; }
-        public static Regex AcceptInviteRegex { get; }
-        public static Regex AcceptRequestInviteRegex { get; }
-        public static Regex OnPlayerJoinedRegex { get; }
-        public static Regex OnPlayerLeftRegex { get; }
-        public static Regex TookScreenshotRegex { get; }
-
-        private static readonly IReadOnlyDictionary<EventTypeEnum, Regex> _regexes;
-
-        public static IReadOnlyDictionary<EventTypeEnum, Regex> Regexes => _regexes;
 
         static RegexPattern()
         {

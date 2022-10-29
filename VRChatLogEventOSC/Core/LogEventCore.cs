@@ -28,6 +28,11 @@ namespace VRChatLogEventOSC.Core
         
         public ReadOnlyReactivePropertySlim<bool> IsRunnging;
 
+        /// <summary>
+        /// 現在適用されている設定を取得します
+        /// </summary>
+        /// <param name="type">設定を取得するイベント</param>
+        /// <returns>指定したイベントの現在の設定</returns>
         public IReadOnlyList<SingleSetting>? GetCurrentSettingsOfType(RegexPattern.EventTypeEnum type)
         {
             _converter.CurrentSetting.Settings.TryGetValue(type, out var settings);

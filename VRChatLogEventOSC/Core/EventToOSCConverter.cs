@@ -43,9 +43,9 @@ namespace VRChatLogEventOSC.Core
         /// <param name="settingCapture">判定する設定のReqInv</param>
         /// <param name="matchCapture">判定するイベントのReqInv</param>
         /// <returns>設定とイベントがマッチする場合trueを、そうでなければfalseを返します</returns>
-        /// ReqInveはInvete+以外取れないので特殊判定
         private static bool IsMatchReqInvSetting(string settingCapture, string matchCapture)
         {
+            // ReqInveはInvete+以外取れないので特殊判定
             if (settingCapture == "NotSpecified")
             {
                 return true;
@@ -84,6 +84,7 @@ namespace VRChatLogEventOSC.Core
                     continue;
                 }
 
+                // 空欄はフィルタリング無し扱い(ReqInvとpublicインスタンス除く)
                 if (string.IsNullOrWhiteSpace(settingCapture))
                 {
                     continue;
@@ -119,11 +120,13 @@ namespace VRChatLogEventOSC.Core
         /// <param name="captures">判定するイベントの正規表現の名前付きグループの一覧</param>
         private void SendIfValid(Match match, SingleSetting setting, IEnumerable<string> captures)
         {
+            // 送信すべき値が無いなら送信しない
             if (setting.OSCValue == null)
             {
                 return;
             }
 
+            // 設定でフィルタリング
             if (!IsEventMatchSetting(match, setting, captures))
             {
                 return;
@@ -154,7 +157,7 @@ namespace VRChatLogEventOSC.Core
             _lineClassifier = lineClassifier;
             _oSCSender = oSCSender;
 
-            
+            // 全イベントをSubscribe
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
                 if (type == EventTypeEnum.None || !Regexes.ContainsKey(type))

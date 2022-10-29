@@ -23,9 +23,9 @@ namespace VRChatLogEventOSC.SystrayIcon
         
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly LogEventCore _core;
-        public ReadOnlyReactivePropertySlim<bool> IsLogEventRunning;
 
         private readonly CompositeDisposable _compositeDisposable = new();
+        public ReadOnlyReactivePropertySlim<bool> IsLogEventRunning;
 
         private bool _disposed = false;
         public void Dispose()

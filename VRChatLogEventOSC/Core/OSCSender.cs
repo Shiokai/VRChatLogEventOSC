@@ -146,7 +146,7 @@ namespace VRChatLogEventOSC.Core
         /// </summary>
         /// <param name="path">送信先</param>
         /// <param name="args">送信する値</param>
-        public void SendMessage(string path, params object[] args)
+        private void SendMessage(string path, params object[] args)
         {
             if (args.Any(obj => obj == null))
             {

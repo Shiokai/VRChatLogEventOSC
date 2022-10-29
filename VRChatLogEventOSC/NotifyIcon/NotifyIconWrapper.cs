@@ -14,6 +14,10 @@ namespace VRChatLogEventOSC.SystrayIcon
     {
         private readonly NotifyIcon? _notifyIcon;
         private readonly ContextMenuStrip? _contextMenuStrip;
+        private readonly ToolStripMenuItem _openControlItem = new("Open Control");
+        private readonly ToolStripMenuItem _openSetingItem = new("Open Setting");
+        private readonly ToolStripMenuItem _quitItem = new("Quit");
+        private readonly ToolStripMenuItem _pauseItem = new("Pause [ ]");
 
         public string Text
         {
@@ -27,6 +31,16 @@ namespace VRChatLogEventOSC.SystrayIcon
                 _notifyIcon.Text = value;
             }
         }
+        public string PauseItemText
+        {
+            get => _pauseItem.Text;
+            set => _pauseItem.Text = value;
+        }
+        public IObservable<EventArgs>? OpenControlSelected { get; private set; }
+        public IObservable<EventArgs>? OpenSettingSelected { get; private set; }
+        public IObservable<EventArgs>? QuitSelected { get; private set; }
+        public IObservable<EventArgs>? DoubleClicked { get; private set; }
+        public IObservable<EventArgs>? PauseSelected { get; private set; }
 
         public void RequestNotify(NotifyRequestRecord record)
         {
@@ -37,23 +51,6 @@ namespace VRChatLogEventOSC.SystrayIcon
         {
             _notifyIcon?.Dispose();
         }
-
-        public IObservable<EventArgs>? OpenControlSelected;
-        public IObservable<EventArgs>? OpenSettingSelected;
-        public IObservable<EventArgs>? QuitSelected;
-        public IObservable<EventArgs>? DoubleClicked;
-        public IObservable<EventArgs>? PauseSelected;
-
-        private readonly ToolStripMenuItem _openControlItem = new("Open Control");
-        private readonly ToolStripMenuItem _openSetingItem = new("Open Setting");
-        private readonly ToolStripMenuItem _quitItem = new("Quit");
-        private readonly ToolStripMenuItem _pauseItem = new("Pause [ ]");
-        public string PauseItemText
-        {
-            get => _pauseItem.Text;
-            set => _pauseItem.Text = value;
-        }
-
         private ContextMenuStrip CreateContextMenu()
         {
             OpenControlSelected = Observable.FromEvent<EventHandler, EventArgs>(
@@ -77,6 +74,7 @@ namespace VRChatLogEventOSC.SystrayIcon
                 h => _quitItem.Click -= h
             );
             var separator = new ToolStripSeparator();
+            // Quitは間隔を空ける
             var contextMenu = new ContextMenuStrip { Items = { _openControlItem, _openSetingItem, _pauseItem, separator, _quitItem } };
             return contextMenu;
         }
@@ -85,7 +83,7 @@ namespace VRChatLogEventOSC.SystrayIcon
         {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
-                
+
             _contextMenuStrip = CreateContextMenu();
 
             _notifyIcon = new NotifyIcon
@@ -94,7 +92,7 @@ namespace VRChatLogEventOSC.SystrayIcon
                 Visible = true,
                 ContextMenuStrip = _contextMenuStrip,
             };
-            
+
             DoubleClicked = Observable.FromEvent<EventHandler, EventArgs>(
                 h => (s, e) => h(e),
                 h => _notifyIcon.DoubleClick += h,

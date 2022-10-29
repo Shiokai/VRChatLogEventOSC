@@ -22,7 +22,8 @@ namespace VRChatLogEventOSC.Setting
         private readonly SettingWindowModel _model;
 
         private readonly ReactivePropertySlim<string> _selectedEvent = new(string.Empty);
-        public ReadOnlyReactivePropertySlim<string> SelectedEvent { get; init; }
+        private readonly ReactivePropertySlim<bool> _isSelected;
+        private readonly CompositeDisposable _compositeDisposable = new();
 
         private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new()
         {
@@ -37,7 +38,9 @@ namespace VRChatLogEventOSC.Setting
             {RegexPattern.EventTypeEnum.OnPlayerLeft, new()},
             {RegexPattern.EventTypeEnum.TookScreenshot, new()},
         };
+
         public IReadOnlyDictionary<RegexPattern.EventTypeEnum, ReactiveCommand> EventsButtonCommand { get; init; }
+        public ReadOnlyReactivePropertySlim<string> SelectedEvent { get; init; }
         public ReadOnlyReactiveCollection<SingleSetting> SelectedTypeSettings { get; set; }
 
         public ReactivePropertySlim<SingleSetting?> SelectedItem { get; init; } = new();
@@ -49,8 +52,6 @@ namespace VRChatLogEventOSC.Setting
         public ReactiveCommand DeleteCommand { get; init; }
         public ReactiveCommand ApplyCommand { get; init; }
 
-        private readonly ReactivePropertySlim<bool> _isSelected;
-        private readonly CompositeDisposable _compositeDisposable = new();
         private bool _disposed = false;
         public void Dispose()
         {
@@ -153,7 +154,7 @@ namespace VRChatLogEventOSC.Setting
                 }
                 var isButtonChecked = _eventsButtonCommand[type];
                 isButtonChecked.AddTo(_compositeDisposable);
-                isButtonChecked.SubscribeOnUIDispatcher().Subscribe(_ =>
+                isButtonChecked.Subscribe(_ =>
                 {
                     _selectedEvent.Value = type.ToString();
                     _model.ChangeShownSetting(type);
