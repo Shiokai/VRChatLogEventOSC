@@ -42,6 +42,7 @@ namespace VRChatLogEventOSC.Core
         public LineClassifier(LogFileWatcher logFileWatcher)
         {
             _eventReactiveProperties = new Dictionary<EventTypeEnum, ReactivePropertySlim<string>>();
+            // 全イベントのKeyを追加
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
                 if (type == EventTypeEnum.None)
@@ -53,14 +54,17 @@ namespace VRChatLogEventOSC.Core
 
             _eventsDisposable = new CompositeDisposable(_eventReactiveProperties.Values);
             var eventReactiveProperties = new Dictionary<EventTypeEnum, ReadOnlyReactivePropertySlim<string>>();
+            // 全イベントのKeyを追加
             foreach (var type in Enum.GetValues<EventTypeEnum>())
             {
                 if (type == EventTypeEnum.None)
                 {
                     continue;
                 }
+                // ReactivePropertyをReadOnlyに
                 eventReactiveProperties.Add(type, _eventReactiveProperties[type].ToReadOnlyReactivePropertySlim<string>(mode: ReactivePropertyMode.None).AddTo(_eventsDisposable));
             }
+            // ReadonlyDictionaryに
             EventReactiveProperties = eventReactiveProperties;
 
             _logFileWatcher = logFileWatcher;
@@ -72,6 +76,7 @@ namespace VRChatLogEventOSC.Core
             .Where(m => m.Success)
             .Subscribe(m =>
             {
+                // この行がどのイベントに対応するか振り分け
                 EventTypeEnum eventType = GetMatchGropeType(m);
                 _eventReactiveProperties[eventType].Value = m.Value;
             });

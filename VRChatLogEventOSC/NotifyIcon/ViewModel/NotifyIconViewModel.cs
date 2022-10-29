@@ -20,13 +20,13 @@ namespace VRChatLogEventOSC.SystrayIcon
         private readonly NotifyIconModel _model;
         private readonly string _iconTextBase = "VRChatLogEventOSC: ";
         private readonly string _statusTextBase = "Status: ";
+        private readonly ReactivePropertySlim<string> _status = new(string.Empty);
+        private readonly CompositeDisposable _compositeDisposable = new();
 
         private string CurrentStatus => _model.IsLogEventRunning.Value ? "Running" : "Paused";
 
-        private readonly ReactivePropertySlim<string> _status = new(string.Empty);
         public ReadOnlyReactivePropertySlim<string> Status => _status.ToReadOnlyReactivePropertySlim<string>();
 
-        private readonly CompositeDisposable _compositeDisposable = new();
 
         private bool _disposed = false;
 

@@ -27,16 +27,15 @@ namespace VRChatLogEventOSC.Core
         private readonly IDisposable _fileCreationDisposable;
 
         private long _lastLength = 0;
+        private readonly ReactivePropertySlim<string> _logLine = new(string.Empty, ReactivePropertyMode.None);
+        private readonly ReactivePropertySlim<bool> _isWatching = new(false);
 
+        public IObservable<string> LogLineObservable => _logLine;
         /// <summary>
         /// ログの読み取り間隔
         /// インスタンス初期化後の変更は無効
         /// </summary>
         public float Interval { get; set; } = 0.1f;
-
-        private readonly ReactivePropertySlim<string> _logLine = new(string.Empty);
-        public IObservable<string> LogLineObservable => _logLine.Skip(1);
-        private readonly ReactivePropertySlim<bool> _isWatching = new(false);
         /// <summary>
         /// 今現在ログの読み取りが行われているか
         /// </summary>
@@ -144,6 +143,8 @@ namespace VRChatLogEventOSC.Core
             
             _watchDisposable = Observable.Interval(TimeSpan.FromSeconds(Interval)).Where(_ => _isWatching.Value).Subscribe(_ =>
             {
+                // VRChatがLogのファイルをWriteで開きっぱなしなため、FileShare.ReadWriteの指定が必要
+                // 従って、File.ReadLines()は使用不可
                 if (!File.Exists(_logFilePath))
                 {
                     return;

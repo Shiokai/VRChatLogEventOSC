@@ -20,8 +20,6 @@ namespace VRChatLogEventOSC.Editor
 {
     internal class EditorWindowViewModel : IDisposable, INotifyPropertyChanged, IClosing
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        private readonly EditorWindowModel _model = EditorWindowModel.Instance;
         public enum InstanceTypeEnum
         {
             None,
@@ -41,13 +39,34 @@ namespace VRChatLogEventOSC.Editor
             JP,
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private readonly EditorWindowModel _model = EditorWindowModel.Instance;
+        // Windowのバツボタンで閉じられているかどうか
+        private bool _isPressedX = true;
+        private readonly CompositeDisposable _compositeDisposable = new();
+
         private readonly Dictionary<string, OSCValueTypeEnum> _comboOSCValueType = new();
-        public IReadOnlyDictionary<string, OSCValueTypeEnum> ComboOSCValueType => _comboOSCValueType;
         private readonly Dictionary<string, OSCTypeEnum> _comboOSCType = new();
-        public IReadOnlyDictionary<string, OSCTypeEnum> ComboOSCType => _comboOSCType;
         private readonly Dictionary<string, InstanceTypeEnum> _comboInstanceType = new();
-        public IReadOnlyDictionary<string, InstanceTypeEnum> ComboInstanceType => _comboInstanceType;
         private readonly Dictionary<string, RegionEnum> _comboRegion = new();
+        
+        private readonly ReactivePropertySlim<string> _eventTypeText = new(string.Empty);
+
+        private readonly ReactivePropertySlim<bool> _userNameEditable = new();
+        private readonly ReactivePropertySlim<bool> _userIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldNameEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldUrlEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _instanceIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _instanceTypeEditable = new();
+        private readonly ReactivePropertySlim<bool> _worldUserIdEditable = new();
+        private readonly ReactivePropertySlim<bool> _regionEditable = new();
+        private readonly ReactivePropertySlim<bool> _messageEditable = new();
+        private readonly ReactivePropertySlim<bool> _urlEditable = new();
+
+        public IReadOnlyDictionary<string, OSCValueTypeEnum> ComboOSCValueType => _comboOSCValueType;
+        public IReadOnlyDictionary<string, OSCTypeEnum> ComboOSCType => _comboOSCType;
+        public IReadOnlyDictionary<string, InstanceTypeEnum> ComboInstanceType => _comboInstanceType;
         public IReadOnlyDictionary<string, RegionEnum> ComboRegion => _comboRegion;
 
         public ReactivePropertySlim<Visibility> OSCBoolVisibility { get; init; }
@@ -55,7 +74,6 @@ namespace VRChatLogEventOSC.Editor
         public ReactivePropertySlim<Visibility> OSCFloatVisibility { get; init; }
         public ReactivePropertySlim<Visibility> OSCStringVisibility { get; init; }
 
-        private readonly ReactivePropertySlim<string> _eventTypeText = new(string.Empty);
         public ReadOnlyReactivePropertySlim<string> EventTypeText { get; init; }
 
 
@@ -63,6 +81,7 @@ namespace VRChatLogEventOSC.Editor
         [Required(ErrorMessage = "Required")]
         public ReactiveProperty<string> OSCAddress { get; private set; }
         public ReactivePropertySlim<bool?> OSCBool { get; private set; }
+        // VRChatのExpressionParameterのIntの範囲は0..255
         [Range(0, 255)]
         public ReactiveProperty<int?> OSCInt { get; private set; }
         private float? OSCFloat { get; set; } = null;
@@ -83,33 +102,20 @@ namespace VRChatLogEventOSC.Editor
         public ReactivePropertySlim<string> Message { get; private set; }
         public ReactivePropertySlim<string> URL { get; private set; }
 
-        private readonly ReactivePropertySlim<bool> _userNameEditable = new();
         public ReadOnlyReactivePropertySlim<bool> UserNameEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _userIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> UserIDEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _worldNameEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldNameEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _worldUrlEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldURLEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _worldIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldIDEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _instanceIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> InstanceIDEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _instanceTypeEditable = new();
         public ReadOnlyReactivePropertySlim<bool> InstanceTypeEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _worldUserIdEditable = new();
         public ReadOnlyReactivePropertySlim<bool> WorldUserIDEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _regionEditable = new();
         public ReadOnlyReactivePropertySlim<bool> RegionEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _messageEditable = new();
         public ReadOnlyReactivePropertySlim<bool> MessageEditable { get; init; }
-        private readonly ReactivePropertySlim<bool> _urlEditable = new();
         public ReadOnlyReactivePropertySlim<bool> URLEditable { get; init; }
 
         public ReactiveCommand<EditorWindow> OKCommand { get; init; }
         public ReactiveCommand<EditorWindow> CancelCommand { get; init; }
-        private bool _isPressedX = true;
-        private readonly CompositeDisposable _compositeDisposable = new();
         private bool _disposed = false;
 
         public void Dispose()
@@ -159,6 +165,7 @@ namespace VRChatLogEventOSC.Editor
 
         public void Closing(CancelEventArgs cancelEventArgs)
         {
+            // CancelボタンまたはOKボタンから閉じている時は表示しない
             if (!_isPressedX)
             {
                 return;
@@ -179,6 +186,10 @@ namespace VRChatLogEventOSC.Editor
         }
 
         // これなんとかしたい
+        /// <summary>
+        /// イベントの種類毎に有効なフィルタリング項目が異なるので、無効な項目を編集不可にする
+        /// </summary>
+        /// <param name="eventType">編集するイベントの種類</param>
         private void EventPropertyEditable(RegexPattern.EventTypeEnum eventType)
         {   
             (
@@ -473,6 +484,7 @@ namespace VRChatLogEventOSC.Editor
             EventTypeText = _eventTypeText.ToReadOnlyReactivePropertySlim<string>();
             _eventTypeText.Value = eventType.ToString();
 
+            // 各Enumを網羅してKeyを追加
             foreach (var oscvtype in Enum.GetValues<OSCValueTypeEnum>())
             {
                 _comboOSCValueType.Add(oscvtype.ToString(), oscvtype);
@@ -514,10 +526,9 @@ namespace VRChatLogEventOSC.Editor
 
             SettingName = new ReactivePropertySlim<string>(string.Empty).AddTo(_compositeDisposable);
 
-            OSCAddress = new ReactiveProperty<string>(string.Empty)
+            OSCAddress = new ReactiveProperty<string>($"/avatar/parameters/{eventType}")
             .SetValidateAttribute(() => OSCAddress)
             .AddTo(_compositeDisposable);
-            OSCAddress.Value = $"/avatar/parameters/{eventType}";
 
             OSCBool = new ReactivePropertySlim<bool?>(false).AddTo(_compositeDisposable);
 

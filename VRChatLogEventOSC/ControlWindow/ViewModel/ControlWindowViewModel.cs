@@ -23,31 +23,32 @@ namespace VRChatLogEventOSC.Control
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly ControlWindowModel _model;
         private readonly ReactivePropertySlim<bool> _isPaused = new(false);
+        private bool _isDirty = false;
+
+        private readonly CompositeDisposable _compositeDisposable = new();
+
         public ReactiveCommand PauseCommand { get; init; }
         public ReactiveCommand RestartCommand { get; init; }
         public ReactiveCommand RescanCommand { get; init; }
         public ReactiveCommand RestartWithScanCommand { get; init; }
-
         public ReactiveCommand QuitApplicationCommand { get; init; }
-
         public ReactiveCommand FolderBrowseCommand { get; init; }
+        public ReactiveCommand SaveAndLoadCommand { get; init; }
 
         [Required(ErrorMessage = "Required")]
         [RegularExpression(@"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$", ErrorMessage = "不正なIPアドレスです")]
         public ReactiveProperty<string> ConfigIPAdress { get; init; }
+
         public ReadOnlyReactivePropertySlim<string> ConfigIPAdressError { get; init; }
         [Required(ErrorMessage = "Required")]
         [Range(0, 65535, ErrorMessage = "ポート番号の範囲は0~65535です")]
+        
         public ReactiveProperty<int> ConfigPort { get; init; }
         public ReadOnlyReactivePropertySlim<string> ConfigPortError { get; init; }
         [Required(ErrorMessage = "Required")]
+        
         public ReactiveProperty<string> ConfigDirectoryPath { get; init; }
         public ReadOnlyReactivePropertySlim<string> ConfigDirectoryPathError { get; init; }
-
-        public ReactiveCommand SaveAndLoadCommand { get; init; }
-        private bool _isDirty = false;
-
-        private readonly CompositeDisposable _compositeDisposable = new();
 
         private bool _disposed = false;
         public void Dispose()
@@ -149,6 +150,7 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
+            // Config系ReactivePropertyの初期化後に記述
             var canSave = Observable.Merge(ConfigIPAdress.ObserveHasErrors.ToUnit(), ConfigPort.ObserveHasErrors.ToUnit(), ConfigDirectoryPath.ObserveHasErrors.ToUnit())
             .Select(_ => ConfigIPAdress.HasErrors || ConfigPort.HasErrors || ConfigDirectoryPath.HasErrors)
             .Inverse();
@@ -161,7 +163,7 @@ namespace VRChatLogEventOSC.Control
                 System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
             }).AddTo(_compositeDisposable);
 
-
+            // ConfigDirectoryPathの初期化より後に記述
             FolderBrowseCommand = new ReactiveCommand().WithSubscribe(() =>
             {
                 using (var folderBrowserDialog = new FolderBrowserDialog())

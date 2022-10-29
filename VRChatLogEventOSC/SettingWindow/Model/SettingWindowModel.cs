@@ -26,15 +26,28 @@ namespace VRChatLogEventOSC.Setting
         private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCollection<SingleSetting>> _settingsCache;
 
         private readonly ReactiveCollection<SingleSetting> _shownSetting = new();
+        private RegexPattern.EventTypeEnum _shownEventType = RegexPattern.EventTypeEnum.None;
+        private bool _isShownDirty = false;
+        private readonly CompositeDisposable _compositeDisposables = new();
 
         public ReadOnlyReactiveCollection<SingleSetting> ShownSetting { get; set; }
-        private RegexPattern.EventTypeEnum _shownEventType = RegexPattern.EventTypeEnum.None;
         public RegexPattern.EventTypeEnum ShownEventType => _shownEventType;
         public SingleSetting? SelectedSetting { get; set; }
         public int SelectedIndex { get; set; }
 
-        private bool _isShownDirty = false;
         public bool IsDirty { get; private set; } = false;
+
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _compositeDisposables.Dispose();
+            _disposed = true;
+        }
 
         /// <summary>
         /// 設定のキャッシュを現在読み込まれている設定に更新します
@@ -134,6 +147,7 @@ namespace VRChatLogEventOSC.Setting
         /// <param name="target">入れ替える設定</param>
         private void SwapItem(int selected, int target)
         {
+            // 一番上からのUpと一番下からのDown対策
             if (selected < 0 || target < 0 || target > _shownSetting.Count - 1)
             {
                 return;
@@ -267,19 +281,6 @@ namespace VRChatLogEventOSC.Setting
             IsDirty = true;
         }
 
-        private readonly CompositeDisposable _compositeDisposables = new();
-
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            _compositeDisposables.Dispose();
-            _disposed = true;
-        }
         private SettingWindowModel()
         {
             _core = LogEventCore.Instance;
