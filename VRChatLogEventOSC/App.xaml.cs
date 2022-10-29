@@ -17,17 +17,18 @@ namespace VRChatLogEventOSC
 
         public void StartUp(object sender, StartupEventArgs e)
         {
-            if (e.Args.Contains("--setting") || e.Args.Contains("-s"))
+            foreach (var arg in e.Args)
             {
                 // 設定のみ行う場合
-                ShutdownMode = ShutdownMode.OnLastWindowClose;
-                var settingWindow = new Setting.SettingWindow();
-                settingWindow.Show();
+                if (arg == "--setting" || arg == "-s")
+                {
+                    ShutdownMode = ShutdownMode.OnLastWindowClose;
+                    var settingWindow = new Setting.SettingWindow();
+                    settingWindow.Show();
+                    break;
+                }
             }
-            else
-            {
-                CreateNotifyIcon();
-            }
+            CreateNotifyIcon();
         }
         private void CreateNotifyIcon()
         {
