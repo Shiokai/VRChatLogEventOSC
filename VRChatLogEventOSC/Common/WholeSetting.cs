@@ -11,7 +11,7 @@ namespace VRChatLogEventOSC.Common
 {
     internal sealed record class WholeSetting
     {
-        public int JsonVersion { get; init; } = 0;
+        public int JsonVersion { get; init; } = 1;
 
         [JsonIgnore]
         public IReadOnlyDictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> Settings { get; }
