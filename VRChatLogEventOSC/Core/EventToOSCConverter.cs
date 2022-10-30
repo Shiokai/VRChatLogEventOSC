@@ -84,7 +84,7 @@ namespace VRChatLogEventOSC.Core
                     continue;
                 }
 
-                // 空欄はフィルタリング無し扱い(ReqInvとpublicインスタンス除く)
+                // 空欄はフィルタリング無し扱い(ReqInv除く)
                 if (string.IsNullOrWhiteSpace(settingCapture))
                 {
                     continue;
@@ -92,6 +92,12 @@ namespace VRChatLogEventOSC.Core
 
                 // インスタンスがpublicのとき、InstanceTypeが取れないので特殊判定
                 if (capture == "InstanceType" && string.IsNullOrEmpty(matchCapture) && settingCapture == "public")
+                {
+                    continue;
+                }
+
+                // Regionがusのとき、Regionが取れないので特殊判定
+                if (capture == "Region" && string.IsNullOrEmpty(matchCapture) && settingCapture == "us")
                 {
                     continue;
                 }
