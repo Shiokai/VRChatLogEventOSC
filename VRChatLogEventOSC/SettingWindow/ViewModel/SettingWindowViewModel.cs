@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -22,7 +23,7 @@ namespace VRChatLogEventOSC.Setting
         private readonly SettingWindowModel _model;
 
         private readonly ReactivePropertySlim<string> _selectedEvent = new(string.Empty);
-        private readonly ReactivePropertySlim<bool> _isSelected;
+        private readonly ReactivePropertySlim<bool> _isSelecting;
         private readonly CompositeDisposable _compositeDisposable = new();
 
         private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new()
@@ -45,6 +46,7 @@ namespace VRChatLogEventOSC.Setting
 
         public ReactivePropertySlim<SingleSetting?> SelectedItem { get; init; } = new();
         public ReactivePropertySlim<int> SelectedIndex { get; init; } = new();
+        public ReactiveCommand<MouseEventArgs> ItemDoubleClickCommand { get; init; }
         public ReactiveCommand UpCommand { get; init; }
         public ReactiveCommand DownCommand { get; init; }
         public ReactiveCommand AddCommand { get; init; }
@@ -93,29 +95,36 @@ namespace VRChatLogEventOSC.Setting
             _selectedEvent.AddTo(_compositeDisposable);
             SelectedEvent.AddTo(_compositeDisposable);
             SelectedItem.AddTo(_compositeDisposable);
-            _isSelected = new ReactivePropertySlim<bool>(false).AddTo(_compositeDisposable);
+            _isSelecting = new ReactivePropertySlim<bool>(false).AddTo(_compositeDisposable);
 
-            SelectedItem.Subscribe(item => {
+            SelectedItem.Subscribe(item =>
+            {
                 _model.SelectedSetting = item;
                 if (item == null)
                 {
-                    _isSelected.Value = false;
+                    _isSelecting.Value = false;
                 }
                 else
                 {
-                    _isSelected.Value = true;
+                    _isSelecting.Value = true;
                 }
             }).AddTo(_compositeDisposable);
 
             SelectedIndex.Subscribe(index => _model.SelectedIndex = index);
 
-            UpCommand = _isSelected.ToReactiveCommand()
+            ItemDoubleClickCommand = new ReactiveCommand<MouseEventArgs>()
+            .WithSubscribe(e => 
+            {
+                _model.OpenEditorAsEdit();
+            }).AddTo(_compositeDisposable);
+
+            UpCommand = _isSelecting.ToReactiveCommand()
             .WithSubscribe(() =>
             {
                 _model.UpSelectedItem();
             }).AddTo(_compositeDisposable);
 
-            DownCommand = _isSelected.ToReactiveCommand()
+            DownCommand = _isSelecting.ToReactiveCommand()
             .WithSubscribe(() =>
             {
                 _model.DownSelectedItem();
@@ -127,15 +136,21 @@ namespace VRChatLogEventOSC.Setting
                 _model.OpenEditorAsAdd();
             }).AddTo(_compositeDisposable);
 
-            EditCommand = _isSelected.ToReactiveCommand()
+            EditCommand = _isSelecting.ToReactiveCommand()
             .WithSubscribe(() =>
             {
                 _model.OpenEditorAsEdit();
             }).AddTo(_compositeDisposable);
-            
-            DeleteCommand = _isSelected.ToReactiveCommand()
+
+            DeleteCommand = _isSelecting.ToReactiveCommand()
             .WithSubscribe(() =>
             {
+                var result = MessageBox.Show("選択した設定を削除しますか?", "Delete", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+
                 _model.DeleteSetting();
             }).AddTo(_compositeDisposable);
 
