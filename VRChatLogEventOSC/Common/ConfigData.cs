@@ -12,6 +12,7 @@ namespace VRChatLogEventOSC.Common
 {
     internal sealed record class ConfigData
     {
+        public int JsonVersion { get; init; } = 1;
         public string IPAddress { get; init; }
         public int Port { get; init; }
         public string LogFileDirectory { get; init; }
@@ -19,12 +20,20 @@ namespace VRChatLogEventOSC.Common
         {
             IPAddress = System.Net.IPAddress.Loopback.ToString();
             Port = 9000;
-            LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat");
+            LogFileDirectory = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..", "LocalLow", "VRChat", "VRChat"));
+        }
+
+        public ConfigData(string ipAddress, int port, string logFileDirectory)
+        {
+            IPAddress = ipAddress;
+            Port = port;
+            LogFileDirectory = logFileDirectory;
         }
 
         [JsonConstructor]
-        public ConfigData(string ipAddress, int port, string logFileDirectory)
+        public ConfigData(int jsonVersion, string ipAddress, int port, string logFileDirectory)
         {
+            JsonVersion = jsonVersion;
             IPAddress = ipAddress;
             Port = port;
             LogFileDirectory = logFileDirectory;
