@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace VRChatLogEventOSC.Common
@@ -12,7 +14,14 @@ namespace VRChatLogEventOSC.Common
     {
         private static readonly string _settingFilePath = Path.Combine(AppContext.BaseDirectory, "setting.json");
         private static readonly string _configFilePath = Path.Combine(AppContext.BaseDirectory, "config.json");
-        private static readonly JsonSerializerOptions _options = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions _options = new()
+        {
+            WriteIndented = true,
+            PropertyNameCaseInsensitive = true,
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            AllowTrailingCommas = true,
+        };
         public static void SaveSetting(WholeSetting setting)
         {
             using var stream = new FileStream(_settingFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
