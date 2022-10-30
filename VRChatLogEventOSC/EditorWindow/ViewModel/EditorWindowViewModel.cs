@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -49,7 +50,7 @@ namespace VRChatLogEventOSC.Editor
         private readonly Dictionary<string, OSCTypeEnum> _comboOSCType = new();
         private readonly Dictionary<string, InstanceTypeEnum> _comboInstanceType = new();
         private readonly Dictionary<string, RegionEnum> _comboRegion = new();
-        
+
         private readonly ReactivePropertySlim<string> _eventTypeText = new(string.Empty);
 
         private readonly ReactivePropertySlim<bool> _userNameEditable = new();
@@ -116,6 +117,7 @@ namespace VRChatLogEventOSC.Editor
 
         public ReactiveCommand<EditorWindow> OKCommand { get; init; }
         public ReactiveCommand<EditorWindow> CancelCommand { get; init; }
+        public ReactiveCommand KeyReturnCommand { get; init; }
         private bool _disposed = false;
 
         public void Dispose()
@@ -191,7 +193,7 @@ namespace VRChatLogEventOSC.Editor
         /// </summary>
         /// <param name="eventType">編集するイベントの種類</param>
         private void EventPropertyEditable(RegexPattern.EventTypeEnum eventType)
-        {   
+        {
             (
                 _userNameEditable.Value,
                 _userIdEditable.Value,
@@ -608,6 +610,11 @@ namespace VRChatLogEventOSC.Editor
                     _isPressedX = false;
                     w.DialogResult = false;
                 }
+            }).AddTo(_compositeDisposable);
+
+            KeyReturnCommand = new ReactiveCommand().WithSubscribe(() =>
+            {
+                Keyboard.ClearFocus();
             }).AddTo(_compositeDisposable);
 
         }

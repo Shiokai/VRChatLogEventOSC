@@ -17,6 +17,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <Grid.InputBindings>
+            <KeyBinding Gesture="Return" Command="{Binding KeyReturnCommand}"/>
+        </Grid.InputBindings>
+        
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>

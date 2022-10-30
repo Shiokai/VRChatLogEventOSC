@@ -45,17 +45,20 @@
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="4*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <Grid.InputBindings>
+                    <KeyBinding Gesture="Return" Command="{Binding KeyReturnCommand}"/>
+                </Grid.InputBindings>
                 
                 <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="Setting Name"/>
                 </Border>
                 <TextBox Grid.Column="1" Grid.Row="0" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding SettingName.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
-                
+
                 <Border Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="OSC Address"/>
                 </Border>
                 <TextBox Grid.Column="1" Grid.Row="1" AcceptsReturn="False" AcceptsTab="False" FontSize="20" Text="{Binding OSCAddress.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center"/>
-                
+
                 <Border Grid.Column="0" Grid.Row="2" BorderThickness="1" BorderBrush="Gainsboro">
                     <Label Content="OSC Value"/>
                 </Border>
