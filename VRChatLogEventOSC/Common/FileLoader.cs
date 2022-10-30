@@ -10,8 +10,8 @@ namespace VRChatLogEventOSC.Common
 {
     internal static class FileLoader
     {
-        private static readonly string _settingFilePath = "./setting.json";
-        private static readonly string _configFilePath = "./config.json";
+        private static readonly string _settingFilePath = Path.Combine(AppContext.BaseDirectory, "setting.json");
+        private static readonly string _configFilePath = Path.Combine(AppContext.BaseDirectory, "config.json");
         private static readonly JsonSerializerOptions _options = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
         public static void SaveSetting(WholeSetting setting)
         {

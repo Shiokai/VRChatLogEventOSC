@@ -88,7 +88,7 @@ namespace VRChatLogEventOSC.SystrayIcon
 
             _notifyIcon = new NotifyIcon
             {
-                Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
+                Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath ?? AppContext.BaseDirectory + "VRChatLogEventOSC.exe"),
                 Visible = true,
                 ContextMenuStrip = _contextMenuStrip,
             };
