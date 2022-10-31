@@ -45,7 +45,7 @@ namespace VRChatLogEventOSC.Common
         /// 各イベントとそのイベントで使用されている名前付きグループの対応
         /// </summary>
         /// <returns></returns>
-        private static readonly Dictionary<EventTypeEnum, Captures> EventCapture = new()
+        private static readonly Dictionary<EventTypeEnum, Captures> _eventCapture = new()
         {
             {EventTypeEnum.JoiningRoomURL, Captures.WorldURL},
             {EventTypeEnum.JoiningRoomName, Captures.WorldName},
@@ -61,6 +61,8 @@ namespace VRChatLogEventOSC.Common
             {EventTypeEnum.Rejoining, Captures.WorldURL},
             {EventTypeEnum.GoHome, Captures.None},
         };
+
+        public static IReadOnlyDictionary<EventTypeEnum, Captures> EventCapture => _eventCapture;
 
         private static readonly IReadOnlyDictionary<EventTypeEnum, Regex> _regexes;
         public static IReadOnlyDictionary<EventTypeEnum, Regex> Regexes => _regexes;
@@ -128,7 +130,7 @@ namespace VRChatLogEventOSC.Common
         /// </summary>
         /// <param name="eventType">名前付きグループの名前を取得するイベント</param>
         /// <returns>名前付きグループの名前の一覧</returns>
-        public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CapturesToCaptureName(EventCapture[eventType]);
+        public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CapturesToCaptureName(_eventCapture[eventType]);
 
         /// <summary>
         /// 正規表現へのマッチがどのイベントのものかを取得します
