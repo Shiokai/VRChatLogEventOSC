@@ -28,23 +28,40 @@ namespace VRChatLogEventOSC.Common
         }
 
         /// <summary>
-        /// 各イベントの正規表現の名前付きグループの名前の一覧
+        /// イベントから取得可能な名前付きグループ
         /// </summary>
-        private static readonly Dictionary<EventTypeEnum, IEnumerable<string>> CaptureName = new(){
-            {EventTypeEnum.JoinedRoomURL, new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "WorldUserID", "ReqInv", "Region"}},
-            {EventTypeEnum.JoinedRoomName, new[]{"WorldName"}},
-            {EventTypeEnum.AcceptFriendRequest, new[]{"UserName", "UserID"}},
-            {EventTypeEnum.PlayedVideo1, new[]{"URL"}},
-            {EventTypeEnum.PlayedVideo2, new[]{"URL"}},
-            {EventTypeEnum.AcceptInvite, new[]{"UserName", "UserID","WorldURL","WorldID","InstanceID","InstanceType","WorldUserID","ReqInv","Region","WorldName","Message",}},
-            {EventTypeEnum.AcceptRequestInvite, new[]{"UserName", "UserID", "Message"}},
-            {EventTypeEnum.OnPlayerJoined, new[]{"DisplayName"}},
-            {EventTypeEnum.OnPlayerLeft, new[]{"DisplayName"}},
-            {EventTypeEnum.TookScreenshot, Enumerable.Empty<string>()},
-            {EventTypeEnum.SuccessfullyLeftRoom, Enumerable.Empty<string>()},
-            {EventTypeEnum.FinishedEnteringWorld, Enumerable.Empty<string>()},
-            {EventTypeEnum.Rejoining, new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "WorldUserID", "ReqInv", "Region"}},
-            {EventTypeEnum.GoHome, Enumerable.Empty<string>()},
+        [Flags]
+        public enum Captures
+        {
+            None = 0,
+            UserName = 1 << 0,
+            UseID = 1 << 1,
+            WorldURL = 1 << 2,
+            WorldName = 1 << 3,
+            Message = 1 << 4,
+            URL = 1 << 5,
+        }
+
+        /// <summary>
+        /// 各イベントとそのイベントで使用されている名前付きグループの対応
+        /// </summary>
+        /// <returns></returns>
+        private static readonly Dictionary<EventTypeEnum, Captures> EventCapture = new()
+        {
+            {EventTypeEnum.JoinedRoomURL, Captures.WorldURL},
+            {EventTypeEnum.JoinedRoomName, Captures.WorldName},
+            {EventTypeEnum.AcceptFriendRequest, Captures.UserName | Captures.UseID},
+            {EventTypeEnum.PlayedVideo1, Captures.URL},
+            {EventTypeEnum.PlayedVideo2, Captures.URL},
+            {EventTypeEnum.AcceptInvite, Captures.UserName | Captures.UseID | Captures.WorldURL | Captures.WorldName | Captures.Message},
+            {EventTypeEnum.AcceptRequestInvite, Captures.UserName | Captures.UseID | Captures.Message},
+            {EventTypeEnum.OnPlayerJoined, Captures.UserName},
+            {EventTypeEnum.OnPlayerLeft, Captures.UserName},
+            {EventTypeEnum.TookScreenshot, Captures.None},
+            {EventTypeEnum.SuccessfullyLeftRoom, Captures.None},
+            {EventTypeEnum.FinishedEnteringWorld, Captures.None},
+            {EventTypeEnum.Rejoining, Captures.WorldURL},
+            {EventTypeEnum.GoHome, Captures.None},
         };
 
         private static readonly IReadOnlyDictionary<EventTypeEnum, Regex> _regexes;
@@ -68,11 +85,53 @@ namespace VRChatLogEventOSC.Common
         public static Regex GoHomeRegex { get; }
 
         /// <summary>
+        /// 名前付きグループのフラグを名前付きグループの名前の一覧に変換します。
+        /// </summary>
+        /// <param name="captures">名前の一覧を取得する名前付きグループのフラグ</param>
+        /// <returns>対応する名前付きグループの名前の一覧</returns>
+        private static IEnumerable<string> CapturesToCaptureName(Captures captures)
+        {
+            var names = new List<string>();
+
+            if (captures.HasFlag(Captures.UserName))
+            {
+                names.Add("UserName");
+            }
+
+            if (captures.HasFlag(Captures.UseID))
+            {
+                names.Add("UserID");
+            }
+
+            if (captures.HasFlag(Captures.WorldURL))
+            {
+                names.AddRange(new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "WorldUserID", "ReqInv", "Region"});
+            }
+
+            if (captures.HasFlag(Captures.WorldName))
+            {
+                names.Add("WorldName");
+            }
+
+            if (captures.HasFlag(Captures.Message))
+            {
+                names.Add("Message");
+            }
+
+            if (captures.HasFlag(Captures.URL))
+            {
+                names.Add("URL");
+            }
+
+            return names;
+        }
+
+        /// <summary>
         /// イベントの正規表現の名前付きグループの名前の一覧を取得します
         /// </summary>
         /// <param name="eventType">名前付きグループの名前を取得するイベント</param>
         /// <returns>名前付きグループの名前の一覧</returns>
-        public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CaptureName[eventType];
+        public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CapturesToCaptureName(EventCapture[eventType]);
 
         /// <summary>
         /// 正規表現へのマッチがどのイベントのものかを取得します
@@ -119,8 +178,8 @@ namespace VRChatLogEventOSC.Common
             string playedVideo2Pattern = @"\[Video Playback\] Attempting to resolve URL '(?<URL>(.+))'$";
             string acceptInvitePattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: invite, id: (.{40}).+worldId=(?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+), worldName=(?<WorldName>(.+?))(, inviteMessage=(?<Message>(.+?)))?(, imageUrl=(.+?))?\}\}, type:invite,.+$";
             string acceptRequestInvitePattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: requestInvite, id: (.{40}),.+\{\{(requestMessage=(?<Message>(.+?)))?,? ?(imageUrl=(.+?))??\}\}, type:requestInvite,.+$";
-            string onPlayerJoinedPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerJoined\s(?<DisplayName>.+)$";
-            string onPlayerLeftPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerLeft\s(?<DisplayName>.+)$";
+            string onPlayerJoinedPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerJoined\s(?<UserName>.+)$";
+            string onPlayerLeftPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerLeft\s(?<UserName>.+)$";
             string tookScreenshotPattern = @"\[VRC Camera\] Took screenshot to: (?<Path>(.*))$";
             // string testPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
             string successfullyLeftRoomPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Successfully left room$";
