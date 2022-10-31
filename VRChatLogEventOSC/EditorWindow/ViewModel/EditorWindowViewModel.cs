@@ -260,20 +260,7 @@ namespace VRChatLogEventOSC.Editor
                     message: false,
                     url: false
                 ),
-                RegexPattern.EventTypeEnum.PlayedVideo1 => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: true
-                ),
-                RegexPattern.EventTypeEnum.PlayedVideo2 => (
+                RegexPattern.EventTypeEnum.PlayedVideo => (
                     userName: false,
                     userId: false,
                     worldName: false,
@@ -351,7 +338,7 @@ namespace VRChatLogEventOSC.Editor
                     message: false,
                     url: false
                 ),
-                RegexPattern.EventTypeEnum.SuccessfullyLeftRoom => (
+                RegexPattern.EventTypeEnum.LeftRoom => (
                     userName: false,
                     userId: false,
                     worldName: false,
@@ -364,7 +351,7 @@ namespace VRChatLogEventOSC.Editor
                     message: false,
                     url: false
                 ),
-                RegexPattern.EventTypeEnum.FinishedEnteringWorld => (
+                RegexPattern.EventTypeEnum.EnteredWorld => (
                     userName: false,
                     userId: false,
                     worldName: false,

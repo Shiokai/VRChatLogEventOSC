@@ -14,15 +14,14 @@ namespace VRChatLogEventOSC.Common
             JoiningRoomURL,
             JoiningRoomName,
             AcceptFriendRequest,
-            PlayedVideo1,
-            PlayedVideo2,
+            PlayedVideo,
             AcceptInvite,
             AcceptRequestInvite,
             OnPlayerJoined,
             OnPlayerLeft,
             TookScreenshot,
-            SuccessfullyLeftRoom,
-            FinishedEnteringWorld,
+            LeftRoom,
+            EnteredWorld,
             Rejoining,
             GoHome,
         }
@@ -51,15 +50,14 @@ namespace VRChatLogEventOSC.Common
             {EventTypeEnum.JoiningRoomURL, Captures.WorldURL},
             {EventTypeEnum.JoiningRoomName, Captures.WorldName},
             {EventTypeEnum.AcceptFriendRequest, Captures.UserName | Captures.UseID},
-            {EventTypeEnum.PlayedVideo1, Captures.URL},
-            {EventTypeEnum.PlayedVideo2, Captures.URL},
+            {EventTypeEnum.PlayedVideo, Captures.URL},
             {EventTypeEnum.AcceptInvite, Captures.UserName | Captures.UseID | Captures.WorldURL | Captures.WorldName | Captures.Message},
             {EventTypeEnum.AcceptRequestInvite, Captures.UserName | Captures.UseID | Captures.Message},
             {EventTypeEnum.OnPlayerJoined, Captures.UserName},
             {EventTypeEnum.OnPlayerLeft, Captures.UserName},
             {EventTypeEnum.TookScreenshot, Captures.None},
-            {EventTypeEnum.SuccessfullyLeftRoom, Captures.None},
-            {EventTypeEnum.FinishedEnteringWorld, Captures.None},
+            {EventTypeEnum.LeftRoom, Captures.None},
+            {EventTypeEnum.EnteredWorld, Captures.None},
             {EventTypeEnum.Rejoining, Captures.WorldURL},
             {EventTypeEnum.GoHome, Captures.None},
         };
@@ -72,15 +70,14 @@ namespace VRChatLogEventOSC.Common
         public static Regex JoiningRoomURLRegex { get; }
         public static Regex JoiningRoomNameRegex { get; }
         public static Regex AcceptFriendRequestRegex { get; }
-        public static Regex PlayedVideo1Regex { get; }
-        public static Regex PlayedVideo2Regex { get; }
+        public static Regex PlayedVideoRegex { get; }
         public static Regex AcceptInviteRegex { get; }
         public static Regex AcceptRequestInviteRegex { get; }
         public static Regex OnPlayerJoinedRegex { get; }
         public static Regex OnPlayerLeftRegex { get; }
         public static Regex TookScreenshotRegex { get; }
-        public static Regex SuccessfullyLeftRoomRegex { get; }
-        public static Regex FinishedEnteringWorldRegex { get; }
+        public static Regex LeftRoomRegex { get; }
+        public static Regex EnteredWorldRegex { get; }
         public static Regex RejoiningRegex { get; }
         public static Regex GoHomeRegex { get; }
 
@@ -174,32 +171,28 @@ namespace VRChatLogEventOSC.Common
             string joiningRoomURLPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+)$";
             string joiningRoomNamePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room: (?<WorldName>(.+))$";
             string acceptFriendRequestPattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: friendRequest, id: (.{40}),.+type:friendRequest,.+$";
-            string playedVideo1Pattern = @"User (.+) added URL (?<URL>(.+))$";
-            string playedVideo2Pattern = @"\[Video Playback\] Attempting to resolve URL '(?<URL>(.+))'$";
+            string playedVideoPattern = @"\[Video Playback\] Attempting to resolve URL '(?<URL>(.+))'$";
             string acceptInvitePattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: invite, id: (.{40}).+worldId=(?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+), worldName=(?<WorldName>(.+?))(, inviteMessage=(?<Message>(.+?)))?(, imageUrl=(.+?))?\}\}, type:invite,.+$";
             string acceptRequestInvitePattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: requestInvite, id: (.{40}),.+\{\{(requestMessage=(?<Message>(.+?)))?,? ?(imageUrl=(.+?))??\}\}, type:requestInvite,.+$";
             string onPlayerJoinedPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerJoined\s(?<UserName>.+)$";
             string onPlayerLeftPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerLeft\s(?<UserName>.+)$";
             string tookScreenshotPattern = @"\[VRC Camera\] Took screenshot to: (?<Path>(.*))$";
-            // string testPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
-            string successfullyLeftRoomPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Successfully left room$";
-            string finishedEnteringWorldPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Finished entering world.$";
+            string leftRoomPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Successfully left room$";
+            string enteredWorldPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Finished entering world.$";
             string rejoiningPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Rejoining local world: (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+)$";
             string goHomePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
 
             string joiningRoomURLSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining w.+$";
             string joiningRoomNameSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room:.+$";
             string acceptFriendRequestSimple = @"AcceptNotification for notification:.+type:friendRequest,.+$";
-            string playedVideo1Simple = @"User .+ added URL .+$";
-            string playedVideo2Simple = @"\[Video Playback\] Attempting to resolve URL '.+'$";
+            string playedVideoSimple = @"\[Video Playback\] Attempting to resolve URL '.+'$";
             string acceptInviteSimple = @"AcceptNotification for notification:.+type:invite,.+$";
             string acceptRequestInviteSimple = @"AcceptNotification for notification:.+type:requestInvite,.+$";
             string onPlayerJoinedSimple = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerJoined\s(.+)$";
             string onPlayerLeftSimple = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerLeft\s(.+)$";
             string tookScreenshotSimple = @"\[VRC Camera\] Took screenshot to: ((.*))$";
-            // string testSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
-            string successfullyLeftRoomSimple = successfullyLeftRoomPattern;
-            string finishedEnteringWorldSimple = finishedEnteringWorldPattern;
+            string leftRoomSimple = leftRoomPattern;
+            string enteredWorldSimple = enteredWorldPattern;
             string rejoiningSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Rejoining local world: w.+$";
             string goHomeSimple = goHomePattern;
 
@@ -208,15 +201,14 @@ namespace VRChatLogEventOSC.Common
             + $"?<{nameof(EventTypeEnum.JoiningRoomURL)}>" + joiningRoomURLSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.JoiningRoomName)}>" + joiningRoomNameSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.AcceptFriendRequest)}>" + acceptFriendRequestSimple + ")" + "|("
-            + $"?<{nameof(EventTypeEnum.PlayedVideo1)}>" + playedVideo1Simple + ")" + "|("
-            + $"?<{nameof(EventTypeEnum.PlayedVideo2)}>" + playedVideo2Simple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.PlayedVideo)}>" + playedVideoSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.AcceptInvite)}>" + acceptInviteSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.AcceptRequestInvite)}>" + acceptRequestInviteSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.OnPlayerJoined)}>" + onPlayerJoinedSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.OnPlayerLeft)}>" + onPlayerLeftSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.TookScreenshot)}>" + tookScreenshotSimple + ")" + "|("
-            + $"?<{nameof(EventTypeEnum.SuccessfullyLeftRoom)}>" + successfullyLeftRoomSimple + ")" + "|("
-            + $"?<{nameof(EventTypeEnum.FinishedEnteringWorld)}>" + finishedEnteringWorldSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.LeftRoom)}>" + leftRoomSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.EnteredWorld)}>" + enteredWorldSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.Rejoining)}>" + rejoiningSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.GoHome)}>" + goHomeSimple + ")";
 
@@ -229,15 +221,14 @@ namespace VRChatLogEventOSC.Common
             JoiningRoomURLRegex = new(joiningRoomURLPattern, RegexOptions.Compiled);
             JoiningRoomNameRegex = new(joiningRoomNamePattern, RegexOptions.Compiled);
             AcceptFriendRequestRegex = new(acceptFriendRequestPattern, RegexOptions.Compiled);
-            PlayedVideo1Regex = new(playedVideo1Pattern, RegexOptions.Compiled);
-            PlayedVideo2Regex = new(playedVideo2Pattern, RegexOptions.Compiled);
+            PlayedVideoRegex = new(playedVideoPattern, RegexOptions.Compiled);
             AcceptInviteRegex = new(acceptInvitePattern, RegexOptions.Compiled);
             AcceptRequestInviteRegex = new(acceptRequestInvitePattern, RegexOptions.Compiled);
             OnPlayerJoinedRegex = new(onPlayerJoinedPattern, RegexOptions.Compiled);
             OnPlayerLeftRegex = new(onPlayerLeftPattern, RegexOptions.Compiled);
             TookScreenshotRegex = new(tookScreenshotPattern, RegexOptions.Compiled);
-            SuccessfullyLeftRoomRegex = new(successfullyLeftRoomPattern, RegexOptions.Compiled);
-            FinishedEnteringWorldRegex = new(finishedEnteringWorldPattern, RegexOptions.Compiled);
+            LeftRoomRegex = new(leftRoomPattern, RegexOptions.Compiled);
+            EnteredWorldRegex = new(enteredWorldPattern, RegexOptions.Compiled);
             RejoiningRegex = new(rejoiningPattern, RegexOptions.Compiled);
             GoHomeRegex = new(goHomePattern, RegexOptions.Compiled);
 
@@ -246,15 +237,14 @@ namespace VRChatLogEventOSC.Common
                 {EventTypeEnum.JoiningRoomURL, JoiningRoomURLRegex},
                 {EventTypeEnum.JoiningRoomName, JoiningRoomNameRegex},
                 {EventTypeEnum.AcceptFriendRequest, AcceptFriendRequestRegex},
-                {EventTypeEnum.PlayedVideo1, PlayedVideo1Regex},
-                {EventTypeEnum.PlayedVideo2, PlayedVideo2Regex},
+                {EventTypeEnum.PlayedVideo, PlayedVideoRegex},
                 {EventTypeEnum.AcceptInvite, AcceptInviteRegex},
                 {EventTypeEnum.AcceptRequestInvite, AcceptRequestInviteRegex},
                 {EventTypeEnum.OnPlayerJoined, OnPlayerJoinedRegex},
                 {EventTypeEnum.OnPlayerLeft, OnPlayerLeftRegex},
                 {EventTypeEnum.TookScreenshot, TookScreenshotRegex},
-                {EventTypeEnum.SuccessfullyLeftRoom, SuccessfullyLeftRoomRegex},
-                {EventTypeEnum.FinishedEnteringWorld, FinishedEnteringWorldRegex},
+                {EventTypeEnum.LeftRoom, LeftRoomRegex},
+                {EventTypeEnum.EnteredWorld, EnteredWorldRegex},
                 {EventTypeEnum.Rejoining, RejoiningRegex},
                 {EventTypeEnum.GoHome, GoHomeRegex},
             };

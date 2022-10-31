@@ -181,7 +181,7 @@ namespace VRChatLogEventOSC.Core
             _oSCSender = oSCSender;
 
             // IsDelayedJoiningRoom対応
-            _lineClassifier.EventReactiveProperties[EventTypeEnum.FinishedEnteringWorld]
+            _lineClassifier.EventReactiveProperties[EventTypeEnum.EnteredWorld]
             .Where(_ => IsDelayedJoiningRoom)
             .Where(e => e != null)
             .Subscribe(e =>
@@ -190,7 +190,7 @@ namespace VRChatLogEventOSC.Core
                 DispatchEventOfType(lastJoiningRoomURL, EventTypeEnum.JoiningRoomURL);
             }).AddTo(_eventsDisposables);
 
-            _lineClassifier.EventReactiveProperties[EventTypeEnum.FinishedEnteringWorld]
+            _lineClassifier.EventReactiveProperties[EventTypeEnum.EnteredWorld]
             .Where(_ => IsDelayedJoiningRoom)
             .Where(e => e != null)
             .Subscribe(e =>

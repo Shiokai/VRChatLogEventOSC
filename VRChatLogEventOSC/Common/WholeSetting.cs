@@ -24,9 +24,7 @@ namespace VRChatLogEventOSC.Common
         [JsonInclude]
         public IReadOnlyList<SingleSetting> AcceptFriendRequest { private get; init; }
         [JsonInclude]
-        public IReadOnlyList<SingleSetting> PlayedVideo1 { private get; init; }
-        [JsonInclude]
-        public IReadOnlyList<SingleSetting> PlayedVideo2 { private get; init; }
+        public IReadOnlyList<SingleSetting> PlayedVideo { private get; init; }
         [JsonInclude]
         public IReadOnlyList<SingleSetting> AcceptInvite { private get; init; }
         [JsonInclude]
@@ -38,9 +36,9 @@ namespace VRChatLogEventOSC.Common
         [JsonInclude]
         public IReadOnlyList<SingleSetting> TookScreenshot { private get; init; }
         [JsonInclude]
-        public IReadOnlyList<SingleSetting> SuccessfullyLeftRoom { private get; init; }
+        public IReadOnlyList<SingleSetting> LeftRoom { private get; init; }
         [JsonInclude]
-        public IReadOnlyList<SingleSetting> FinishedEnteringWorld { private get; init; }
+        public IReadOnlyList<SingleSetting> EnteredWorld { private get; init; }
         [JsonInclude]
         public IReadOnlyList<SingleSetting> Rejoining { private get; init; }
         [JsonInclude]
@@ -114,15 +112,14 @@ namespace VRChatLogEventOSC.Common
         private (IReadOnlyList<SingleSetting> joiningRoomUrl,
             IReadOnlyList<SingleSetting> joiningRoomName,
             IReadOnlyList<SingleSetting> acceptFriendRequest,
-            IReadOnlyList<SingleSetting> playedVideo1,
-            IReadOnlyList<SingleSetting> playedVideo2,
+            IReadOnlyList<SingleSetting> playedVideo,
             IReadOnlyList<SingleSetting> acceptInvite,
             IReadOnlyList<SingleSetting> acceptRequestInvite,
             IReadOnlyList<SingleSetting> onPlayerJoined,
             IReadOnlyList<SingleSetting> onPlayerLeft,
             IReadOnlyList<SingleSetting> tookScreenshot,
-            IReadOnlyList<SingleSetting> SuccessfullyLeftRoom,
-            IReadOnlyList<SingleSetting> FinishedEnteringWorld,
+            IReadOnlyList<SingleSetting> leftRoom,
+            IReadOnlyList<SingleSetting> enteredWorld,
             IReadOnlyList<SingleSetting> Rejoining,
             IReadOnlyList<SingleSetting> GoHome) DistributeSettings(Dictionary<EventTypeEnum, List<SingleSetting>> settings)
         {
@@ -132,15 +129,14 @@ namespace VRChatLogEventOSC.Common
                 settings[EventTypeEnum.JoiningRoomURL].AsReadOnly(),
                 settings[EventTypeEnum.JoiningRoomName].AsReadOnly(),
                 settings[EventTypeEnum.AcceptFriendRequest].AsReadOnly(),
-                settings[EventTypeEnum.PlayedVideo1].AsReadOnly(),
-                settings[EventTypeEnum.PlayedVideo2].AsReadOnly(),
+                settings[EventTypeEnum.PlayedVideo].AsReadOnly(),
                 settings[EventTypeEnum.AcceptInvite].AsReadOnly(),
                 settings[EventTypeEnum.AcceptRequestInvite].AsReadOnly(),
                 settings[EventTypeEnum.OnPlayerJoined].AsReadOnly(),
                 settings[EventTypeEnum.OnPlayerLeft].AsReadOnly(),
                 settings[EventTypeEnum.TookScreenshot].AsReadOnly(),
-                settings[EventTypeEnum.SuccessfullyLeftRoom].AsReadOnly(),
-                settings[EventTypeEnum.FinishedEnteringWorld].AsReadOnly(),
+                settings[EventTypeEnum.LeftRoom].AsReadOnly(),
+                settings[EventTypeEnum.EnteredWorld].AsReadOnly(),
                 settings[EventTypeEnum.Rejoining].AsReadOnly(),
                 settings[EventTypeEnum.GoHome].AsReadOnly()
             );
@@ -160,15 +156,14 @@ namespace VRChatLogEventOSC.Common
                 {EventTypeEnum.JoiningRoomURL, JoiningRoomURL},
                 {EventTypeEnum.JoiningRoomName, JoiningRoomName},
                 {EventTypeEnum.AcceptFriendRequest, AcceptFriendRequest},
-                {EventTypeEnum.PlayedVideo1, PlayedVideo1},
-                {EventTypeEnum.PlayedVideo2, PlayedVideo2},
+                {EventTypeEnum.PlayedVideo, PlayedVideo},
                 {EventTypeEnum.AcceptInvite, AcceptInvite},
                 {EventTypeEnum.AcceptRequestInvite, AcceptRequestInvite},
                 {EventTypeEnum.OnPlayerJoined, OnPlayerJoined},
                 {EventTypeEnum.OnPlayerLeft, OnPlayerLeft},
                 {EventTypeEnum.TookScreenshot, TookScreenshot},
-                {EventTypeEnum.SuccessfullyLeftRoom, SuccessfullyLeftRoom},
-                {EventTypeEnum.FinishedEnteringWorld, FinishedEnteringWorld},
+                {EventTypeEnum.LeftRoom, LeftRoom},
+                {EventTypeEnum.EnteredWorld, EnteredWorld},
                 {EventTypeEnum.Rejoining, Rejoining},
                 {EventTypeEnum.GoHome, GoHome},
             };
@@ -192,15 +187,14 @@ namespace VRChatLogEventOSC.Common
                 JoiningRoomURL,
                 JoiningRoomName,
                 AcceptFriendRequest,
-                PlayedVideo1,
-                PlayedVideo2,
+                PlayedVideo,
                 AcceptInvite,
                 AcceptRequestInvite,
                 OnPlayerJoined,
                 OnPlayerLeft,
                 TookScreenshot,
-                SuccessfullyLeftRoom,
-                FinishedEnteringWorld,
+                LeftRoom,
+                EnteredWorld,
                 Rejoining,
                 GoHome
             ) = DistributeSettings(settings);
@@ -215,15 +209,14 @@ namespace VRChatLogEventOSC.Common
                 JoiningRoomURL,
                 JoiningRoomName,
                 AcceptFriendRequest,
-                PlayedVideo1,
-                PlayedVideo2,
+                PlayedVideo,
                 AcceptInvite,
                 AcceptRequestInvite,
                 OnPlayerJoined,
                 OnPlayerLeft,
                 TookScreenshot,
-                SuccessfullyLeftRoom,
-                FinishedEnteringWorld,
+                LeftRoom,
+                EnteredWorld,
                 Rejoining,
                 GoHome
             ) = DistributeSettings(settings);
@@ -236,15 +229,14 @@ namespace VRChatLogEventOSC.Common
             IReadOnlyList<SingleSetting> joiningRoomUrl,
             IReadOnlyList<SingleSetting> joiningRoomName,
             IReadOnlyList<SingleSetting> acceptFriendRequest,
-            IReadOnlyList<SingleSetting> playedVideo1,
-            IReadOnlyList<SingleSetting> playedVideo2,
+            IReadOnlyList<SingleSetting> playedVideo,
             IReadOnlyList<SingleSetting> acceptInvite,
             IReadOnlyList<SingleSetting> acceptRequestInvite,
             IReadOnlyList<SingleSetting> onPlayerJoined,
             IReadOnlyList<SingleSetting> onPlayerLeft,
             IReadOnlyList<SingleSetting> tookScreenshot,
-            IReadOnlyList<SingleSetting> successfullyLeftRoom,
-            IReadOnlyList<SingleSetting> finishedEnteringWorld,
+            IReadOnlyList<SingleSetting> leftRoom,
+            IReadOnlyList<SingleSetting> enteredWorld,
             IReadOnlyList<SingleSetting> rejoining,
             IReadOnlyList<SingleSetting> goHome)
         {
@@ -262,15 +254,14 @@ namespace VRChatLogEventOSC.Common
             JoiningRoomURL = joiningRoomUrl;
             JoiningRoomName = joiningRoomName;
             AcceptFriendRequest = acceptFriendRequest;
-            PlayedVideo1 = playedVideo1;
-            PlayedVideo2 = playedVideo2;
+            PlayedVideo = playedVideo;
             AcceptInvite = acceptInvite;
             AcceptRequestInvite = acceptRequestInvite;
             OnPlayerJoined = onPlayerJoined;
             OnPlayerLeft = onPlayerLeft;
             TookScreenshot = tookScreenshot;
-            SuccessfullyLeftRoom = successfullyLeftRoom;
-            FinishedEnteringWorld = finishedEnteringWorld;
+            LeftRoom = leftRoom;
+            EnteredWorld = enteredWorld;
             Rejoining = rejoining;
             GoHome = goHome;
 
