@@ -351,6 +351,58 @@ namespace VRChatLogEventOSC.Editor
                     message: false,
                     url: false
                 ),
+                RegexPattern.EventTypeEnum.SuccessfullyLeftRoom => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.FinishedEnteringWorld => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.Rejoining => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: true,
+                    worldId: true,
+                    instanceId: true,
+                    instanceType: true,
+                    worldUserId: true,
+                    region: true,
+                    message: false,
+                    url: false
+                ),
+                RegexPattern.EventTypeEnum.GoHome => (
+                    userName: false,
+                    userId: false,
+                    worldName: false,
+                    worldUrl: false,
+                    worldId: false,
+                    instanceId: false,
+                    instanceType: false,
+                    worldUserId: false,
+                    region: false,
+                    message: false,
+                    url: false
+                ),
                 _ => (
                     userName: false,
                     userId: false,

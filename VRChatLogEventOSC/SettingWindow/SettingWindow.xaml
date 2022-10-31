@@ -7,7 +7,7 @@
         xmlns:rp="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
         xmlns:local="clr-namespace:VRChatLogEventOSC.Setting"
         mc:Ignorable="d"
-        Title="SettingWindow" Height="450" Width="800" MinHeight="350" MinWidth="500">
+        Title="SettingWindow" Height="630" Width="800" MinHeight="390" MinWidth="540">
     <Window.DataContext>
         <local:SettingWindowViewModel/>
     </Window.DataContext>
@@ -21,6 +21,10 @@
         </Grid.RowDefinitions>
         <Grid Grid.Column="0" Grid.Row="0">
             <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -45,14 +49,18 @@
             <Button Content="On Player Joined" Grid.Row="7" Grid.Column="0" Command="{Binding EventsButtonCommand[OnPlayerJoined]}" FontSize="16"/>
             <Button Content="On Player Left" Grid.Row="8" Grid.Column="0" Command="{Binding EventsButtonCommand[OnPlayerLeft]}" FontSize="16"/>
             <Button Content="Took Screenshot" Grid.Row="9" Grid.Column="0" Command="{Binding EventsButtonCommand[TookScreenshot]}" FontSize="16"/>
+            <Button Content="Successfully Left Room" Grid.Row="10" Grid.Column="0" Command="{Binding EventsButtonCommand[SuccessfullyLeftRoom]}" FontSize="16"/>
+            <Button Content="Finished Entering World" Grid.Row="11" Grid.Column="0" Command="{Binding EventsButtonCommand[FinishedEnteringWorld]}" FontSize="16"/>
+            <Button Content="Rejoining" Grid.Row="12" Grid.Column="0" Command="{Binding EventsButtonCommand[Rejoining]}" FontSize="16"/>
+            <Button Content="GoHome" Grid.Row="13" Grid.Column="0" Command="{Binding EventsButtonCommand[GoHome]}" FontSize="16"/>
             
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="10*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>

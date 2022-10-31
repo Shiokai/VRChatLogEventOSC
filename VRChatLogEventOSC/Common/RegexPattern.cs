@@ -21,6 +21,10 @@ namespace VRChatLogEventOSC.Common
             OnPlayerJoined,
             OnPlayerLeft,
             TookScreenshot,
+            SuccessfullyLeftRoom,
+            FinishedEnteringWorld,
+            Rejoining,
+            GoHome,
         }
 
         /// <summary>
@@ -37,7 +41,10 @@ namespace VRChatLogEventOSC.Common
             {EventTypeEnum.OnPlayerJoined, new[]{"DisplayName"}},
             {EventTypeEnum.OnPlayerLeft, new[]{"DisplayName"}},
             {EventTypeEnum.TookScreenshot, Enumerable.Empty<string>()},
-
+            {EventTypeEnum.SuccessfullyLeftRoom, Enumerable.Empty<string>()},
+            {EventTypeEnum.FinishedEnteringWorld, Enumerable.Empty<string>()},
+            {EventTypeEnum.Rejoining, new[]{"WorldURL", "WorldID", "InstanceID", "InstanceType", "WorldUserID", "ReqInv", "Region"}},
+            {EventTypeEnum.GoHome, Enumerable.Empty<string>()},
         };
 
         private static readonly IReadOnlyDictionary<EventTypeEnum, Regex> _regexes;
@@ -55,6 +62,10 @@ namespace VRChatLogEventOSC.Common
         public static Regex OnPlayerJoinedRegex { get; }
         public static Regex OnPlayerLeftRegex { get; }
         public static Regex TookScreenshotRegex { get; }
+        public static Regex SuccessfullyLeftRoomRegex { get; }
+        public static Regex FinishedEnteringWorldRegex { get; }
+        public static Regex RejoiningRegex { get; }
+        public static Regex GoHomeRegex { get; }
 
         /// <summary>
         /// イベントの正規表現の名前付きグループの名前の一覧を取得します
@@ -62,7 +73,7 @@ namespace VRChatLogEventOSC.Common
         /// <param name="eventType">名前付きグループの名前を取得するイベント</param>
         /// <returns>名前付きグループの名前の一覧</returns>
         public static IEnumerable<string> CaptureNames(EventTypeEnum eventType) => CaptureName[eventType];
-        
+
         /// <summary>
         /// 正規表現へのマッチがどのイベントのものかを取得します
         /// </summary>
@@ -111,7 +122,11 @@ namespace VRChatLogEventOSC.Common
             string onPlayerJoinedPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerJoined\s(?<DisplayName>.+)$";
             string onPlayerLeftPattern = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerLeft\s(?<DisplayName>.+)$";
             string tookScreenshotPattern = @"\[VRC Camera\] Took screenshot to: (?<Path>(.*))$";
-
+            // string testPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
+            string successfullyLeftRoomPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Successfully left room$";
+            string finishedEnteringWorldPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Finished entering world.$";
+            string rejoiningPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Rejoining local world: (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+)$";
+            string goHomePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
 
             string joinedRoomURLSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining w.+$";
             string joinedRoomNameSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room:.+$";
@@ -123,6 +138,12 @@ namespace VRChatLogEventOSC.Common
             string onPlayerJoinedSimple = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerJoined\s(.+)$";
             string onPlayerLeftSimple = @"\[(?:Player|[Ǆǅ]*|Behaviour)\] OnPlayerLeft\s(.+)$";
             string tookScreenshotSimple = @"\[VRC Camera\] Took screenshot to: ((.*))$";
+            // string testSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
+            string successfullyLeftRoomSimple = successfullyLeftRoomPattern;
+            string finishedEnteringWorldSimple = finishedEnteringWorldPattern;
+            string rejoiningSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Rejoining local world: w.+$";
+            string goHomeSimple = goHomePattern;
+
 
             string anyEventPattern = "("
             + $"?<{nameof(EventTypeEnum.JoinedRoomURL)}>" + joinedRoomURLSimple + ")" + "|("
@@ -134,7 +155,11 @@ namespace VRChatLogEventOSC.Common
             + $"?<{nameof(EventTypeEnum.AcceptRequestInvite)}>" + acceptRequestInviteSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.OnPlayerJoined)}>" + onPlayerJoinedSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.OnPlayerLeft)}>" + onPlayerLeftSimple + ")" + "|("
-            + $"?<{nameof(EventTypeEnum.TookScreenshot)}>" + tookScreenshotSimple + ")";
+            + $"?<{nameof(EventTypeEnum.TookScreenshot)}>" + tookScreenshotSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.SuccessfullyLeftRoom)}>" + successfullyLeftRoomSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.FinishedEnteringWorld)}>" + finishedEnteringWorldSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.Rejoining)}>" + rejoiningSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.GoHome)}>" + goHomeSimple + ")";
 
 
 
@@ -152,7 +177,10 @@ namespace VRChatLogEventOSC.Common
             OnPlayerJoinedRegex = new(onPlayerJoinedPattern, RegexOptions.Compiled);
             OnPlayerLeftRegex = new(onPlayerLeftPattern, RegexOptions.Compiled);
             TookScreenshotRegex = new(tookScreenshotPattern, RegexOptions.Compiled);
-
+            SuccessfullyLeftRoomRegex = new(successfullyLeftRoomPattern, RegexOptions.Compiled);
+            FinishedEnteringWorldRegex = new(finishedEnteringWorldPattern, RegexOptions.Compiled);
+            RejoiningRegex = new(rejoiningPattern, RegexOptions.Compiled);
+            GoHomeRegex = new(goHomePattern, RegexOptions.Compiled);
 
             _regexes = new Dictionary<EventTypeEnum, Regex>()
             {
@@ -166,6 +194,10 @@ namespace VRChatLogEventOSC.Common
                 {EventTypeEnum.OnPlayerJoined, OnPlayerJoinedRegex},
                 {EventTypeEnum.OnPlayerLeft, OnPlayerLeftRegex},
                 {EventTypeEnum.TookScreenshot, TookScreenshotRegex},
+                {EventTypeEnum.SuccessfullyLeftRoom, SuccessfullyLeftRoomRegex},
+                {EventTypeEnum.FinishedEnteringWorld, FinishedEnteringWorldRegex},
+                {EventTypeEnum.Rejoining, RejoiningRegex},
+                {EventTypeEnum.GoHome, GoHomeRegex},
             };
 
         }

@@ -26,19 +26,7 @@ namespace VRChatLogEventOSC.Setting
         private readonly ReactivePropertySlim<bool> _isSelecting;
         private readonly CompositeDisposable _compositeDisposable = new();
 
-        private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new()
-        {
-            {RegexPattern.EventTypeEnum.JoinedRoomURL, new()},
-            {RegexPattern.EventTypeEnum.JoinedRoomName, new()},
-            {RegexPattern.EventTypeEnum.AcceptFriendRequest, new()},
-            {RegexPattern.EventTypeEnum.PlayedVideo1, new()},
-            {RegexPattern.EventTypeEnum.PlayedVideo2, new()},
-            {RegexPattern.EventTypeEnum.AcceptInvite, new()},
-            {RegexPattern.EventTypeEnum.AcceptRequestInvite, new()},
-            {RegexPattern.EventTypeEnum.OnPlayerJoined, new()},
-            {RegexPattern.EventTypeEnum.OnPlayerLeft, new()},
-            {RegexPattern.EventTypeEnum.TookScreenshot, new()},
-        };
+        private readonly Dictionary<RegexPattern.EventTypeEnum, ReactiveCommand> _eventsButtonCommand = new();
 
         public IReadOnlyDictionary<RegexPattern.EventTypeEnum, ReactiveCommand> EventsButtonCommand { get; init; }
         public ReadOnlyReactivePropertySlim<string> SelectedEvent { get; init; }
@@ -89,6 +77,12 @@ namespace VRChatLogEventOSC.Setting
         public SettingWindowViewModel()
         {
             _model = SettingWindowModel.Instance;
+            
+            foreach (var type in Enum.GetValues<RegexPattern.EventTypeEnum>())
+            {
+                _eventsButtonCommand.Add(type, new ReactiveCommand());
+            }
+
             EventsButtonCommand = _eventsButtonCommand;
             SelectedTypeSettings = _model.ShownSetting;
             SelectedEvent = _selectedEvent.ToReadOnlyReactivePropertySlim<string>();
