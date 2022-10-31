@@ -39,9 +39,9 @@ namespace VRChatLogEventOSC.Control
 
         [Required(ErrorMessage = "Required")]
         [RegularExpression(@"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$", ErrorMessage = "不正なIPアドレスです")]
-        public ReactiveProperty<string> ConfigIPAdress { get; init; }
+        public ReactiveProperty<string> ConfigIPAddress { get; init; }
 
-        public ReadOnlyReactivePropertySlim<string> ConfigIPAdressError { get; init; }
+        public ReadOnlyReactivePropertySlim<string> ConfigIPAddressError { get; init; }
         [Required(ErrorMessage = "Required")]
         [Range(0, 65535, ErrorMessage = "ポート番号の範囲は0~65535です")]
 
@@ -79,16 +79,16 @@ namespace VRChatLogEventOSC.Control
             else if (result == MessageBoxResult.Yes)
             {
                 SaveAndLoad();
-                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
+                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAddress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
                 return;
             }
         }
 
         private void SaveAndLoad()
         {
-            _model.SaveConfig(ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
+            _model.SaveConfig(ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
             var config = _model.LoadConfig();
-            (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            (ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
             _isDirty = false;
         }
 
@@ -125,11 +125,11 @@ namespace VRChatLogEventOSC.Control
             QuitApplicationCommand = new ReactiveCommand().WithSubscribe(() => ControlWindowModel.QuitApplication()).AddTo(_compositeDisposable);
 
 
-            ConfigIPAdress = new ReactiveProperty<string>(IPAddress.Loopback.ToString(), ReactivePropertyMode.DistinctUntilChanged)
-            .SetValidateAttribute(() => ConfigIPAdress)
+            ConfigIPAddress = new ReactiveProperty<string>(IPAddress.Loopback.ToString(), ReactivePropertyMode.DistinctUntilChanged)
+            .SetValidateAttribute(() => ConfigIPAddress)
             .AddTo(_compositeDisposable);
 
-            ConfigIPAdressError = ConfigIPAdress.ObserveErrorChanged
+            ConfigIPAddressError = ConfigIPAddress.ObserveErrorChanged
             .Select(error => error?.Cast<string>().FirstOrDefault() ?? string.Empty)
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
@@ -153,8 +153,8 @@ namespace VRChatLogEventOSC.Control
             .AddTo(_compositeDisposable);
 
             // Config系ReactivePropertyの初期化後に記述
-            var canSave = Observable.Merge(ConfigIPAdress.ObserveHasErrors.ToUnit(), ConfigPort.ObserveHasErrors.ToUnit(), ConfigDirectoryPath.ObserveHasErrors.ToUnit())
-            .Select(_ => ConfigIPAdress.HasErrors || ConfigPort.HasErrors || ConfigDirectoryPath.HasErrors)
+            var canSave = Observable.Merge(ConfigIPAddress.ObserveHasErrors.ToUnit(), ConfigPort.ObserveHasErrors.ToUnit(), ConfigDirectoryPath.ObserveHasErrors.ToUnit())
+            .Select(_ => ConfigIPAddress.HasErrors || ConfigPort.HasErrors || ConfigDirectoryPath.HasErrors)
             .Inverse();
 
             SaveAndLoadCommand = canSave
@@ -162,7 +162,7 @@ namespace VRChatLogEventOSC.Control
             .WithSubscribe(() =>
             {
                 SaveAndLoad();
-                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAdress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
+                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAddress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
             }).AddTo(_compositeDisposable);
 
             KeyReturnCommand = new ReactiveCommand().WithSubscribe(() =>
@@ -188,11 +188,11 @@ namespace VRChatLogEventOSC.Control
             }).AddTo(_compositeDisposable);
 
             var config = _model.LoadConfig();
-            (ConfigIPAdress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            (ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
 
             // 最初のLoadCinfigより後に行う
             // そうでなければ、読み込んだコンフィグがデフォルト値と異なる場合編集していなくてもDirtyになる
-            Observable.Merge(ConfigIPAdress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
+            Observable.Merge(ConfigIPAddress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
             .Subscribe(_ => _isDirty = true).AddTo(_compositeDisposable);
 
         }

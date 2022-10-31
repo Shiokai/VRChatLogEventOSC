@@ -60,9 +60,9 @@
                 <TextBlock Text="{Binding ConfigDirectoryPathError.Value, Mode=OneWay}" Foreground="Red" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap"/>
                 <Button Content="Browze" Command="{Binding FolderBrowseCommand}" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
 
-                <TextBlock Text="IP Adress" Grid.Row="2" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のIPアドレスを指定します"/>
-                <TextBox TextWrapping="Wrap" Text="{Binding ConfigIPAdress.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center"/>
-                <TextBlock Text="{Binding ConfigIPAdressError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
+                <TextBlock Text="IP Address" Grid.Row="2" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のIPアドレスを指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigIPAddress.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigIPAddressError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
 
                 <TextBlock Text="Port" Grid.Row="4" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のポート番号を指定します"/>
                 <TextBox TextWrapping="Wrap" Text="{Binding ConfigPort.Value,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center"/>
