@@ -106,6 +106,11 @@ namespace VRChatLogEventOSC.Common
             return settings;
         }
 
+        /// <summary>
+        /// 設定全体を各イベント毎の設定に分解
+        /// </summary>
+        /// <param name="settings">分解する設定</param>
+        /// <returns></returns>
         private (IReadOnlyList<SingleSetting> joinedRoomUrl,
             IReadOnlyList<SingleSetting> joinedRoomName,
             IReadOnlyList<SingleSetting> acceptFriendRequest,
@@ -141,6 +146,10 @@ namespace VRChatLogEventOSC.Common
             );
         }
 
+        /// <summary>
+        /// 個別の設定から全体の設定を構成
+        /// </summary>
+        /// <returns>構成された全体の設定</returns>
         private Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>> CompoundSettings()
         {
             var settings = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>();

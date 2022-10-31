@@ -128,6 +128,10 @@ namespace VRChatLogEventOSC.Common
 
         private readonly Dictionary<string, string> _nameToProperty;
 
+        /// <summary>
+        /// 名前付きグループの名前と設定値の対応付け
+        /// </summary>
+        /// <returns>対応付けされたDictionary</returns>
         private Dictionary<string, string> MapNameToProperty()
         {
             return new()
@@ -147,6 +151,12 @@ namespace VRChatLogEventOSC.Common
                 {nameof(URL), URL},
             };
         }
+
+        /// <summary>
+        /// 名前付きグループに対応する設定値
+        /// </summary>
+        /// <param name="capture">名前付きグループの名前</param>
+        /// <returns>対応する設定値</returns>
         public string CaptureProperty(string capture)
         {
             return _nameToProperty[capture];
