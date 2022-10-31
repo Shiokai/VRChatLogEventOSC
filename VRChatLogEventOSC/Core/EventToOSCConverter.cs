@@ -20,7 +20,8 @@ namespace VRChatLogEventOSC.Core
         private readonly LineClassifier _lineClassifier;
         private readonly OSCSender _oSCSender;
         private readonly CompositeDisposable _eventsDisposables = new();
-        public WholeSetting CurrentSetting {get; set;} = new();
+        public WholeSetting CurrentSetting { get; set; } = new();
+        public bool IsDelayedJoiningRoom { get; set; }
 
         private bool _disposed = false;
 
@@ -158,10 +159,46 @@ namespace VRChatLogEventOSC.Core
             }
         }
 
+        /// <summary>
+        /// 各イベントSubscribe内での実行用
+        /// </summary>
+        /// <param name="eventContent">ReactivePropertyから流れてくるイベント内容</param>
+        /// <param name="type">イベントの種類</param>
+        private void DispatchEventOfType(string eventContent, EventTypeEnum type)
+        {
+            var match = Regexes[type].Match(eventContent);
+            IEnumerable<string> captures = CaptureNames(type);
+
+            foreach (var setting in CurrentSetting.Settings[type])
+            {
+                SendIfValid(match, setting, captures);
+            }
+        }
+
         public EventToOSCConverter(LineClassifier lineClassifier, OSCSender oSCSender)
         {
             _lineClassifier = lineClassifier;
             _oSCSender = oSCSender;
+
+            // IsDelayedJoiningRoom対応
+            _lineClassifier.EventReactiveProperties[EventTypeEnum.FinishedEnteringWorld]
+            .Where(_ => IsDelayedJoiningRoom)
+            .Where(e => e != null)
+            .Subscribe(e =>
+            {
+                var lastJoiningRoomURL = _lineClassifier.EventReactiveProperties[EventTypeEnum.JoiningRoomURL].Value;
+                DispatchEventOfType(lastJoiningRoomURL, EventTypeEnum.JoiningRoomURL);
+            }).AddTo(_eventsDisposables);
+
+            _lineClassifier.EventReactiveProperties[EventTypeEnum.FinishedEnteringWorld]
+            .Where(_ => IsDelayedJoiningRoom)
+            .Where(e => e != null)
+            .Subscribe(e =>
+            {
+                var lastJoiningRoomName = _lineClassifier.EventReactiveProperties[EventTypeEnum.JoiningRoomName].Value;
+                DispatchEventOfType(lastJoiningRoomName, EventTypeEnum.JoiningRoomName);
+            }).AddTo(_eventsDisposables);
+            // FinishedEnteringWorld自体はIsDelayedJoiningRoomかどうかにかかわらず下でSubscribe
 
             // 全イベントをSubscribe
             foreach (var type in Enum.GetValues<EventTypeEnum>())
@@ -171,17 +208,15 @@ namespace VRChatLogEventOSC.Core
                     continue;
                 }
 
-                var diposable = _lineClassifier.EventReactiveProperties[type]
-                .Where(e => e != null)
-                .Subscribe( e =>
-                {
-                    Match match = Regexes[type].Match(e);
-                    IEnumerable<string> captures = CaptureNames(type);
+                // IsDelayedJoiningRoom対応
+                bool isdelayed = IsDelayedJoiningRoom && (type == EventTypeEnum.JoiningRoomName || type == EventTypeEnum.JoiningRoomURL);
 
-                    foreach (var setting in CurrentSetting.Settings[type])
-                    {
-                        SendIfValid(match, setting, captures);
-                    }
+                _lineClassifier.EventReactiveProperties[type]
+                .Where(_ => !isdelayed)
+                .Where(e => e != null)
+                .Subscribe(e =>
+                {
+                    DispatchEventOfType(e, type);
                 }).AddTo(_eventsDisposables);
             }
         }

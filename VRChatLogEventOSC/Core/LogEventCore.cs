@@ -102,6 +102,7 @@ namespace VRChatLogEventOSC.Core
             _logFileWatcher.ChangeLogDerectory(config.LogFileDirectory);
             _logFileWatcher.LoadLatestLogFile();
             _logFileWatcher.SeekToCurrent();
+            _converter.IsDelayedJoiningRoom = config.IsTuned;
         }
 
         /// <summary>

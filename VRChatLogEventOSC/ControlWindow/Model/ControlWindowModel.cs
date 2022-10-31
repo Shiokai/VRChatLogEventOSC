@@ -122,9 +122,9 @@ namespace VRChatLogEventOSC.Control
         /// <param name="ipAddress">保存するコンフィグのIP Adress</param>
         /// <param name="port">保存するコンフィグのPort番号</param>
         /// <param name="logFileDirectory">保存するコンフィグのログファイルのディレクトリパス</param>
-        public void SaveConfig(string ipAddress, int port, string logFileDirectory)
+        public void SaveConfig(string ipAddress, int port, string logFileDirectory, bool isTuned)
         {
-            var config = new ConfigData(ipAddress, port, logFileDirectory);
+            var config = new ConfigData(ipAddress, port, logFileDirectory, isTuned);
             try
             {
                 FileLoader.SaveConfig(config);

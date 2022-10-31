@@ -52,6 +52,8 @@ namespace VRChatLogEventOSC.Control
         public ReactiveProperty<string> ConfigDirectoryPath { get; init; }
         public ReadOnlyReactivePropertySlim<string> ConfigDirectoryPathError { get; init; }
 
+        public ReactivePropertySlim<bool> ConfigIsTuned { get; init; }
+
         private bool _disposed = false;
         public void Dispose()
         {
@@ -86,9 +88,9 @@ namespace VRChatLogEventOSC.Control
 
         private void SaveAndLoad()
         {
-            _model.SaveConfig(ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value);
+            _model.SaveConfig(ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigIsTuned.Value);
             var config = _model.LoadConfig();
-            (ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            (ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigIsTuned.Value) = (config.IPAddress, config.Port, config.LogFileDirectory, config.IsTuned);
             _isDirty = false;
         }
 
@@ -152,6 +154,9 @@ namespace VRChatLogEventOSC.Control
             .ToReadOnlyReactivePropertySlim<string>()
             .AddTo(_compositeDisposable);
 
+            ConfigIsTuned = new ReactivePropertySlim<bool>(true)
+            .AddTo(_compositeDisposable);
+
             // Config系ReactivePropertyの初期化後に記述
             var canSave = Observable.Merge(ConfigIPAddress.ObserveHasErrors.ToUnit(), ConfigPort.ObserveHasErrors.ToUnit(), ConfigDirectoryPath.ObserveHasErrors.ToUnit())
             .Select(_ => ConfigIPAddress.HasErrors || ConfigPort.HasErrors || ConfigDirectoryPath.HasErrors)
@@ -162,7 +167,7 @@ namespace VRChatLogEventOSC.Control
             .WithSubscribe(() =>
             {
                 SaveAndLoad();
-                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAddress.Value}\nPort: {ConfigPort.Value}", "Apply config", MessageBoxButton.OK);
+                System.Windows.MessageBox.Show($"設定が適用されました\n\nLog directory: {ConfigDirectoryPath.Value}\nIP Address: {ConfigIPAddress.Value}\nPort: {ConfigPort.Value}\nTuned: {ConfigIsTuned.Value}", "Apply config", MessageBoxButton.OK);
             }).AddTo(_compositeDisposable);
 
             KeyReturnCommand = new ReactiveCommand().WithSubscribe(() =>
@@ -188,11 +193,11 @@ namespace VRChatLogEventOSC.Control
             }).AddTo(_compositeDisposable);
 
             var config = _model.LoadConfig();
-            (ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value) = (config.IPAddress, config.Port, config.LogFileDirectory);
+            (ConfigIPAddress.Value, ConfigPort.Value, ConfigDirectoryPath.Value, ConfigIsTuned.Value) = (config.IPAddress, config.Port, config.LogFileDirectory, config.IsTuned);
 
             // 最初のLoadCinfigより後に行う
             // そうでなければ、読み込んだコンフィグがデフォルト値と異なる場合編集していなくてもDirtyになる
-            Observable.Merge(ConfigIPAddress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit())
+            Observable.Merge(ConfigIPAddress.ToUnit(), ConfigPort.ToUnit(), ConfigDirectoryPath.ToUnit(), ConfigIsTuned.ToUnit())
             .Subscribe(_ => _isDirty = true).AddTo(_compositeDisposable);
 
         }
