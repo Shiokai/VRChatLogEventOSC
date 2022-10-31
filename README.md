@@ -210,6 +210,7 @@ OSCを送信するイベントを設定します。
 
 ## ThirdParty
 
+* VRChatActivityTools (License: "MIT")
 * Reactive Extensions (License: "MIT")
 * ReactiveProperty(License  : "MIT")
 * Rug.Osc (License: "MIT")
