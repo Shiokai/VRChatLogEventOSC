@@ -7,7 +7,7 @@
         xmlns:rp="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
         xmlns:local="clr-namespace:VRChatLogEventOSC.Setting"
         mc:Ignorable="d"
-        Title="SettingWindow" Height="450" Width="800" MinHeight="350" MinWidth="500">
+        Title="SettingWindow" Height="585" Width="800" MinHeight="390" MinWidth="500">
     <Window.DataContext>
         <local:SettingWindowViewModel/>
     </Window.DataContext>
@@ -31,28 +31,34 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Content="Joined Room URL" Grid.Row="0" Grid.Column="0" Command="{Binding EventsButtonCommand[JoinedRoomURL]}" FontSize="16"/>
-            <Button Content="Joined Room Name" Grid.Row="1" Grid.Column="0" Command="{Binding EventsButtonCommand[JoinedRoomName]}" FontSize="16"/>
+            <Button Content="Joining Room URL" Grid.Row="0" Grid.Column="0" Command="{Binding EventsButtonCommand[JoiningRoomURL]}" FontSize="16"/>
+            <Button Content="Joining Room Name" Grid.Row="1" Grid.Column="0" Command="{Binding EventsButtonCommand[JoiningRoomName]}" FontSize="16"/>
             <Button Content="Accept Friend Request" Grid.Row="2" Grid.Column="0" Command="{Binding EventsButtonCommand[AcceptFriendRequest]}" FontSize="16"/>
-            <Button Content="Played Video 1" Grid.Row="3" Grid.Column="0" Command="{Binding EventsButtonCommand[PlayedVideo1]}" FontSize="16"/>
-            <Button Content="Played Video 2" Grid.Row="4" Grid.Column="0" Command="{Binding EventsButtonCommand[PlayedVideo2]}" FontSize="16"/>
-            <Button Content="Accept Invite" Grid.Row="5" Grid.Column="0" Command="{Binding EventsButtonCommand[AcceptInvite]}" FontSize="16"/>
-            <Button Content="Accept Request Invite" Grid.Row="6" Grid.Column="0" Command="{Binding EventsButtonCommand[AcceptRequestInvite]}" FontSize="16"/>
-            <Button Content="On Player Joined" Grid.Row="7" Grid.Column="0" Command="{Binding EventsButtonCommand[OnPlayerJoined]}" FontSize="16"/>
-            <Button Content="On Player Left" Grid.Row="8" Grid.Column="0" Command="{Binding EventsButtonCommand[OnPlayerLeft]}" FontSize="16"/>
-            <Button Content="Took Screenshot" Grid.Row="9" Grid.Column="0" Command="{Binding EventsButtonCommand[TookScreenshot]}" FontSize="16"/>
+            <Button Content="Played Video" Grid.Row="3" Grid.Column="0" Command="{Binding EventsButtonCommand[PlayedVideo]}" FontSize="16"/>
+            <Button Content="Accept Invite" Grid.Row="4" Grid.Column="0" Command="{Binding EventsButtonCommand[AcceptInvite]}" FontSize="16"/>
+            <Button Content="Accept Request Invite" Grid.Row="5" Grid.Column="0" Command="{Binding EventsButtonCommand[AcceptRequestInvite]}" FontSize="16"/>
+            <Button Content="On Player Joined" Grid.Row="6" Grid.Column="0" Command="{Binding EventsButtonCommand[OnPlayerJoined]}" FontSize="16"/>
+            <Button Content="On Player Left" Grid.Row="7" Grid.Column="0" Command="{Binding EventsButtonCommand[OnPlayerLeft]}" FontSize="16"/>
+            <Button Content="Took Screenshot" Grid.Row="8" Grid.Column="0" Command="{Binding EventsButtonCommand[TookScreenshot]}" FontSize="16"/>
+            <Button Content="Left Room" Grid.Row="9" Grid.Column="0" Command="{Binding EventsButtonCommand[LeftRoom]}" FontSize="16"/>
+            <Button Content="Entered World" Grid.Row="10" Grid.Column="0" Command="{Binding EventsButtonCommand[EnteredWorld]}" FontSize="16"/>
+            <Button Content="Rejoining" Grid.Row="11" Grid.Column="0" Command="{Binding EventsButtonCommand[Rejoining]}" FontSize="16"/>
+            <Button Content="GoHome" Grid.Row="12" Grid.Column="0" Command="{Binding EventsButtonCommand[GoHome]}" FontSize="16"/>
             
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="10*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>

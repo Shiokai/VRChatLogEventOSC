@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VRChatLogEventOSC.Editor"
         mc:Ignorable="d"
-        Title="EditorWindow" Height="550" Width="500"
+        Title="EditorWindow" Height="550" Width="510"
         Name="editorWindow">
     <Window.DataContext>
         <local:EditorWindowViewModel/>

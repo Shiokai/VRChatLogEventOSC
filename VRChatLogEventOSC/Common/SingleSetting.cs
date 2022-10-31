@@ -127,6 +127,36 @@ namespace VRChatLogEventOSC.Common
         public string URL { get; private set; } = string.Empty;
 
         private readonly Dictionary<string, string> _nameToProperty;
+
+        /// <summary>
+        /// 名前付きグループの名前と設定値の対応付け
+        /// </summary>
+        /// <returns>対応付けされたDictionary</returns>
+        private Dictionary<string, string> MapNameToProperty()
+        {
+            return new()
+            {
+                {nameof(SettingName), SettingName},
+                {nameof(UserName), UserName},
+                {nameof(UserID), UserID},
+                {nameof(WorldName), WorldName},
+                {nameof(WorldURL), WorldURL},
+                {nameof(WorldID), WorldID},
+                {nameof(InstanceID), InstanceID},
+                {nameof(InstanceType), InstanceType},
+                {nameof(ReqInv), ReqInv.ToString()},
+                {nameof(WorldUserID), WorldUserID},
+                {nameof(Region), Region},
+                {nameof(Message), Message},
+                {nameof(URL), URL},
+            };
+        }
+
+        /// <summary>
+        /// 名前付きグループに対応する設定値
+        /// </summary>
+        /// <param name="capture">名前付きグループの名前</param>
+        /// <returns>対応する設定値</returns>
         public string CaptureProperty(string capture)
         {
             return _nameToProperty[capture];
@@ -168,23 +198,7 @@ namespace VRChatLogEventOSC.Common
             Message = message;
             URL = url;
 
-            _nameToProperty = new()
-            {
-                {nameof(SettingName), SettingName},
-                {nameof(UserName), UserName},
-                {nameof(UserID), UserID},
-                {nameof(WorldName), WorldName},
-                {nameof(WorldURL), WorldURL},
-                {nameof(WorldID), WorldID},
-                {nameof(InstanceID), InstanceID},
-                {nameof(InstanceType), InstanceType},
-                {nameof(ReqInv), ReqInv.ToString()},
-                {nameof(WorldUserID), WorldUserID},
-                {nameof(Region), Region},
-                {nameof(Message), Message},
-                {"DisplayName", UserName},
-                {nameof(URL), URL},
-            };
+            _nameToProperty = MapNameToProperty();
         }
         /// <summary>
         /// Only for Json Constructor.
@@ -234,23 +248,7 @@ namespace VRChatLogEventOSC.Common
             Message = message;
             URL = url;
 
-            _nameToProperty = new()
-            {
-                {nameof(SettingName), SettingName},
-                {nameof(UserName), UserName},
-                {nameof(UserID), UserID},
-                {nameof(WorldName), WorldName},
-                {nameof(WorldURL), WorldURL},
-                {nameof(WorldID), WorldID},
-                {nameof(InstanceID), InstanceID},
-                {nameof(InstanceType), InstanceType},
-                {nameof(ReqInv), ReqInv.ToString()},
-                {nameof(WorldUserID), WorldUserID},
-                {nameof(Region), Region},
-                {nameof(Message), Message},
-                {"DisplayName", UserName},
-                {nameof(URL), URL},
-            };
+            _nameToProperty = MapNameToProperty();
         }
 
     }

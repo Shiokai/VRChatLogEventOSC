@@ -187,7 +187,6 @@ namespace VRChatLogEventOSC.Editor
             }
         }
 
-        // これなんとかしたい
         /// <summary>
         /// イベントの種類毎に有効なフィルタリング項目が異なるので、無効な項目を編集不可にする
         /// </summary>
@@ -206,165 +205,43 @@ namespace VRChatLogEventOSC.Editor
                 _regionEditable.Value,
                 _messageEditable.Value,
                 _urlEditable.Value
-            ) = eventType switch
+            ) = (false, false, false, false, false, false, false, false, false, false, false);
+            
+            var captures = RegexPattern.EventCapture[eventType];
+            if (captures.HasFlag(RegexPattern.Captures.UserName))
             {
-                RegexPattern.EventTypeEnum.None => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.JoinedRoomURL => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: true,
-                    worldId: true,
-                    instanceId: true,
-                    instanceType: true,
-                    worldUserId: true,
-                    region: true,
-                    message: false,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.JoinedRoomName => (
-                    userName: false,
-                    userId: false,
-                    worldName: true,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.AcceptFriendRequest => (
-                    userName: true,
-                    userId: true,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.PlayedVideo1 => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: true
-                ),
-                RegexPattern.EventTypeEnum.PlayedVideo2 => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: true
-                ),
-                RegexPattern.EventTypeEnum.AcceptInvite => (
-                    userName: true,
-                    userId: true,
-                    worldName: true,
-                    worldUrl: true,
-                    worldId: true,
-                    instanceId: true,
-                    instanceType: true,
-                    worldUserId: true,
-                    region: true,
-                    message: true,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.AcceptRequestInvite => (
-                    userName: true,
-                    userId: true,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: true,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.OnPlayerJoined => (
-                    userName: true,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.OnPlayerLeft => (
-                    userName: true,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-                RegexPattern.EventTypeEnum.TookScreenshot => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-                _ => (
-                    userName: false,
-                    userId: false,
-                    worldName: false,
-                    worldUrl: false,
-                    worldId: false,
-                    instanceId: false,
-                    instanceType: false,
-                    worldUserId: false,
-                    region: false,
-                    message: false,
-                    url: false
-                ),
-            };
+                _userNameEditable.Value = true;
+            }
+
+            if (captures.HasFlag(RegexPattern.Captures.UseID))
+            {
+                _userIdEditable.Value = true;
+            }
+
+            if (captures.HasFlag(RegexPattern.Captures.WorldURL))
+            {
+                _worldUrlEditable.Value = true;
+                _worldIdEditable.Value = true;
+                _instanceIdEditable.Value = true;
+                _instanceTypeEditable.Value = true;
+                _worldUserIdEditable.Value = true;
+                _regionEditable.Value = true;
+            }
+
+            if (captures.HasFlag(RegexPattern.Captures.WorldName))
+            {
+                _worldNameEditable.Value = true;
+            }
+
+            if (captures.HasFlag(RegexPattern.Captures.Message))
+            {
+                _messageEditable.Value = true;
+            }
+
+            if (captures.HasFlag(RegexPattern.Captures.URL))
+            {
+                _urlEditable.Value = true;
+            }
         }
 
         /// <summary>
@@ -604,7 +481,7 @@ namespace VRChatLogEventOSC.Editor
 
             CancelCommand = new ReactiveCommand<EditorWindow>().WithSubscribe(w =>
             {
-                var result = MessageBox.Show("編集中の内容を破棄しますか?", "Cancel", MessageBoxButton.YesNo);
+                var result = MessageBox.Show("編集内容を破棄しますか?", "Cancel", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     _isPressedX = false;
