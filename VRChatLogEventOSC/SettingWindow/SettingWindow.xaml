@@ -39,8 +39,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Content="Joined Room URL" Grid.Row="0" Grid.Column="0" Command="{Binding EventsButtonCommand[JoinedRoomURL]}" FontSize="16"/>
-            <Button Content="Joined Room Name" Grid.Row="1" Grid.Column="0" Command="{Binding EventsButtonCommand[JoinedRoomName]}" FontSize="16"/>
+            <Button Content="Joining Room URL" Grid.Row="0" Grid.Column="0" Command="{Binding EventsButtonCommand[JoiningRoomURL]}" FontSize="16"/>
+            <Button Content="Joining Room Name" Grid.Row="1" Grid.Column="0" Command="{Binding EventsButtonCommand[JoiningRoomName]}" FontSize="16"/>
             <Button Content="Accept Friend Request" Grid.Row="2" Grid.Column="0" Command="{Binding EventsButtonCommand[AcceptFriendRequest]}" FontSize="16"/>
             <Button Content="Played Video 1" Grid.Row="3" Grid.Column="0" Command="{Binding EventsButtonCommand[PlayedVideo1]}" FontSize="16"/>
             <Button Content="Played Video 2" Grid.Row="4" Grid.Column="0" Command="{Binding EventsButtonCommand[PlayedVideo2]}" FontSize="16"/>

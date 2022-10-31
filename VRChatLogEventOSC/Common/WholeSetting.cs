@@ -18,9 +18,9 @@ namespace VRChatLogEventOSC.Common
         // Dictionaryで読み書きするとKeyに無いイベントが設定されていた時にエラーになるので、読み書き用に個別プロパティを用意
         // イベント追加時の追加忘れ注意
         [JsonInclude]
-        public IReadOnlyList<SingleSetting> JoinedRoomURL { private get; init; }
+        public IReadOnlyList<SingleSetting> JoiningRoomURL { private get; init; }
         [JsonInclude]
-        public IReadOnlyList<SingleSetting> JoinedRoomName { private get; init; }
+        public IReadOnlyList<SingleSetting> JoiningRoomName { private get; init; }
         [JsonInclude]
         public IReadOnlyList<SingleSetting> AcceptFriendRequest { private get; init; }
         [JsonInclude]
@@ -111,8 +111,8 @@ namespace VRChatLogEventOSC.Common
         /// </summary>
         /// <param name="settings">分解する設定</param>
         /// <returns></returns>
-        private (IReadOnlyList<SingleSetting> joinedRoomUrl,
-            IReadOnlyList<SingleSetting> joinedRoomName,
+        private (IReadOnlyList<SingleSetting> joiningRoomUrl,
+            IReadOnlyList<SingleSetting> joiningRoomName,
             IReadOnlyList<SingleSetting> acceptFriendRequest,
             IReadOnlyList<SingleSetting> playedVideo1,
             IReadOnlyList<SingleSetting> playedVideo2,
@@ -129,8 +129,8 @@ namespace VRChatLogEventOSC.Common
             // イベント追加時の追加忘れ注意
             return
             (
-                settings[EventTypeEnum.JoinedRoomURL].AsReadOnly(),
-                settings[EventTypeEnum.JoinedRoomName].AsReadOnly(),
+                settings[EventTypeEnum.JoiningRoomURL].AsReadOnly(),
+                settings[EventTypeEnum.JoiningRoomName].AsReadOnly(),
                 settings[EventTypeEnum.AcceptFriendRequest].AsReadOnly(),
                 settings[EventTypeEnum.PlayedVideo1].AsReadOnly(),
                 settings[EventTypeEnum.PlayedVideo2].AsReadOnly(),
@@ -157,8 +157,8 @@ namespace VRChatLogEventOSC.Common
             // イベント追加時の追加忘れ注意
             var eachSettings = new Dictionary<EventTypeEnum, IReadOnlyList<SingleSetting>>()
             {
-                {EventTypeEnum.JoinedRoomURL, JoinedRoomURL},
-                {EventTypeEnum.JoinedRoomName, JoinedRoomName},
+                {EventTypeEnum.JoiningRoomURL, JoiningRoomURL},
+                {EventTypeEnum.JoiningRoomName, JoiningRoomName},
                 {EventTypeEnum.AcceptFriendRequest, AcceptFriendRequest},
                 {EventTypeEnum.PlayedVideo1, PlayedVideo1},
                 {EventTypeEnum.PlayedVideo2, PlayedVideo2},
@@ -189,8 +189,8 @@ namespace VRChatLogEventOSC.Common
 
             // イベント追加時の追加忘れ注意
             (
-                JoinedRoomURL,
-                JoinedRoomName,
+                JoiningRoomURL,
+                JoiningRoomName,
                 AcceptFriendRequest,
                 PlayedVideo1,
                 PlayedVideo2,
@@ -212,8 +212,8 @@ namespace VRChatLogEventOSC.Common
         {
             // イベント追加時の追加忘れ注意
             (
-                JoinedRoomURL,
-                JoinedRoomName,
+                JoiningRoomURL,
+                JoiningRoomName,
                 AcceptFriendRequest,
                 PlayedVideo1,
                 PlayedVideo2,
@@ -233,8 +233,8 @@ namespace VRChatLogEventOSC.Common
 
         [JsonConstructor]
         public WholeSetting(int jsonVersion,
-            IReadOnlyList<SingleSetting> joinedRoomUrl,
-            IReadOnlyList<SingleSetting> joinedRoomName,
+            IReadOnlyList<SingleSetting> joiningRoomUrl,
+            IReadOnlyList<SingleSetting> joiningRoomName,
             IReadOnlyList<SingleSetting> acceptFriendRequest,
             IReadOnlyList<SingleSetting> playedVideo1,
             IReadOnlyList<SingleSetting> playedVideo2,
@@ -259,8 +259,8 @@ namespace VRChatLogEventOSC.Common
             // }
 
             // イベント追加時の追加忘れ注意
-            JoinedRoomURL = joinedRoomUrl;
-            JoinedRoomName = joinedRoomName;
+            JoiningRoomURL = joiningRoomUrl;
+            JoiningRoomName = joiningRoomName;
             AcceptFriendRequest = acceptFriendRequest;
             PlayedVideo1 = playedVideo1;
             PlayedVideo2 = playedVideo2;

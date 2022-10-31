@@ -11,8 +11,8 @@ namespace VRChatLogEventOSC.Common
         public enum EventTypeEnum
         {
             None = -1,
-            JoinedRoomURL,
-            JoinedRoomName,
+            JoiningRoomURL,
+            JoiningRoomName,
             AcceptFriendRequest,
             PlayedVideo1,
             PlayedVideo2,
@@ -48,8 +48,8 @@ namespace VRChatLogEventOSC.Common
         /// <returns></returns>
         private static readonly Dictionary<EventTypeEnum, Captures> EventCapture = new()
         {
-            {EventTypeEnum.JoinedRoomURL, Captures.WorldURL},
-            {EventTypeEnum.JoinedRoomName, Captures.WorldName},
+            {EventTypeEnum.JoiningRoomURL, Captures.WorldURL},
+            {EventTypeEnum.JoiningRoomName, Captures.WorldName},
             {EventTypeEnum.AcceptFriendRequest, Captures.UserName | Captures.UseID},
             {EventTypeEnum.PlayedVideo1, Captures.URL},
             {EventTypeEnum.PlayedVideo2, Captures.URL},
@@ -69,8 +69,8 @@ namespace VRChatLogEventOSC.Common
 
         public static Regex AnyEventRegex { get; }
         public static Regex DatetimeRegex { get; }
-        public static Regex JoinedRoomURLRegex { get; }
-        public static Regex JoinedRoomNameRegex { get; }
+        public static Regex JoiningRoomURLRegex { get; }
+        public static Regex JoiningRoomNameRegex { get; }
         public static Regex AcceptFriendRequestRegex { get; }
         public static Regex PlayedVideo1Regex { get; }
         public static Regex PlayedVideo2Regex { get; }
@@ -171,8 +171,8 @@ namespace VRChatLogEventOSC.Common
 
             string datetimePattern = @"^[0-9]{4}\.[0-9]{2}\.[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} Log {8}- {2}";
 
-            string joinedRoomURLPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+)$";
-            string joinedRoomNamePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room: (?<WorldName>(.+))$";
+            string joiningRoomURLPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+)$";
+            string joiningRoomNamePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room: (?<WorldName>(.+))$";
             string acceptFriendRequestPattern = @"AcceptNotification for notification:<Notification from username:(?<UserName>(.+)), sender user id:(?<UserID>(.{40})).+ of type: friendRequest, id: (.{40}),.+type:friendRequest,.+$";
             string playedVideo1Pattern = @"User (.+) added URL (?<URL>(.+))$";
             string playedVideo2Pattern = @"\[Video Playback\] Attempting to resolve URL '(?<URL>(.+))'$";
@@ -187,8 +187,8 @@ namespace VRChatLogEventOSC.Common
             string rejoiningPattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Rejoining local world: (?<WorldURL>(?<WorldID>wrld_[0-9a-zA-Z-]+):(?<InstanceID>[0-9]+)?~?(?<InstanceType>((private)|(friends)|hidden))?(\((?<WorldUserID>(.{40}))\))?(?<ReqInv>~canRequestInvite)?(~region\((?<Region>.+)\))?.+)$";
             string goHomePattern = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Going to current users Home world$";
 
-            string joinedRoomURLSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining w.+$";
-            string joinedRoomNameSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room:.+$";
+            string joiningRoomURLSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining w.+$";
+            string joiningRoomNameSimple = @"\[(RoomManager|[Ǆǅ]*|Behaviour)\] Joining or Creating Room:.+$";
             string acceptFriendRequestSimple = @"AcceptNotification for notification:.+type:friendRequest,.+$";
             string playedVideo1Simple = @"User .+ added URL .+$";
             string playedVideo2Simple = @"\[Video Playback\] Attempting to resolve URL '.+'$";
@@ -205,8 +205,8 @@ namespace VRChatLogEventOSC.Common
 
 
             string anyEventPattern = "("
-            + $"?<{nameof(EventTypeEnum.JoinedRoomURL)}>" + joinedRoomURLSimple + ")" + "|("
-            + $"?<{nameof(EventTypeEnum.JoinedRoomName)}>" + joinedRoomNameSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.JoiningRoomURL)}>" + joiningRoomURLSimple + ")" + "|("
+            + $"?<{nameof(EventTypeEnum.JoiningRoomName)}>" + joiningRoomNameSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.AcceptFriendRequest)}>" + acceptFriendRequestSimple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.PlayedVideo1)}>" + playedVideo1Simple + ")" + "|("
             + $"?<{nameof(EventTypeEnum.PlayedVideo2)}>" + playedVideo2Simple + ")" + "|("
@@ -226,8 +226,8 @@ namespace VRChatLogEventOSC.Common
 
             DatetimeRegex = new(datetimePattern, RegexOptions.Compiled);
 
-            JoinedRoomURLRegex = new(joinedRoomURLPattern, RegexOptions.Compiled);
-            JoinedRoomNameRegex = new(joinedRoomNamePattern, RegexOptions.Compiled);
+            JoiningRoomURLRegex = new(joiningRoomURLPattern, RegexOptions.Compiled);
+            JoiningRoomNameRegex = new(joiningRoomNamePattern, RegexOptions.Compiled);
             AcceptFriendRequestRegex = new(acceptFriendRequestPattern, RegexOptions.Compiled);
             PlayedVideo1Regex = new(playedVideo1Pattern, RegexOptions.Compiled);
             PlayedVideo2Regex = new(playedVideo2Pattern, RegexOptions.Compiled);
@@ -243,8 +243,8 @@ namespace VRChatLogEventOSC.Common
 
             _regexes = new Dictionary<EventTypeEnum, Regex>()
             {
-                {EventTypeEnum.JoinedRoomURL, JoinedRoomURLRegex},
-                {EventTypeEnum.JoinedRoomName, JoinedRoomNameRegex},
+                {EventTypeEnum.JoiningRoomURL, JoiningRoomURLRegex},
+                {EventTypeEnum.JoiningRoomName, JoiningRoomNameRegex},
                 {EventTypeEnum.AcceptFriendRequest, AcceptFriendRequestRegex},
                 {EventTypeEnum.PlayedVideo1, PlayedVideo1Regex},
                 {EventTypeEnum.PlayedVideo2, PlayedVideo2Regex},

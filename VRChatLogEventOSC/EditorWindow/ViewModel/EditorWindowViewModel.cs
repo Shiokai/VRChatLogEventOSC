@@ -221,7 +221,7 @@ namespace VRChatLogEventOSC.Editor
                     message: false,
                     url: false
                 ),
-                RegexPattern.EventTypeEnum.JoinedRoomURL => (
+                RegexPattern.EventTypeEnum.JoiningRoomURL => (
                     userName: false,
                     userId: false,
                     worldName: false,
@@ -234,7 +234,7 @@ namespace VRChatLogEventOSC.Editor
                     message: false,
                     url: false
                 ),
-                RegexPattern.EventTypeEnum.JoinedRoomName => (
+                RegexPattern.EventTypeEnum.JoiningRoomName => (
                     userName: false,
                     userId: false,
                     worldName: true,
