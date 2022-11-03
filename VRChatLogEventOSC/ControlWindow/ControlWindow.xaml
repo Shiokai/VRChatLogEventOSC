@@ -1,0 +1,80 @@
+﻿<Window x:Class="VRChatLogEventOSC.Control.ControlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VRChatLogEventOSC.Control"
+        mc:Ignorable="d"
+        Title="ControlWindow" Height="350" Width="350" MinHeight="300" MinWidth="300">
+    <Window.DataContext>
+        <local:ControlWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.InputBindings>
+            <KeyBinding Gesture="Return" Command="{Binding KeyReturnCommand}"/>
+        </Grid.InputBindings>
+        
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Content="Pause" RenderTransformOrigin="-0.416,-0.048" Grid.Row="0" Command="{Binding PauseCommand}" Margin="5,5,5,5" ToolTip="ログの読み取りを一時停止します"/>
+            <Button Content="Restart" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="0" Command="{Binding RestartCommand}" Margin="5,5,5,5" ToolTip="現在の位置からログの読み取りを再開します"/>
+            <Button Content="Continue" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="1" Command="{Binding RestartWithScanCommand}" Margin="5,5,5,5" ToolTip="最後の読み取り位置からログの読み取りを再開します"/>
+            <Button Content="Rescan" RenderTransformOrigin="-0.416,-0.048" Grid.Row="1" Grid.Column="2" Command="{Binding RescanCommand}" Margin="5,5,5,5" ToolTip="ログの先頭から読み取りを再開します"/>
+            <Button Content="Quit" RenderTransformOrigin="-0.416,-0.048" Grid.Row="2" Grid.Column="0" Command="{Binding QuitApplicationCommand}" Margin="5,5,5,5" ToolTip="アプリケーションを終了します"/>
+        </Grid>
+        <GroupBox Header="Config" Grid.Row="1" Grid.Column="0">
+            <Grid Margin="0,16,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*"></ColumnDefinition>
+                    <ColumnDefinition Width="59*"></ColumnDefinition>
+                    <ColumnDefinition Width="16*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="LogDirectory" Grid.Row="0" Grid.Column="0" TextAlignment="Center" ToolTip="ログファイルの出力されるフォルダを指定します"/>
+                <TextBox TextWrapping="NoWrap" Text="{Binding ConfigDirectoryPath.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigDirectoryPathError.Value, Mode=OneWay}" Foreground="Red" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap"/>
+                <Button Content="Browze" Command="{Binding FolderBrowseCommand}" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+
+                <TextBlock Text="IP Address" Grid.Row="2" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のIPアドレスを指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigIPAddress.Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigIPAddressError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
+
+                <TextBlock Text="Port" Grid.Row="4" Grid.Column="0" TextAlignment="Center" ToolTip="送信先のポート番号を指定します"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding ConfigPort.Value,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center"/>
+                <TextBlock Text="{Binding ConfigPortError.Value, Mode=OneWay}" Foreground="Red" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"/>
+
+                <TextBlock Text="Tuned" Grid.Row="6" Grid.Column="0" TextAlignment="Center" ToolTip="一部のイベントの発行をExpressionParameterが受け取れるタイミングまで遅らせます"/>
+                <CheckBox Content="{Binding ConfigIsTuned.Value}" IsChecked="{Binding ConfigIsTuned.Value, Mode=TwoWay}" Grid.Row="6" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+                <Button Content="Apply" RenderTransformOrigin="-0.165,0.062" Command="{Binding SaveAndLoadCommand}" Grid.Row="7" Grid.Column="2" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</Window>
